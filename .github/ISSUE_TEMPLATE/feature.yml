@@ -1,0 +1,20 @@
+name: A feature to understand
+description: Suggest a public-source mechanism for the example gallery.
+body:
+  - type: input
+    id: repository
+    attributes:
+      label: Public repository and revision
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: What question should the graph answer?
+      description: For example, how does a failed webhook get retried? Include a source entry point if you know it.
+    validations:
+      required: true
+  - type: textarea
+    id: usefulness
+    attributes:
+      label: Who would this help?

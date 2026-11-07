@@ -1,0 +1,14 @@
+.work/
+.venv/
+__pycache__/
+.DS_Store
+.impeccable/review/
+.impeccable/references/
+dist/
+
+# Design sessions, generated concepts and research stay local.
+.impeccable/
+!.impeccable/design.json
+concepts/
+reports/
+research_notes/

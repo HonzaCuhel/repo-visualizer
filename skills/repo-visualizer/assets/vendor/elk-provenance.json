@@ -1,0 +1,8 @@
+{
+  "package": "elkjs",
+  "version": "0.12.1",
+  "source": "https://registry.npmjs.org/elkjs/-/elkjs-0.12.1.tgz",
+  "archive_sha256": "7a017dd56e31e4963ad5c4b9deb3230db5c37edf53a82dc507a8599f2f01122f",
+  "license": "EPL-2.0 OR GPL-3.0-or-later",
+  "selected_license": "EPL-2.0"
+}

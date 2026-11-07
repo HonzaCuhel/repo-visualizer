@@ -1,0 +1,22 @@
+name: Incorrect or unclear explanation
+description: Report a graph relationship, source reference or explanation that needs correction.
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: What were you trying to understand?
+      description: Give the feature/question and the public repository revision, or a small permitted reproduction. Keep private source and credentials out of public issues.
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: Which claim or interaction was wrong?
+      description: Include the component/edge label, expected behavior and relevant public source reference if available.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and output
+      description: Agent, skill version, OS/browser and export format. Is this a semantic graph issue or a renderer issue?

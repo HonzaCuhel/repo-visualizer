@@ -1,0 +1,510 @@
+{
+  "schema_version": 1,
+  "title": "stack-diagram",
+  "question": "How does the builder turn a draft into a portable diagram?",
+  "summary": "A source-grounded map of asset embedding, validation, and the separate PNG renderer.",
+  "nodes": [
+    {
+      "id": "draft",
+      "label": "HTML draft",
+      "kind": "input",
+      "description": "Reads the authored HTML draft as UTF-8. Its placeholders determine which assets need embedding.",
+      "source_ids": [
+        "args"
+      ],
+      "group": "build",
+      "evidence": "source"
+    },
+    {
+      "id": "fonts",
+      "label": "Font assets",
+      "kind": "artifact",
+      "description": "When --fonts is supplied, matching display and monospace placeholders are replaced with Base64 font bytes.",
+      "source_ids": [
+        "fonts"
+      ],
+      "group": "build",
+      "evidence": "source"
+    },
+    {
+      "id": "icons",
+      "label": "Icon assets",
+      "kind": "artifact",
+      "description": "Supported images are inspected in sorted order. Only placeholders present in the draft are replaced.",
+      "source_ids": [
+        "icons"
+      ],
+      "group": "build",
+      "evidence": "source"
+    },
+    {
+      "id": "encode",
+      "label": "Base64 encoder",
+      "kind": "function",
+      "description": "The shared b64 helper reads asset bytes and returns their Base64 representation. Both font and icon embedding call it.",
+      "source_ids": [
+        "base64",
+        "fonts",
+        "icons"
+      ],
+      "group": "build",
+      "evidence": "source"
+    },
+    {
+      "id": "validate",
+      "label": "Token validation",
+      "kind": "decision",
+      "description": "Searches for unresolved %%...%% tokens after embedding. Missing assets stop the process before the write.",
+      "source_ids": [
+        "tokens"
+      ],
+      "group": "build",
+      "evidence": "source"
+    },
+    {
+      "id": "stop",
+      "label": "Build error",
+      "kind": "output",
+      "description": "Exits with the unresolved token names. No new HTML is written on this branch.",
+      "source_ids": [
+        "tokens"
+      ],
+      "group": "build",
+      "evidence": "source"
+    },
+    {
+      "id": "html",
+      "label": "Portable HTML",
+      "kind": "artifact",
+      "description": "Writes the completed HTML after all matching tokens have been resolved.",
+      "source_ids": [
+        "write"
+      ],
+      "group": "build",
+      "evidence": "source"
+    },
+    {
+      "id": "browser",
+      "label": "Headless Chromium",
+      "kind": "service",
+      "description": "The separate render_png script opens the HTML with Playwright and adjusts viewport width for the canvas.",
+      "source_ids": [
+        "browser",
+        "render-input"
+      ],
+      "group": "render",
+      "evidence": "source"
+    },
+    {
+      "id": "capture",
+      "label": "Canvas capture",
+      "kind": "function",
+      "description": "Captures either the full page or the selected diagram element. Missing selectors stop capture.",
+      "source_ids": [
+        "capture"
+      ],
+      "group": "render",
+      "evidence": "source"
+    },
+    {
+      "id": "png",
+      "label": "PNG output",
+      "kind": "output",
+      "description": "By default captures light and dark versions. --single captures the authored appearance once.",
+      "source_ids": [
+        "themes"
+      ],
+      "group": "render",
+      "evidence": "source"
+    }
+  ],
+  "edges": [
+    {
+      "id": "draft-fonts",
+      "from": "draft",
+      "to": "fonts",
+      "label": "matching font tokens",
+      "relation": "feeds",
+      "source_ids": [
+        "fonts"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "draft-icons",
+      "from": "draft",
+      "to": "icons",
+      "label": "matching icon tokens",
+      "relation": "feeds",
+      "source_ids": [
+        "icons"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "font-encode",
+      "from": "fonts",
+      "to": "encode",
+      "label": "calls b64()",
+      "relation": "calls",
+      "source_ids": [
+        "fonts"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "icon-encode",
+      "from": "icons",
+      "to": "encode",
+      "label": "calls b64()",
+      "relation": "calls",
+      "source_ids": [
+        "icons"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "draft-check",
+      "from": "draft",
+      "to": "validate",
+      "label": "updated draft",
+      "relation": "feeds",
+      "source_ids": [
+        "args",
+        "tokens"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "encode-check",
+      "from": "encode",
+      "to": "validate",
+      "label": "embedded bytes",
+      "relation": "feeds",
+      "source_ids": [
+        "fonts",
+        "icons",
+        "tokens"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "invalid",
+      "from": "validate",
+      "to": "stop",
+      "label": "unresolved tokens",
+      "relation": "fails",
+      "source_ids": [
+        "tokens"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "valid",
+      "from": "validate",
+      "to": "html",
+      "label": "all tokens resolved",
+      "relation": "writes",
+      "source_ids": [
+        "tokens",
+        "write"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "html-browser",
+      "from": "html",
+      "to": "browser",
+      "label": "separate render command",
+      "relation": "reads",
+      "source_ids": [
+        "render-input",
+        "browser"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "browser-capture",
+      "from": "browser",
+      "to": "capture",
+      "label": "loaded document",
+      "relation": "calls",
+      "source_ids": [
+        "browser",
+        "themes"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "capture-png",
+      "from": "capture",
+      "to": "png",
+      "label": "one or both themes",
+      "relation": "writes",
+      "source_ids": [
+        "capture",
+        "themes"
+      ],
+      "evidence": "source"
+    }
+  ],
+  "sources": [
+    {
+      "id": "args",
+      "path": "skills/stack-diagram/scripts/build.py",
+      "start": 21,
+      "end": 29,
+      "sha256": "28049a14bbec3a1264a9b61a7d6abe435f1932393ba9b991068ea5690e83d3a7",
+      "excerpt": "def main():\n    args = sys.argv[1:]\n    fontsdir = None\n    if \"--fonts\" in args:\n        i = args.index(\"--fonts\"); fontsdir = pathlib.Path(args[i + 1]); del args[i:i + 2]\n    if len(args) != 3:\n        print(__doc__); sys.exit(1)\n    draft, icondir, out = pathlib.Path(args[0]), pathlib.Path(args[1]), pathlib.Path(args[2])\n    html = draft.read_text(encoding=\"utf-8\")",
+      "excerpt_sha256": "2d90dba57ec00a87282f3120dfcb999b09bed891b4b52ff1168de3f99fe8afa7",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/build.py#L21-L29"
+    },
+    {
+      "id": "fonts",
+      "path": "skills/stack-diagram/scripts/build.py",
+      "start": 31,
+      "end": 34,
+      "sha256": "28049a14bbec3a1264a9b61a7d6abe435f1932393ba9b991068ea5690e83d3a7",
+      "excerpt": "    if fontsdir:\n        for tok, fn in ((\"%%FONT_DISPLAY%%\", \"Geist.woff2\"), (\"%%FONT_JBM%%\", \"JetBrainsMono.woff2\")):\n            if tok in html:\n                html = html.replace(tok, b64(fontsdir / fn))",
+      "excerpt_sha256": "32f9c8a341f558f0211ffc2272f80adea58fd9d7326c28f6aa32fcef8350dd83",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/build.py#L31-L34"
+    },
+    {
+      "id": "icons",
+      "path": "skills/stack-diagram/scripts/build.py",
+      "start": 36,
+      "end": 41,
+      "sha256": "28049a14bbec3a1264a9b61a7d6abe435f1932393ba9b991068ea5690e83d3a7",
+      "excerpt": "    for f in sorted(icondir.iterdir()):\n        if f.suffix.lstrip(\".\") not in MIME:\n            continue\n        tok = f\"%%ICON_{f.stem}%%\"\n        if tok in html:\n            html = html.replace(tok, f\"data:{MIME[f.suffix.lstrip('.')]};base64,{b64(f)}\")",
+      "excerpt_sha256": "741fcb2e82f350b23e4dc3a8691ecd37b49bfff8c5a33027ef414dcd9f00d355",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/build.py#L36-L41"
+    },
+    {
+      "id": "base64",
+      "path": "skills/stack-diagram/scripts/build.py",
+      "start": 14,
+      "end": 19,
+      "sha256": "28049a14bbec3a1264a9b61a7d6abe435f1932393ba9b991068ea5690e83d3a7",
+      "excerpt": "import base64, pathlib, re, sys\n\nMIME = {\"svg\": \"image/svg+xml\", \"png\": \"image/png\", \"webp\": \"image/webp\",\n        \"jpg\": \"image/jpeg\", \"jpeg\": \"image/jpeg\"}\n\ndef b64(p): return base64.b64encode(pathlib.Path(p).read_bytes()).decode()",
+      "excerpt_sha256": "1b1f0eab3f4ad06c37b8b320a0312f34cb07c3283474d317c2e42f3bd40a0baa",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/build.py#L14-L19"
+    },
+    {
+      "id": "tokens",
+      "path": "skills/stack-diagram/scripts/build.py",
+      "start": 43,
+      "end": 46,
+      "sha256": "28049a14bbec3a1264a9b61a7d6abe435f1932393ba9b991068ea5690e83d3a7",
+      "excerpt": "    leftover = sorted(set(re.findall(r\"%%[A-Za-z0-9_-]+%%\", html)))\n    if leftover:\n        sys.exit(f\"unresolved tokens: {', '.join(leftover)}\\n\"\n                 f\"(missing icon files in {icondir}? forgot --fonts?)\")",
+      "excerpt_sha256": "d8acd4d2fbfc73a91772ee8484b7e57eda4f20fe0636f54862898a9991190991",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/build.py#L43-L46"
+    },
+    {
+      "id": "write",
+      "path": "skills/stack-diagram/scripts/build.py",
+      "start": 47,
+      "end": 48,
+      "sha256": "28049a14bbec3a1264a9b61a7d6abe435f1932393ba9b991068ea5690e83d3a7",
+      "excerpt": "    out.write_text(html, encoding=\"utf-8\")\n    print(f\"built {out} ({len(html) // 1024} KB)\")",
+      "excerpt_sha256": "4f6c20b0ae69b4663ca15c62a6e651114f45c123be771433b7c34e7f50263140",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/build.py#L47-L48"
+    },
+    {
+      "id": "render-input",
+      "path": "skills/stack-diagram/scripts/render_png.py",
+      "start": 27,
+      "end": 40,
+      "sha256": "588873e0441cf4e796a1f916e00f90975c23c952def4a9477f01ef8ebb0f206b",
+      "excerpt": "def main():\n    args = sys.argv[1:]\n    sel, scale, full, single = \".canvas\", 2, False, False\n    if \"--selector\" in args:\n        i = args.index(\"--selector\"); sel = args[i + 1]; del args[i:i + 2]\n    if \"--scale\" in args:\n        i = args.index(\"--scale\"); scale = float(args[i + 1]); del args[i:i + 2]\n    if \"--full-page\" in args:\n        args.remove(\"--full-page\"); full = True\n    if \"--single\" in args:\n        args.remove(\"--single\"); single = True\n    if len(args) != 2:\n        print(__doc__); sys.exit(1)\n    src, out = pathlib.Path(args[0]).resolve(), pathlib.Path(args[1])",
+      "excerpt_sha256": "ca3a18cd10ff7d633feb3dc783f0cdd1ccd7fdd1340d5a7fbd5cf0ec28a8c711",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/render_png.py#L27-L40"
+    },
+    {
+      "id": "browser",
+      "path": "skills/stack-diagram/scripts/render_png.py",
+      "start": 75,
+      "end": 84,
+      "sha256": "588873e0441cf4e796a1f916e00f90975c23c952def4a9477f01ef8ebb0f206b",
+      "excerpt": "    with sync_playwright() as p:\n        # headless Chromium hints glyph advances to whole pixels by default: uneven letter spacing\n        b = p.chromium.launch(args=[\"--no-sandbox\", \"--font-render-hinting=none\"])\n        page = b.new_page(viewport={\"width\": 1200, \"height\": 1000}, device_scale_factor=scale)\n        page.goto(src.as_uri())\n        # .scroller clips a canvas wider than the viewport\n        width = page.evaluate(\"document.querySelector('.canvas')?.offsetWidth ?? 0\")\n        if width + 100 > 1200:\n            page.set_viewport_size({\"width\": width + 100, \"height\": 1000})\n        page.wait_for_timeout(1000)  # let embedded fonts settle",
+      "excerpt_sha256": "09fa03f72bfe38184e9c04d39fabd200f08b255e8d25f628daf5251b2ffd0088",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/render_png.py#L75-L84"
+    },
+    {
+      "id": "capture",
+      "path": "skills/stack-diagram/scripts/render_png.py",
+      "start": 65,
+      "end": 73,
+      "sha256": "588873e0441cf4e796a1f916e00f90975c23c952def4a9477f01ef8ebb0f206b",
+      "excerpt": "    def shoot(page, path):\n        if full:\n            page.screenshot(path=str(path), full_page=True)\n        else:\n            el = page.query_selector(sel)\n            if not el:\n                sys.exit(f\"selector {sel!r} not found in {src.name}\")\n            el.screenshot(path=str(path))\n        print(f\"rendered {path}\")",
+      "excerpt_sha256": "89119b0e40b1186673bb779b7cbb4cf784d891c9c2826c7184a017ff98b69920",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/render_png.py#L65-L73"
+    },
+    {
+      "id": "themes",
+      "path": "skills/stack-diagram/scripts/render_png.py",
+      "start": 85,
+      "end": 94,
+      "sha256": "588873e0441cf4e796a1f916e00f90975c23c952def4a9477f01ef8ebb0f206b",
+      "excerpt": "        page.add_style_tag(content=SQUARE_CORNERS)\n        if single:\n            shoot(page, out)\n        else:\n            page.evaluate(\"document.documentElement.removeAttribute('data-theme')\")\n            page.wait_for_timeout(120)\n            shoot(page, out)\n            page.evaluate(\"document.documentElement.setAttribute('data-theme','dark')\")\n            page.wait_for_timeout(120)\n            shoot(page, out.with_name(out.stem + \"-dark\" + out.suffix))",
+      "excerpt_sha256": "346c4efd0b249e273d77873bec97bcc34614cb6882fec9cc1366b92d62398bc9",
+      "revision": "commit",
+      "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+      "url": "https://github.com/caru-ini/stack-diagram/blob/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838/skills/stack-diagram/scripts/render_png.py#L85-L94"
+    }
+  ],
+  "groups": [
+    {
+      "id": "build",
+      "label": "Portable document builder"
+    },
+    {
+      "id": "render",
+      "label": "Optional PNG renderer"
+    }
+  ],
+  "steps": [
+    {
+      "id": "read",
+      "title": "Read the draft",
+      "description": "The draft contains the asset placeholders the builder needs to resolve.",
+      "node_ids": [
+        "draft"
+      ],
+      "edge_ids": [],
+      "source_ids": [
+        "args"
+      ],
+      "duration_ms": 2600,
+      "evidence": "source"
+    },
+    {
+      "id": "assets",
+      "title": "Embed only matching assets",
+      "description": "Fonts are optional. Both fonts and icons share the Base64 helper; these are code relationships, not parallel execution.",
+      "node_ids": [
+        "fonts",
+        "icons",
+        "encode"
+      ],
+      "edge_ids": [
+        "draft-fonts",
+        "draft-icons",
+        "font-encode",
+        "icon-encode"
+      ],
+      "source_ids": [
+        "fonts",
+        "icons",
+        "base64"
+      ],
+      "duration_ms": 2600,
+      "evidence": "source"
+    },
+    {
+      "id": "gate",
+      "title": "Check every remaining token",
+      "description": "Missing assets are an explicit error exit before any output write.",
+      "node_ids": [
+        "validate",
+        "stop"
+      ],
+      "edge_ids": [
+        "encode-check",
+        "invalid"
+      ],
+      "source_ids": [
+        "tokens"
+      ],
+      "duration_ms": 2600,
+      "evidence": "source"
+    },
+    {
+      "id": "write",
+      "title": "Write portable HTML",
+      "description": "The successful branch writes the self-contained document.",
+      "node_ids": [
+        "validate",
+        "html"
+      ],
+      "edge_ids": [
+        "valid"
+      ],
+      "source_ids": [
+        "write"
+      ],
+      "duration_ms": 2600,
+      "evidence": "source"
+    },
+    {
+      "id": "render",
+      "title": "Render a separate PNG",
+      "description": "A second command loads that document into Chromium and captures the chosen theme or both themes.",
+      "node_ids": [
+        "browser",
+        "capture",
+        "png"
+      ],
+      "edge_ids": [
+        "html-browser",
+        "browser-capture",
+        "capture-png"
+      ],
+      "source_ids": [
+        "browser",
+        "capture",
+        "themes"
+      ],
+      "duration_ms": 2600,
+      "evidence": "source"
+    }
+  ],
+  "uncertainties": [
+    "Static source analysis at a pinned revision; not a recorded execution.",
+    "fetch_icons.py and the hosted sharing service are outside this focused graph.",
+    "The source is MIT-licensed, copyright 2026 caru-ini."
+  ],
+  "language": "en",
+  "default_view": "map",
+  "scenarios": [
+    {
+      "id": "default",
+      "label": "Walkthrough",
+      "step_ids": [
+        "read",
+        "assets",
+        "gate",
+        "write",
+        "render"
+      ]
+    }
+  ],
+  "repo": {
+    "name": "stack-diagram",
+    "commit": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+    "dirty": false,
+    "url": "https://github.com/caru-ini/stack-diagram"
+  },
+  "grounding": {
+    "status": "files-and-ranges-checked",
+    "scope": "Source existence, line ranges and fingerprints. The author must verify the interpretation; this is not a runtime trace."
+  },
+  "source_license": "MIT License\n\nCopyright (c) 2026 caru-ini\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+}

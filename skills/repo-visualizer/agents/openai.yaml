@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repo Visualizer"
+  short_description: "Explore source-grounded repository graphs"
+  default_prompt: "Use $repo-visualizer to explain this repository or feature as an interactive component graph with inspectable code."
