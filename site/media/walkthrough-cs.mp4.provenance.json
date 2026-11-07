@@ -11,7 +11,7 @@
   },
   "source_repository": "https://github.com/openai/codex",
   "source_revision": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
-  "source_html_sha256": "82c5515bc0749aa133dff0219e6644d4b2c3723bf3d897a23c3cba724ab1e32b",
-  "artifact_sha256": "c8537ec612f43c310212839bacababcddf7909df9c030339244c875971ef81c3",
+  "source_html_sha256": "8428e5000b13f125965a767245932f021eba389582029ead74f01217c6411783",
+  "artifact_sha256": "0549fab946ac6583803bca222895dac7c0b7c6cd6e02dbcfd26d27982a86091c",
   "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
 }

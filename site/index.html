@@ -1896,7 +1896,29 @@ body {
 .export-frame.standalone .site-header{height:48px}
 
     </style>
-  <meta name="description" content="Understand how a repository works. Explore source-grounded component graphs and export HTML, GIF and video with an open skill for Codex and Claude Code.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJicmFuZC1tYXJrIiB2aWV3Qm94PSIwIDAgMzIgMzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjb2xvcj0iIzIxNjRjNyIgc3Ryb2tlLXdpZHRoPSIxLjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgPHBhdGggZD0iTTggMTB2MTJNMTMgNmg4YTQgNCAwIDAgMSA0IDR2Mk0yNSAyMHYyYTQgNCAwIDAgMS00IDRoLTgiLz4KICA8cmVjdCB4PSIzIiB5PSIyIiB3aWR0aD0iMTAiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9ImN1cnJlbnRDb2xvciIvPgogIDxyZWN0IHg9IjIxIiB5PSIxMiIgd2lkdGg9IjgiIGhlaWdodD0iOCIgcng9IjIiLz4KICA8cmVjdCB4PSIzIiB5PSIyMiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjgiIHJ4PSIyIi8+CjxzdHlsZT5AbWVkaWEocHJlZmVycy1jb2xvci1zY2hlbWU6ZGFyayl7c3Zne2NvbG9yOiM4YmI5ZmZ9fTwvc3R5bGU+PC9zdmc+"><style id="brand-style">.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.wordmark .brand-mark {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  color: var(--blue);
+}
+@media (max-width: 600px) {
+  .site-header .wordmark { font-size: 18px; gap: 7px; }
+  .wordmark .brand-mark { width: 24px; height: 24px; }
+}
+@media (max-width: 360px) {
+  .site-header { padding-inline: 12px; gap: 8px; }
+  .site-header .wordmark { font-size: 16px; gap: 6px; }
+  .wordmark .brand-mark { width: 22px; height: 22px; }
+}
+</style><meta name="description" content="Understand how a repository works. Explore source-grounded component graphs and export HTML, GIF and video with an open skill for Codex and Claude Code.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="Repo Visualizer — understand how the code works">
 <meta property="og:description" content="A component graph you can explore, verify against source, and share as HTML or video.">
@@ -1907,7 +1929,28 @@ body {
   top: 0;
   z-index: 30;
   background: var(--paper);
+  border-bottom: 1px solid var(--line);
 }
+.landing .intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 32px;
+  padding: 36px 28px 30px;
+}
+.landing .intro h1 {
+  font-size: clamp(29px, 2.65vw, 38px);
+  max-width: 29ch;
+  grid-column: 1;
+}
+.landing #page-description { grid-column: 1; margin-top: 12px; }
+.landing .intro .hero-actions { grid-column: 2; grid-row: 1 / 3; margin: 0; align-self: center; justify-content: flex-end; }
+.landing .intro .hero-meta { grid-column: 1 / -1; margin-top: 16px; }
+.landing .workspace { grid-template-columns: 21% 55% 24%; height: 640px; }
+.landing .component-pane h2 { font-size: 17px; }
+.landing .inspector h2 { font-size: 21px; }
+.landing .component-pane, .landing .inspector { padding: 16px; }
+.landing .source-heading a { font-size: 12px; }
+.landing .graph-count, .landing #elapsed, .landing .tour-caption { font-size: 11px; }
 .intro .hero-actions {
   display: flex;
   align-items: center;
@@ -2000,6 +2043,8 @@ body {
 .example-row:last-child {
   border-bottom: 1px solid var(--line);
 }
+.example-row:hover { background: var(--hover); }
+.example-row:focus-visible { outline-offset: 5px; }
 .example-row h3 {
   font-size: 18px;
   font-weight: 600;
@@ -2168,7 +2213,7 @@ body {
   background: var(--paper);
 }
 .export-showcase figcaption {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
   margin-top: 12px;
@@ -2246,7 +2291,14 @@ body {
     gap: 28px;
   }
 }
+@media (max-width: 900px) {
+  .landing .workspace { grid-template-columns: 31% 69%; height: 760px; }
+}
 @media (max-width: 700px) {
+  .landing .intro { display: block; padding: 28px 20px 24px; }
+  .landing .intro h1 { font-size: 29px; }
+  .landing .intro .hero-actions { margin-top: 20px; justify-content: flex-start; }
+  .landing .workspace { height: auto; }
   .landing-section {
     padding: 44px 20px;
   }
@@ -2346,7 +2398,12 @@ body {
         href="#"
         aria-label="Repo Visualizer home"
         data-i18n-aria="home"
-        >repo-visualizer</a
+        ><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="brand-mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" color="#2164c7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 10v12M13 6h8a4 4 0 0 1 4 4v2M25 20v2a4 4 0 0 1-4 4h-8"/>
+  <rect x="3" y="2" width="10" height="8" rx="2" fill="currentColor"/>
+  <rect x="21" y="12" width="8" height="8" rx="2"/>
+  <rect x="3" y="22" width="10" height="8" rx="2"/>
+</svg><span>repo-visualizer</span></a
       >
       <nav
         class="site-nav"

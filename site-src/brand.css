@@ -1,0 +1,22 @@
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.wordmark .brand-mark {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  color: var(--blue);
+}
+@media (max-width: 600px) {
+  .site-header .wordmark { font-size: 18px; gap: 7px; }
+  .wordmark .brand-mark { width: 24px; height: 24px; }
+}
+@media (max-width: 360px) {
+  .site-header { padding-inline: 12px; gap: 8px; }
+  .site-header .wordmark { font-size: 16px; gap: 6px; }
+  .wordmark .brand-mark { width: 22px; height: 22px; }
+}

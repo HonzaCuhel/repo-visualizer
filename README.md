@@ -1,16 +1,18 @@
 <div align="center">
 
+<img src="site/assets/brand-mark.svg" width="52" height="52" alt="Repo Visualizer graph mark">
+
 # Repo Visualizer
 
-**Understand the mechanism behind the code.**
+Ask how the code works. Explore the answer.
 
-An open skill that turns repository questions into component graphs—with source you can inspect and animations you can share.
+An open skill for **Codex** and **Claude Code**. Turn a repository question into an interactive component graph with source references and shareable animation.
 
-[Explore the live demo](https://honzacuhel.github.io/repo-visualizer/) · [Install the skill](#install) · [Download a release](https://github.com/HonzaCuhel/repo-visualizer/releases)
+[**Explore the demo**](https://honzacuhel.github.io/repo-visualizer/) · [Install](#quick-start) · [Download](https://github.com/HonzaCuhel/repo-visualizer/releases)
 
 [![Check skill](https://github.com/HonzaCuhel/repo-visualizer/actions/workflows/check.yml/badge.svg)](https://github.com/HonzaCuhel/repo-visualizer/actions/workflows/check.yml)
 [![Release](https://img.shields.io/github/v/release/HonzaCuhel/repo-visualizer?color=2164c7)](https://github.com/HonzaCuhel/repo-visualizer/releases)
-[![License: MIT](https://img.shields.io/badge/license-MIT-64748b)](LICENSE)
+[![MIT license](https://img.shields.io/badge/license-MIT-64748b)](LICENSE)
 
 English · [Česky](README.cs.md)
 
@@ -18,70 +20,70 @@ English · [Česky](README.cs.md)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/media/walkthrough-dark.gif">
-  <img src="site/media/walkthrough.gif" alt="Codex's complete agent-loop example: user input, model responses, tool dispatch, approval, sandbox execution and the result loop, with inspectable source." width="100%">
+  <img src="site/media/walkthrough.gif" alt="The Codex agent loop: user input, model responses, tool dispatch, approvals, sandbox execution and results fed back into conversation history." width="100%">
 </picture>
 
-The agent reads the implementation and authors a graph of responsibilities and relationships. The explorer renders that graph: branches stay branches, retries stay loops, and an optional walkthrough highlights a path through the same topology.
+**The example is Codex explaining Codex.** A fresh Codex CLI session used the installed skill to produce 11 components, 19 relationships and 37 revision-pinned source references. Explore the [complete agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html), select a component and open the code behind it. [Source and test record](examples/codex/README.md).
 
-## Install
+<a id="install"></a>
 
-Run inside your repository:
+## Quick start
+
+Run inside the repository you want to understand:
 
 ```sh
 npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer -a codex -a claude-code
 ```
 
-Keep one `-a` option to choose a single agent. Add `-g` for a personal installation across projects. The installer uses the existing [skills CLI](https://github.com/vercel-labs/skills); skills are fetched from this GitHub repository.
+Then ask your agent:
 
-Then ask:
+> Use repo-visualizer to explain how this feature works. Include components, branches and failure paths, with source references. Export an interactive HTML graph and a short GIF.
 
-> Use repo-visualizer to explain how this feature works. Extract its components and relationships, include failure paths, and export an interactive HTML graph and a short GIF.
+Keep one `-a` option to choose a single agent; add `-g` to install across projects. The command uses the existing [skills CLI](https://github.com/vercel-labs/skills) to fetch this GitHub repository. A complete skill ZIP and SHA-256 checksum are also available in [Releases](https://github.com/HonzaCuhel/repo-visualizer/releases).
 
-Prefer a file? Download the complete skill ZIP from [Releases](https://github.com/HonzaCuhel/repo-visualizer/releases). Each release includes its SHA-256 checksum. Keep the skill folder intact when installing manually.
+<details>
+<summary>Requirements</summary>
 
-| Requirement | Used for |
+| Requirement | Purpose |
 | --- | --- |
-| Codex or Claude Code | Read the repository and author the explanation |
-| Node.js 22.20+ | Install through `npx skills` |
+| Codex or Claude Code | Read implementation and author the explanation |
+| Node.js 22.20+ | Install through npx |
 | Python 3.9+ | Inventory, source validation and HTML assembly |
-| Optional rendering environment | Animated and image exports; see the [export guide](skills/repo-visualizer/references/exports.md) |
+| Optional rendering environment | GIF, video and image exports; [setup](skills/repo-visualizer/references/exports.md) |
 
-## Explore the code, at your own pace
+</details>
 
-| View | What it shows |
+## Follow the mechanism
+
+The agent reads the implementation and authors a graph of responsibilities and relationships. Branches, cycles, parallel edges and subsystem boundaries remain part of that graph.
+
+| View | Use it to |
 | --- | --- |
-| **Map** | The complete component graph, including branches, cycles, parallel edges and nested groups |
-| **Focus** | The selected component and its immediate relationships |
-| **Path** | A source-derived walkthrough over the same graph |
+| **Map** | See the complete topology |
+| **Focus** | Inspect a component and its immediate relationships |
+| **Path** | Follow a source-derived walkthrough over the same graph |
 
-Select a component or relationship to read embedded code excerpts and open revision-pinned source links. Search, zoom, pan, seek and keyboard controls work in the portable HTML, including offline.
+Select a component or relationship to read embedded excerpts and open revision-pinned source links. Search, pan, zoom and seek at your own pace. The portable HTML works offline.
 
-[Explore the Codex agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Focus on shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [Explore the builder example](https://honzacuhel.github.io/repo-visualizer/portable-builder.html)
+[Codex agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [Portable HTML builder](https://honzacuhel.github.io/repo-visualizer/portable-builder.html)
 
-## One graph, multiple outputs
+## Share the explanation
 
 **Interactive HTML · JSON · SVG · PNG · GIF · MP4 · WebM**
 
-The player and local exporters use the same graph and seekable scene. HTML keeps clickable evidence. Image and video exports carry the visual explanation. An optional [HyperFrames adapter](skills/repo-visualizer/references/exports.md#hyperframes) renders that same scene locally.
+One canonical graph and one seekable scene drive the player and its exports. HTML keeps the clickable evidence; images and animation carry the visual explanation. [Export guide](skills/repo-visualizer/references/exports.md), including the optional HyperFrames adapter.
 
-Light, dark and system appearance are user choices. Explanations follow the user's requested language, independently of the agent. English and Czech interface translations are bundled; other languages can provide an explicit translated dictionary. [Language and appearance](skills/repo-visualizer/references/localization.md).
+Choose light, dark or system appearance. Explanations follow your requested language, independently of the agent. English and Czech interface translations are bundled; other interface languages can provide an explicit dictionary. [Language and appearance](skills/repo-visualizer/references/localization.md).
 
-## How it stays grounded
+## Evidence and limits
 
-1. **Read.** Inventory the repository without importing or running its code; inspect the relevant implementation.
-2. **Model.** Describe responsibilities, typed relationships, uncertainty and optional walkthroughs in canonical JSON.
-3. **Verify.** Check source ranges, fingerprints and revision before assembling the explorer.
-4. **Share.** Inspect the result, then export the same explanation in the format you need.
+The skill inventories source without importing or executing the target repository. The agent then reads implementation, models the mechanism and validates source paths, ranges, fingerprints and revision before building the explorer.
 
-The semantic explanation is authored by the coding agent. Static imports are hints; matching a fingerprint does **not** prove the interpretation is correct. A walkthrough illustrates source-derived behavior, not a recorded execution.
+Source matching checks the bytes; the agent's interpretation still needs review. A walkthrough illustrates source-derived behavior rather than recording a running application. Dense maps are best explored with zoom and component selection.
 
-Generated HTML embeds source excerpts. Keep private-repository artifacts private. The renderer and exports run locally; your coding agent's existing data settings still apply.
+Generated HTML embeds source excerpts. Keep private outputs private. Rendering and exports run locally; your coding agent's existing data settings still apply.
 
-## Verification
-
-Fresh Codex and Claude Code sessions have independently produced graphs, offline HTML and changing GIFs from public source. Separate checks cover source fingerprints, graph interaction, packaging, topology, offline operation and decoded video frames. [Test record and limitations](docs/verification.md).
-
-On macOS, the agent's OS sandbox may require approval for the specific trusted browser export command. Dense diagrams are best explored in HTML with zoom; scope a video around one useful question.
+Fresh Codex and Claude Code sessions have independently produced graphs, offline HTML and changing GIFs from public source. Automated checks cover topology, source matching, safe inputs, localization, themes, offline use, packaging and decoded animation frames. [Verification record](docs/verification.md).
 
 ## Development
 

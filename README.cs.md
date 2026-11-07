@@ -1,12 +1,14 @@
 <div align="center">
 
+<img src="site/assets/brand-mark.svg" width="52" height="52" alt="Značka Repo Visualizer: propojené komponenty">
+
 # Repo Visualizer
 
-**Pochopte mechanismus za zdrojovým kódem.**
+Zeptejte se na kód. Prozkoumejte odpověď.
 
-Otevřený skill pro Codex a Claude Code: z otázky nad repozitářem vytvoří graf komponent, odkazy do kódu a animaci.
+Otevřený skill pro **Codex** a **Claude Code**. Z otázky nad repozitářem vytvoří interaktivní graf komponent, odkazy do kódu a animaci.
 
-[Živá ukázka](https://honzacuhel.github.io/repo-visualizer/?lang=cs) · [Instalace](#instalace) · [Vydané verze](https://github.com/HonzaCuhel/repo-visualizer/releases)
+[**Živá ukázka**](https://honzacuhel.github.io/repo-visualizer/?lang=cs) · [Instalace](#rychlý-start) · [Stažení](https://github.com/HonzaCuhel/repo-visualizer/releases)
 
 [English](README.md) · Česky
 
@@ -14,61 +16,70 @@ Otevřený skill pro Codex a Claude Code: z otázky nad repozitářem vytvoří 
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/media/walkthrough-cs-dark.gif">
-  <img src="site/media/walkthrough-cs.gif" alt="Úplná ukázka agentní smyčky Codexu: zadání, odpovědi modelu, výběr nástroje, schválení, sandbox a vrácení výsledku, s odkazy do kódu." width="100%">
+  <img src="site/media/walkthrough-cs.gif" alt="Agentní smyčka Codexu: zadání, odpovědi modelu, volání nástrojů, schvalování, sandbox a vrácení výsledků do historie." width="100%">
 </picture>
 
-Agent přečte implementaci a popíše odpovědnosti a vztahy. Průzkumník pak zobrazí tento graf. Větvení zůstane větvením, opakování smyčkou; volitelný průchod zvýrazní cestu stejnou topologií.
+**V ukázce Codex vysvětluje Codex.** Čerstvá relace Codex CLI pomocí nainstalovaného skillu vytvořila 11 komponent, 19 vazeb a 37 odkazů na konkrétní revizi zdrojů. Otevřete [celou agentní smyčku](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html?lang=cs), vyberte komponentu a přečtěte si její kód. [Zdroj a záznam testu](examples/codex/README.md).
 
-## Instalace
+<a id="instalace"></a>
 
-Spusťte uvnitř svého repozitáře:
+## Rychlý start
+
+Spusťte uvnitř repozitáře, který chcete pochopit:
 
 ```sh
 npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer -a codex -a claude-code
 ```
 
-Pro jednoho agenta ponechte jen jeho `-a`. Volba `-g` nainstaluje skill pro všechny vaše projekty. Instalaci z tohoto GitHub repozitáře zajišťuje existující [skills CLI](https://github.com/vercel-labs/skills).
+Pak požádejte agenta:
 
-Poté požádejte agenta:
+> Pomocí repo-visualizer vysvětli, jak tato funkce funguje. Zahrň komponenty, větvení a chybové cesty s odkazy do kódu. Exportuj interaktivní HTML graf a krátký GIF.
 
-> Pomocí repo-visualizer vysvětli, jak tato funkce funguje. Zahrň hlavní komponenty, vztahy a chybové větve. Vytvoř interaktivní HTML graf a krátký GIF.
+Pro jednoho agenta ponechte jen jeho `-a`. S `-g` platí instalace pro všechny projekty. Příkaz používá existující [skills CLI](https://github.com/vercel-labs/skills). Kompletní ZIP a kontrolní součet SHA-256 jsou také ve [vydaných verzích](https://github.com/HonzaCuhel/repo-visualizer/releases).
 
-K dispozici je také kompletní ZIP a kontrolní součet SHA-256 ve [vydaných verzích](https://github.com/HonzaCuhel/repo-visualizer/releases). Při ruční instalaci ponechte složku skillu celou.
+<details>
+<summary>Požadavky</summary>
 
-| Požadavek | K čemu slouží |
+| Požadavek | Účel |
 | --- | --- |
-| Codex nebo Claude Code | Čtení repozitáře a tvorba vysvětlení |
-| Node.js 22.20+ | Instalace přes `npx skills` |
+| Codex nebo Claude Code | Čtení implementace a vytvoření vysvětlení |
+| Node.js 22.20+ | Instalace přes npx |
 | Python 3.9+ | Inventář, ověření zdrojů a sestavení HTML |
-| Volitelné vykreslovací nástroje | Export obrázků a animací; viz [návod](skills/repo-visualizer/references/exports.md) |
+| Volitelné vykreslovací prostředí | GIF, video a obrázky; [nastavení](skills/repo-visualizer/references/exports.md) |
 
-## Zvolte si pohled
+</details>
 
-| Pohled | Výsledek |
+## Sledujte mechanismus
+
+Agent přečte implementaci a popíše její odpovědnosti a vztahy. Graf zachová větvení, cykly, souběžné vazby i hranice subsystémů.
+
+| Pohled | Co ukáže |
 | --- | --- |
-| **Mapa** | Úplná topologie včetně větvení, smyček, paralelních vazeb a vnořených skupin |
-| **Okolí** | Vybraná komponenta a její přímé vztahy |
+| **Mapa** | Celou topologii komponent |
+| **Okolí** | Vybranou komponentu a její přímé sousedy |
 | **Průchod** | Vysvětlení vybrané cesty stejným grafem |
 
-Komponentu nebo vztah lze rozkliknout, přečíst si vložený úryvek a otevřít konkrétní revizi kódu. Přenositelné HTML má hledání, přiblížení, posouvání i klávesové ovládání a funguje offline.
+U komponent i vztahů můžete číst vložené úryvky a otevřít zdroj na konkrétní revizi. Hledejte, přibližujte a přehrávejte vlastním tempem. Přenositelné HTML funguje offline.
 
-## Jeden graf, více formátů
+[Agentní smyčka Codexu](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html?lang=cs) · [Spuštění příkazu](https://honzacuhel.github.io/repo-visualizer/codex-shell.html?lang=cs) · [Sestavení přenositelného HTML](https://honzacuhel.github.io/repo-visualizer/portable-builder.html?lang=cs)
+
+## Sdílejte vysvětlení
 
 **Interaktivní HTML · JSON · SVG · PNG · GIF · MP4 · WebM**
 
-HTML zachovává klikatelné důkazy. Obrázky a videa přenášejí vizuální vysvětlení. Přehrávač i exportéry používají stejný graf a scénu; k dispozici je také volitelný adaptér HyperFrames.
+Přehrávač i exporty používají jediný graf a stejnou scénu. HTML zachová klikatelné zdroje; obrázky a animace přenesou vizuální vysvětlení. [Průvodce exportem](skills/repo-visualizer/references/exports.md), včetně volitelného adaptéru HyperFrames.
 
-Světlý, tmavý a systémový vzhled volí uživatel. Jazyk vysvětlení určuje zadání, nezávisle na agentovi. Ovládání má vestavěnou češtinu a angličtinu; další jazyky mohou dodat vlastní překladový slovník. Zdrojový kód, názvy symbolů a cesty se nepřekládají. [Jazyky a vzhled](skills/repo-visualizer/references/localization.md).
+Vyberte světlý, tmavý nebo systémový vzhled. Jazyk vysvětlení určuje váš požadavek, nezávisle na agentovi. Rozhraní má český a anglický překlad; další jazyky mohou dodat vlastní slovník. [Jazyk a vzhled](skills/repo-visualizer/references/localization.md).
 
-## Důkazy a ověření
+## Důkazy a omezení
 
-Skill ověřuje řádky, otisky a revizi zdrojů. Významové vysvětlení ale tvoří agent: shoda se zdrojem sama nedokazuje správnost interpretace. Animace ilustruje kód, není záznamem skutečného běhu.
+Skill vytvoří inventář bez spouštění cílového repozitáře. Agent přečte implementaci, sestaví graf a před vytvořením průzkumníka ověří cesty, rozsahy, otisky a revizi zdrojů.
 
-Skutečné běhy Codexu a Claude Code vytvořily samostatné grafy, offline HTML a animované GIFy. Nezávislé kontroly pokrývají zdroje, ovládání, topologii, balíček a dekódované snímky. [Výsledky a omezení](docs/verification.md).
+Shoda zdrojů ověřuje konkrétní bajty; správnost výkladu je stále potřeba posoudit. Animace ilustruje chování podle kódu. Husté mapy prozkoumávejte pomocí přiblížení a výběru komponent.
 
-Na macOS může sandbox agenta vyžadovat schválení konkrétního příkazu pro vykreslení. Složité grafy se nejlépe prohlížejí v HTML s přiblížením; video zaměřte na jednu otázku.
+HTML obsahuje úryvky kódu. Soukromé výstupy ponechte soukromé. Vykreslení a exporty běží lokálně; nadále platí datová nastavení vašeho coding agenta.
 
-HTML obsahuje úryvky kódu. Soukromé výstupy ponechte soukromé. Vykreslování a exporty jsou lokální; nadále platí datová nastavení vašeho coding agenta.
+Čerstvé relace Codexu i Claude Code nezávisle vytvořily grafy, offline HTML a animované GIFy z veřejných zdrojů. [Záznam ověření](docs/verification.md).
 
 ## Vývoj
 

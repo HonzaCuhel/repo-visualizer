@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="brand-mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" color="#2164c7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 10v12M13 6h8a4 4 0 0 1 4 4v2M25 20v2a4 4 0 0 1-4 4h-8"/>
+  <rect x="3" y="2" width="10" height="8" rx="2" fill="currentColor"/>
+  <rect x="21" y="12" width="8" height="8" rx="2"/>
+  <rect x="3" y="22" width="10" height="8" rx="2"/>
+</svg>

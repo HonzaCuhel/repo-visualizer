@@ -196,6 +196,12 @@ Controls have small, practical curves: inset source blocks and icon buttons use 
 
 ## Components
 
+### Brand mark and public page
+
+The brand mark is a crisp graph of three connected components: one filled node and two outlined nodes. It uses the existing working blue, with current-color strokes for light/dark presentation. The public header, favicon and README share this SVG; public standalone examples embed it to remain offline. It is geometry, not an illustration or an external icon dependency.
+
+The public landing introduction pairs its explanation with installation actions on wide screens and stacks them on mobile. Its compact display range ends at 38px. The desktop explorer gives the full graph 55% of the workspace, with 21% component navigation and 24% source inspection; tablet and phone layouts retain their existing reflow. The complete canonical Codex graph stays intact. This public-page refinement does not change the installed skill's player template.
+
 ### Buttons
 Compact, familiar actions.
 - The installation action uses the primary variant, a matching blue border, semibold text and a darker hover fill. The hero action uses 14px text; the header uses 13px. Both share one action color.
