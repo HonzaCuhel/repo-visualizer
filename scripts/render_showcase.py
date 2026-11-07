@@ -19,8 +19,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--browser', help='Path to an existing Chromium browser')
     args = parser.parse_args()
-    source = ROOT / 'site/codex-shell.html'
-    graph = json.loads((ROOT / 'examples/codex/graph.json').read_text())
+    source = ROOT / 'site/codex-agent-loop.html'
+    graph = json.loads((ROOT / 'examples/codex/agent-loop.json').read_text())
     jobs = []
     for language in ('en', 'cs'):
         for theme in ('light', 'dark'):

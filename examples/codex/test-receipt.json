@@ -15,11 +15,18 @@
     "gif_distinct_frames": 90
   },
   "landing_scope": {
+    "nodes": 11,
+    "edges": 19,
+    "sources": 37,
+    "duration_ms": 15000,
+    "derivation": "Complete, unmodified agent-authored graph."
+  },
+  "target_source_changes": false,
+  "focused_example_scope": {
     "nodes": 6,
     "edges": 9,
     "sources": 25,
     "duration_ms": 14400,
     "derivation": "Editorially scoped from the agent-authored graph; canonical source ranges and topology retained for the shell mechanism."
-  },
-  "target_source_changes": false
+  }
 }

@@ -18,7 +18,7 @@ English · [Česky](README.cs.md)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/media/walkthrough-dark.gif">
-  <img src="site/media/walkthrough.gif" alt="A source-derived graph of Codex's shell execution, approval decisions and conditional retries, with inspectable code." width="100%">
+  <img src="site/media/walkthrough.gif" alt="Codex's complete agent-loop example: user input, model responses, tool dispatch, approval, sandbox execution and the result loop, with inspectable source." width="100%">
 </picture>
 
 The agent reads the implementation and authors a graph of responsibilities and relationships. The explorer renders that graph: branches stay branches, retries stay loops, and an optional walkthrough highlights a path through the same topology.
@@ -56,7 +56,7 @@ Prefer a file? Download the complete skill ZIP from [Releases](https://github.co
 
 Select a component or relationship to read embedded code excerpts and open revision-pinned source links. Search, zoom, pan, seek and keyboard controls work in the portable HTML, including offline.
 
-[Explore Codex shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [See the complete agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Explore the builder example](https://honzacuhel.github.io/repo-visualizer/portable-builder.html)
+[Explore the Codex agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Focus on shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [Explore the builder example](https://honzacuhel.github.io/repo-visualizer/portable-builder.html)
 
 ## One graph, multiple outputs
 

@@ -2,8 +2,8 @@
 
 Public source: [openai/codex](https://github.com/openai/codex), pinned to revision `33b3f80a0935e51a49cbbda7d6473ef757d4241b`.
 
-- `graph.json`: focused shell execution example used on the landing page, with 6 components, 9 relationships, 25 source references and a 14.4-second walkthrough.
-- `agent-loop.json`: the complete fresh Codex CLI result, with 11 components, 19 relationships, 37 source references and a 15-second walkthrough.
+- `agent-loop.json`: the complete fresh Codex CLI result used on the landing page and in all showcase media, with 11 components, 19 relationships, 37 source references and a 15-second walkthrough.
+- `graph.json`: an additional focused shell execution example, with 6 components, 9 relationships, 25 source references and a 14.4-second walkthrough.
 - `SOURCE-LICENSE` and `SOURCE-NOTICE`: exact Apache-2.0 license and NOTICE copied from the analyzed revision. Both are embedded in each graph's source license.
 - `test-receipt.json`: sanitized record of the real skill installation and CLI run.
 
@@ -15,7 +15,7 @@ The OS sandbox blocked the initial browser launch. The approved local export use
 
 ## Showcase scope
 
-The complete agent-loop map is intentionally retained as the deeper example. The landing graph is an editorially scoped projection of its shell mechanism, with shorter labels and a new focused walkthrough. It retains the original cited source ranges and relationships, including conditional approval, parallel attempt/retry edges and the denial cycle. All landing HTML, GIF, MP4, PNG and SVG outputs are built from this one focused canonical graph. The overview does not claim to cover every Codex subsystem.
+The landing page and every showcase HTML, GIF, MP4, PNG and SVG use the complete, unmodified agent-loop graph produced by the fresh CLI run. The focused shell mechanism remains an additional example. It retains the original cited source ranges and relationships, including conditional approval, parallel attempt/retry edges and the denial cycle. Neither graph claims to cover every Codex subsystem.
 
 The source paths in this revision include `session/turn.rs`, tool routing and parallel dispatch, split `tools/handlers/unified_exec/` preparation, `tools/orchestrator.rs`, approvals, the unified execution runtime and process manager. Historical monolithic shell paths were not assumed.
 

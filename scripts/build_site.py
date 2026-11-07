@@ -11,8 +11,7 @@ from story_model import read_story,write_story
 
 def portable_builder_graph():
     graph=read_story(ROOT/'examples/stack-diagram/graph.json')
-    # The landing question is the portable builder; the separate PNG renderer
-    # stays available in the full example, rather than elongating this scope.
+    # Keep the portable builder and the separate PNG renderer as two examples.
     graph['nodes']=[n for n in graph['nodes'] if n.get('group')=='build']
     ids={n['id'] for n in graph['nodes']}
     graph['edges']=[e for e in graph['edges'] if e['from'] in ids and e['to'] in ids]
@@ -33,7 +32,7 @@ def portable_builder_graph():
     return graph
 
 def build():
-    graph=read_story(ROOT/'examples/codex/graph.json')
+    graph=read_story(ROOT/'examples/codex/agent-loop.json')
     portable=portable_builder_graph()
     site=ROOT/'site';assets=site/'assets';assets.mkdir(parents=True,exist_ok=True)
     shutil.copy2(ROOT/'skills/repo-visualizer/assets/fonts/AtkinsonHyperlegibleNext.ttf',assets)
@@ -45,8 +44,8 @@ def build():
     document=document.replace('</main>', (ROOT/'site-src/sections.html').read_text()+'\n</main>',1)
     document=document.replace('</body>','<script id="site-locales" type="application/json">'+(ROOT/'site-src/locales.json').read_text().replace('<','\\u003c')+'</script><script id="site-script">'+(ROOT/'site-src/site.js').read_text()+'</script>\n</body>',1)
     write_html(site/'index.html',document)
-    write_html(site/'codex-shell.html',build_html(graph))
-    write_html(site/'codex-agent-loop.html',build_html(read_story(ROOT/'examples/codex/agent-loop.json')))
+    write_html(site/'codex-shell.html',build_html(read_story(ROOT/'examples/codex/graph.json')))
+    write_html(site/'codex-agent-loop.html',build_html(graph))
     write_html(site/'portable-builder.html',build_html(portable))
     full=read_story(ROOT/'examples/stack-diagram/graph.json')
     full['translations']={'cs':json.loads((ROOT/'site-src/demo-cs.json').read_text())}

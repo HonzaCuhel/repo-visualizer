@@ -25,7 +25,7 @@ jobs:
         run: |
           gh release create "$RELEASE_TAG" \
             dist/repo-visualizer.zip site/downloads/SHA256SUMS.txt \
-            'site/codex-shell.html#explorer.html' \
+            'site/codex-agent-loop.html#explorer.html' \
             site/media/walkthrough.gif site/media/walkthrough.mp4 \
             --verify-tag --title "$RELEASE_TAG — Source-grounded repository graphs" \
             --notes-file "docs/releases/$RELEASE_TAG.md"

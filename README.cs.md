@@ -14,7 +14,7 @@ Otevřený skill pro Codex a Claude Code: z otázky nad repozitářem vytvoří 
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/media/walkthrough-cs-dark.gif">
-  <img src="site/media/walkthrough-cs.gif" alt="Graf spouštění příkazu v Codexu, včetně schvalování, podmíněného opakování a odpovídajícího zdrojového kódu." width="100%">
+  <img src="site/media/walkthrough-cs.gif" alt="Úplná ukázka agentní smyčky Codexu: zadání, odpovědi modelu, výběr nástroje, schválení, sandbox a vrácení výsledku, s odkazy do kódu." width="100%">
 </picture>
 
 Agent přečte implementaci a popíše odpovědnosti a vztahy. Průzkumník pak zobrazí tento graf. Větvení zůstane větvením, opakování smyčkou; volitelný průchod zvýrazní cestu stejnou topologií.
