@@ -86,6 +86,19 @@ def validate_structure(data):
         raise StoryError("default_view: expected map, focus or path")
     sources = _records(story.get("sources"), "sources")
     nodes = _records(story.get("nodes"), "nodes")
+    overview = story.setdefault('overview', {})
+    if not isinstance(overview, dict) or set(overview) - {'lead', 'path'}:
+        raise StoryError('overview: expected a short lead and optional component path')
+    if 'lead' in overview:
+        _text(overview['lead'], 'overview.lead')
+    if 'path' in overview:
+        if not isinstance(overview['path'], list):
+            raise StoryError('overview.path: expected component references')
+        for entry in overview['path']:
+            if not isinstance(entry, dict) or set(entry) - {'node_id', 'label'} or entry.get('node_id') not in nodes:
+                raise StoryError('overview.path: use existing component ids')
+            if 'label' in entry:
+                _text(entry['label'], 'overview.path.label')
     raw_edges = story.setdefault("edges", [])
     if not isinstance(raw_edges, list):
         raise StoryError("edges: expected a list")
@@ -155,6 +168,33 @@ def validate_structure(data):
     repo = story.setdefault("repo", {})
     if not isinstance(repo, dict):
         raise StoryError("repo: expected an object")
+    ui_strings = story.setdefault('ui_strings', {})
+    if not isinstance(ui_strings, dict) or any(not isinstance(k, str) or not isinstance(v, str) or not v.strip() for k, v in ui_strings.items()):
+        raise StoryError('ui_strings: expected a dictionary of interface keys and translated text')
+    translations = story.setdefault('translations', {})
+    if not isinstance(translations, dict):
+        raise StoryError('translations: expected language-tagged display text')
+    collections = {'nodes': (nodes, {'label', 'description'}), 'edges': (edges, {'label'}), 'groups': (groups, {'label'}), 'steps': (steps, {'title', 'description'}), 'scenarios': ({s['id']: s for s in scenarios}, {'label'})}
+    for locale, display in translations.items():
+        if not isinstance(locale, str) or not re.fullmatch(r'[a-zA-Z]{2,8}(?:-[a-zA-Z0-9]{1,8})*', locale) or not isinstance(display, dict):
+            raise StoryError('translations: expected valid language tags and display objects')
+        for field, value in display.items():
+            if field in ('title', 'question', 'summary'):
+                _text(value, 'translations.'+field)
+            elif field == 'uncertainties':
+                if not isinstance(value, list) or any(not isinstance(v, str) for v in value):
+                    raise StoryError('translations.uncertainties: expected text entries')
+            elif field in collections:
+                available, allowed = collections[field]
+                if not isinstance(value, dict):
+                    raise StoryError('translations.'+field+': expected display text by id')
+                for identity, fields in value.items():
+                    if identity not in available or not isinstance(fields, dict) or set(fields) - allowed:
+                        raise StoryError('translations: display text cannot change graph topology or evidence')
+                    for text_value in fields.values():
+                        _text(text_value, 'translations.'+field)
+            else:
+                raise StoryError('translations: unsupported display field '+field)
     return story
 
 

@@ -4,20 +4,38 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="referrer" content="no-referrer" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
     <title>@@TITLE@@ · Repo Visualizer</title>
+    <script id="appearance-config" type="application/json">
+      @@UI_CONFIG@@
+    </script>
+    <script id="interface-locales" type="application/json">
+      @@LOCALES@@
+    </script>
+    <script id="appearance-script">
+      @@APPEARANCE@@
+    </script>
     <style id="player-style">
       @font-face{font-family:Atkinson;src:url(@@FONT_URL@@) format('truetype');font-weight:100 900;font-display:swap}@@CSS@@
     </style>
   </head>
-  <body>
-    <a class="skip-link" href="#workspace">Skip to graph</a>
+  <body class="@@BODY_CLASS@@">
+    <a class="skip-link" href="#workspace" data-i18n="skip">Skip to graph</a>
     <header class="site-header">
-      <a class="wordmark" href="#" aria-label="Repo Visualizer home"
+      <a
+        class="wordmark"
+        href="#"
+        aria-label="Repo Visualizer home"
+        data-i18n-aria="home"
         >repo-visualizer</a
       >
-      <nav class="site-nav" aria-label="Main navigation">
-        <a href="#examples">Examples</a><a href="#guide">Guide</a
+      <nav
+        class="site-nav"
+        aria-label="Main navigation"
+        data-i18n-aria="navigation"
+      >
+        <a href="#examples" data-i18n="examples">Examples</a
+        ><a href="#guide" data-i18n="guide">Guide</a
         ><a
           href="https://github.com/HonzaCuhel/repo-visualizer"
           target="_blank"
@@ -25,30 +43,74 @@
           >GitHub</a
         >
       </nav>
-      <span class="agent-names">Codex / Claude Code</span
-      ><a class="install-button" href="#install">Install skill</a>
+      <div class="appearance-controls">
+        <label class="language-control"
+          ><span class="sr-only" data-i18n="languageLabel"
+            >Interface language</span
+          ><select
+            id="language-select"
+            data-i18n-aria="languageLabel"
+            aria-label="Interface language"
+          >
+            <option value="en">English</option>
+            <option value="cs">Česky</option>
+          </select></label
+        >
+        <label class="theme-control"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z"
+            /></svg
+          ><span class="sr-only" data-i18n="themeLabel">Color theme</span
+          ><select
+            id="theme-select"
+            data-i18n-aria="themeLabel"
+            aria-label="Color theme"
+          >
+            <option value="system" data-i18n="themeSystem">System theme</option>
+            <option value="light" data-i18n="themeLight">Light theme</option>
+            <option value="dark" data-i18n="themeDark">Dark theme</option>
+          </select></label
+        >
+      </div>
+      <a class="install-button" href="#install" data-i18n="install"
+        >Install skill</a
+      >
     </header>
     <main>
       <section class="intro" aria-labelledby="page-title">
-        <h1 id="page-title">Understand how the code works.</h1>
+        <h1 id="page-title" data-i18n="headline">
+          Understand how the code works.
+        </h1>
         <p id="page-description">
-          Turn a repository question into a short, animated walkthrough with an
-          inspectable code reference.
+          <span data-i18n="subtitle"
+            >Ask a question. Explore the components, follow the connections, and
+            inspect the code.</span
+          >
         </p>
+        <ol id="overview-path" class="overview-path" hidden></ol>
+        <div id="intro-metadata" class="intro-metadata" hidden></div>
+        <details id="intro-details" class="intro-details" hidden><summary data-i18n="scope">Scope and uncertainties</summary><p id="intro-details-copy"></p></details>
       </section>
       <section
         id="workspace"
         class="workspace"
         aria-label="Repository graph explorer"
+        data-i18n-aria="workspace"
         tabindex="-1"
       >
-        <aside class="component-pane" aria-label="Component navigation">
+        <aside
+          class="component-pane"
+          aria-label="Component navigation"
+          data-i18n-aria="componentNavigation"
+        >
           <div class="repo-reference">
             <span id="repo-name"></span><span id="repo-revision"></span>
           </div>
           <h2 id="question"></h2>
           <label class="search"
-            ><span class="sr-only">Find a component</span
+            ><span class="sr-only" data-i18n="findComponent"
+              >Find a component</span
             ><svg viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="10" cy="10" r="6.5" />
               <path d="m15 15 5 5" /></svg
@@ -56,26 +118,44 @@
               id="component-search"
               type="search"
               placeholder="Find a component"
+              data-i18n-placeholder="findComponent"
               autocomplete="off"
           /></label>
           <div id="component-list" class="component-list"></div>
-          <p id="no-components" hidden>No matching components.</p>
+          <p id="no-components" hidden data-i18n="noComponents">
+            No matching components.
+          </p>
           <details class="analysis-notes">
-            <summary>Scope and uncertainties</summary>
-            <p>Source analysis, not a recorded runtime trace.</p>
+            <summary data-i18n="scope">Scope and uncertainties</summary>
+            <p data-i18n="staticAnalysis">
+              Source analysis, not a recorded runtime trace.
+            </p>
             <ul id="uncertainties"></ul>
           </details>
         </aside>
-        <section class="graph-pane" aria-label="Graph and playback">
+        <section
+          class="graph-pane"
+          aria-label="Graph and playback"
+          data-i18n-aria="graphPlayback"
+        >
           <div class="graph-heading">
-            <div class="view-switch" role="group" aria-label="Graph view">
-              <button data-view="map" aria-pressed="true">Map</button
-              ><button data-view="focus" aria-pressed="false">Focus</button
-              ><button data-view="path" aria-pressed="false">Path</button>
+            <div
+              class="view-switch"
+              role="group"
+              aria-label="Graph view"
+              data-i18n-aria="graphView"
+            >
+              <button data-view="map" aria-pressed="true" data-i18n="map">
+                Map</button
+              ><button data-view="focus" aria-pressed="false" data-i18n="focus">
+                Focus</button
+              ><button data-view="path" aria-pressed="false" data-i18n="path">
+                Path
+              </button>
             </div>
             <details class="export-menu">
               <summary>
-                Export
+                <span data-i18n="export">Export</span>
                 <svg viewBox="0 0 16 16" aria-hidden="true">
                   <path d="m4 6 4 4 4-4" />
                 </svg>
@@ -84,14 +164,16 @@
                 class="export-options"
                 role="group"
                 aria-label="Export format"
+                data-i18n-aria="exportFormat"
               >
-                <button data-export="html">Interactive HTML</button
-                ><button data-export="json">Graph JSON</button
-                ><button data-export="svg">Vector SVG</button
-                ><button data-export="png">Graph PNG</button
-                ><button data-export="gif">Animated GIF</button
-                ><button data-export="mp4">Video MP4</button
-                ><button data-export="webm">Video WebM</button>
+                <button data-export="html" data-i18n="html">
+                  Interactive HTML</button
+                ><button data-export="json" data-i18n="json">Graph JSON</button
+                ><button data-export="svg" data-i18n="svg">Vector SVG</button
+                ><button data-export="png" data-i18n="png">Graph PNG</button
+                ><button data-export="gif" data-i18n="gif">Animated GIF</button
+                ><button data-export="mp4" data-i18n="mp4">Video MP4</button
+                ><button data-export="webm" data-i18n="webm">Video WebM</button>
               </div>
             </details>
           </div>
@@ -104,11 +186,28 @@
               xmlns="http://www.w3.org/2000/svg"
               role="group"
               aria-label="Component relationships"
+              data-i18n-aria="relationships"
             ></svg>
-            <div class="zoom-controls" role="group" aria-label="Graph zoom">
-              <button id="zoom-out" aria-label="Zoom out">−</button
-              ><button id="zoom-fit">Fit</button
-              ><button id="zoom-in" aria-label="Zoom in">+</button>
+            <div
+              class="zoom-controls"
+              role="group"
+              aria-label="Graph zoom"
+              data-i18n-aria="graphZoom"
+            >
+              <button
+                id="zoom-out"
+                aria-label="Zoom out"
+                data-i18n-aria="zoomOut"
+              >
+                −</button
+              ><button id="zoom-fit" data-i18n="fit">Fit</button
+              ><button
+                id="zoom-in"
+                aria-label="Zoom in"
+                data-i18n-aria="zoomIn"
+              >
+                +
+              </button>
             </div>
             <span class="graph-count" id="graph-count"></span>
           </div>
@@ -117,23 +216,30 @@
               id="play"
               class="icon-button"
               aria-label="Play walkthrough"
+              data-i18n-aria="play"
               title="Play / pause (Space)"
+              data-i18n-title="playHelp"
             ></button
             ><button
               id="previous"
               class="icon-button"
               aria-label="Previous highlight"
+              data-i18n-aria="previous"
               title="Previous (Left arrow)"
+              data-i18n-title="previousHelp"
             ></button
             ><button
               id="next"
               class="icon-button"
               aria-label="Next highlight"
+              data-i18n-aria="next"
               title="Next (Right arrow)"
+              data-i18n-title="nextHelp"
             ></button
             ><span id="elapsed" class="elapsed">0:00 / 0:00</span
             ><label class="seek-label"
-              ><span class="sr-only">Walkthrough position</span
+              ><span class="sr-only" data-i18n="position"
+                >Walkthrough position</span
               ><input
                 id="seek"
                 type="range"
@@ -147,6 +253,7 @@
             <select
               id="scenario"
               aria-label="Walkthrough or component tour"
+              data-i18n-aria="scenario"
             ></select
             ><span id="tour-note">Component tour · not execution order</span>
           </div>
@@ -157,12 +264,13 @@
             hidden
           >
             <span id="export-message"></span
-            ><button id="cancel-export">Cancel</button>
+            ><button id="cancel-export" data-i18n="cancel">Cancel</button>
           </div>
         </section>
         <aside
           class="inspector"
           aria-label="Selected component and source code"
+          data-i18n-aria="inspector"
         >
           <div class="selection-meta" id="selection-meta"></div>
           <h2 id="selection-title"></h2>
@@ -170,9 +278,17 @@
             <p id="selection-description" class="selection-description"></p>
             <div id="connections" class="connections"></div>
           </div>
-          <div class="inspector-tabs" role="group" aria-label="Inspector view">
-            <button id="overview-tab" aria-pressed="true">Overview</button
-            ><button id="code-tab" aria-pressed="false">Code</button>
+          <div
+            class="inspector-tabs"
+            role="group"
+            aria-label="Inspector view"
+            data-i18n-aria="inspectorView"
+          >
+            <button id="overview-tab" aria-pressed="true" data-i18n="overview">
+              Overview</button
+            ><button id="code-tab" aria-pressed="false" data-i18n="code">
+              Code
+            </button>
           </div>
           <div id="source-content"></div>
         </aside>
@@ -180,16 +296,19 @@
       <p id="player-status" class="player-status" role="status"></p>
     </main>
     <footer class="player-footer">
-      <span>Repo Visualizer · source-grounded graphs</span>
+      <span data-i18n="footer">Repo Visualizer · source-grounded graphs</span>
       <details>
-        <summary>Licenses and source</summary>
-        <p>
-          Original player: MIT. Layout: elkjs 0.12.1, EPL-2.0;
-          <a href="https://github.com/kieler/elkjs/tree/v0.12.1"
-            >corresponding source</a
-          >. GIF encoding: gifenc 1.0.3, MIT. Font: Atkinson Hyperlegible Next,
-          OFL-1.1. Repository excerpts retain their original license.
+        <summary data-i18n="licenses">Licenses and source</summary>
+        <p data-i18n="licenseSummary">
+          Original player: MIT. Layout: elkjs 0.12.1, EPL-2.0. GIF encoding:
+          gifenc 1.0.3, MIT. Font: Atkinson Hyperlegible Next, OFL-1.1. Source
+          excerpts retain their original license.
         </p>
+        <a
+          href="https://github.com/kieler/elkjs/tree/v0.12.1"
+          data-i18n="correspondingSource"
+          >corresponding source</a
+        >
         <pre>@@PLAYER_LICENSE@@</pre>
         <pre>@@SOURCE_LICENSE@@</pre>
         <pre>@@ELK_LICENSE@@</pre>

@@ -1,0 +1,122 @@
+{
+  "title": "stack-diagram",
+  "question": "Jak sestavení převede návrh na přenositelný diagram?",
+  "summary": "Od vložení písem a ikon ke kontrole značek a samostatnému vykreslení PNG. Výklad veřejného zdrojového kódu.",
+  "nodes": {
+    "draft": {
+      "label": "HTML návrh",
+      "description": "Načte vytvořený HTML návrh jako UTF-8. Zástupné značky určují, které soubory se mají vložit."
+    },
+    "fonts": {
+      "label": "Soubory písem",
+      "description": "Je-li zadáno --fonts, nahradí odpovídající značky písem jejich obsahem v Base64."
+    },
+    "icons": {
+      "label": "Soubory ikon",
+      "description": "Prochází podporované obrázky v seřazeném pořadí. Nahradí pouze značky přítomné v návrhu."
+    },
+    "encode": {
+      "label": "Enkodér Base64",
+      "description": "Sdílená funkce b64 načte soubor a vrátí jeho obsah v Base64. Používají ji písma i ikony."
+    },
+    "validate": {
+      "label": "Kontrola značek",
+      "description": "Po vložení hledá nezpracované značky %%...%%. Chybějící soubory zastaví proces před zápisem."
+    },
+    "stop": {
+      "label": "Chyba sestavení",
+      "description": "Skončí s názvy nezpracovaných značek. V této větvi se nové HTML nezapíše."
+    },
+    "html": {
+      "label": "Přenositelné HTML",
+      "description": "Zapíše dokončené HTML, jakmile jsou všechny odpovídající značky nahrazené."
+    },
+    "browser": {
+      "label": "Chromium bez okna",
+      "description": "Samostatný render_png otevře HTML pomocí Playwrightu a upraví šířku okna podle plátna."
+    },
+    "capture": {
+      "label": "Zachycení plátna",
+      "description": "Zachytí celou stránku nebo vybraný prvek diagramu. Chybějící selektor zachycení zastaví."
+    },
+    "png": {
+      "label": "Výstup PNG",
+      "description": "Ve výchozím režimu zachytí světlou i tmavou variantu. --single zachytí zadaný vzhled jednou."
+    }
+  },
+  "edges": {
+    "draft-fonts": {
+      "label": "značky písem"
+    },
+    "draft-icons": {
+      "label": "značky ikon"
+    },
+    "font-encode": {
+      "label": "volá b64()"
+    },
+    "icon-encode": {
+      "label": "volá b64()"
+    },
+    "draft-check": {
+      "label": "upravený návrh"
+    },
+    "encode-check": {
+      "label": "vložené bajty"
+    },
+    "invalid": {
+      "label": "nezpracované značky"
+    },
+    "valid": {
+      "label": "vše nahrazeno"
+    },
+    "html-browser": {
+      "label": "samostatný příkaz"
+    },
+    "browser-capture": {
+      "label": "načtený dokument"
+    },
+    "capture-png": {
+      "label": "jeden nebo oba režimy"
+    }
+  },
+  "groups": {
+    "build": {
+      "label": "Sestavení přenositelného dokumentu"
+    },
+    "render": {
+      "label": "Volitelné vykreslení PNG"
+    }
+  },
+  "steps": {
+    "read": {
+      "title": "Načíst návrh",
+      "description": "Návrh obsahuje značky souborů, které sestavení musí nahradit."
+    },
+    "assets": {
+      "title": "Vložit odpovídající soubory",
+      "description": "Písma jsou volitelná. Písma i ikony sdílejí enkodér Base64; vazby neurčují souběžné provádění."
+    },
+    "gate": {
+      "title": "Ověřit zbylé značky",
+      "description": "Chybějící soubory vedou k výslovnému chybovému výstupu před zápisem."
+    },
+    "write": {
+      "title": "Zapsat přenositelné HTML",
+      "description": "Úspěšná větev zapíše soběstačný dokument."
+    },
+    "render": {
+      "title": "Samostatně vykreslit PNG",
+      "description": "Druhý příkaz načte dokument do Chromia a zachytí jeden nebo oba barevné režimy."
+    }
+  },
+  "scenarios": {
+    "default": {
+      "label": "Průchod zdroji"
+    }
+  },
+  "uncertainties": [
+    "Statická analýza veřejného zdroje na konkrétní revizi; nikoli záznam skutečného běhu.",
+    "Ukázka nezahrnuje všechny pomocné funkce, stahování ikon ani sdílecí službu.",
+    "Zdroj: caru-ini/stack-diagram, MIT, copyright 2026 caru-ini."
+  ]
+}

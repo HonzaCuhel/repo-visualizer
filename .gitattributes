@@ -1,0 +1,7 @@
+# Generated showcase artifacts stay available without dominating source review.
+site/** linguist-generated=true
+site/*.html -whitespace
+site/downloads/*.svg -whitespace
+skills/repo-visualizer/assets/vendor/** linguist-vendored=true
+skills/repo-visualizer/assets/fonts/** linguist-vendored=true
+uv.lock linguist-generated=true

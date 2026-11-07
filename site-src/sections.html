@@ -1,22 +1,197 @@
-<section id="examples" class="landing-section examples-section">
-  <div class="section-heading"><h2>Follow the mechanism.</h2><p>Real source. A specific question. An explanation you can inspect.</p></div>
-  <a class="example-row" href="portable-builder.html"><div><h3>From draft to portable HTML</h3><p>Asset embedding, a shared encoder, and the validation branch that stops a build.</p></div><span class="example-meta">stack-diagram · 7 components</span><span class="row-action">Explore graph <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a>
-  <a class="example-row" href="full-pipeline.html"><div><h3>From HTML to image</h3><p>The document builder and its separate Chromium renderer, in one component map.</p></div><span class="example-meta">stack-diagram · 10 components</span><span class="row-action">Explore graph <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a>
-  <p class="source-credit">Examples analyze <a href="https://github.com/caru-ini/stack-diagram/tree/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838">caru-ini/stack-diagram at 1ed53e3</a>, under MIT. They explain static source, not a recorded execution.</p>
+<section id="examples" class="landing-section">
+  <div class="section-heading">
+    <h2 data-site="examplesTitle">Start with a real mechanism.</h2>
+    <p data-site="examplesDescription">
+      Select a component. Follow its relationships. Open the code behind it.
+    </p>
+  </div>
+  <div class="example-list">
+    <a class="example-row" href="portable-builder.html"
+      ><div>
+        <h3 data-site="builderTitle">From draft to portable HTML</h3>
+        <p data-site="builderDescription">
+          Asset embedding, a shared encoder, and the validation branch that
+          stops a build.
+        </p>
+      </div>
+      <span class="example-meta" data-site="builderMeta"
+        >stack-diagram · 7 components</span
+      ><span class="row-action"
+        ><span data-site="exploreGraph">Explore graph</span
+        ><svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 17 17 7M7 7h10v10" /></svg></span
+    ></a>
+    <a class="example-row" href="full-pipeline.html"
+      ><div>
+        <h3 data-site="pipelineTitle">From HTML to image</h3>
+        <p data-site="pipelineDescription">
+          The document builder and its separate Chromium renderer, in one map.
+        </p>
+      </div>
+      <span class="example-meta" data-site="pipelineMeta"
+        >stack-diagram · 10 components</span
+      ><span class="row-action"
+        ><span data-site="exploreGraph">Explore graph</span
+        ><svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 17 17 7M7 7h10v10" /></svg></span
+    ></a>
+  </div>
+  <p class="source-credit">
+    <span data-site="exampleCredit"
+      >Public-source examples, analyzed at a pinned revision:</span
+    >
+    <a
+      href="https://github.com/caru-ini/stack-diagram/tree/1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838"
+      >caru-ini/stack-diagram · 1ed53e3 · MIT</a
+    >.
+  </p>
 </section>
 <section id="install" class="landing-section install-section">
- <div class="install-inner"><div class="section-heading"><h2>Bring it to your repository.</h2><p>Install the open skill. Ask your coding agent how a feature works.</p></div>
- <div class="install-agent-switch" role="group" aria-label="Install for agent"><button data-install-agent="both" aria-pressed="true">Codex + Claude Code</button><button data-install-agent="codex" aria-pressed="false">Codex</button><button data-install-agent="claude-code" aria-pressed="false">Claude Code</button></div>
- <div class="command-box"><pre tabindex="0" aria-label="Installation command"><code id="install-command">npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer -a codex -a claude-code</code></pre><button id="copy-install">Copy command</button></div><p id="install-feedback" class="install-feedback" role="status">Run inside your repository. Add <code>-g</code> to install for all your projects. Requires Node.js 22.20+.</p>
- <div class="prompt-example"><span>Then ask</span><blockquote>Use repo-visualizer to explain how this feature works. Extract its components and relationships, link the code, and export an interactive HTML graph and a GIF.</blockquote></div>
- <p class="install-alternative">Prefer a file? <a href="downloads/repo-visualizer.zip" download>Download the complete skill ZIP</a>. Core analysis and HTML assembly use Python 3.9+. Animated exports have <a href="https://github.com/HonzaCuhel/repo-visualizer/blob/main/skills/repo-visualizer/references/exports.md">optional dependencies</a>.</p></div>
+  <div class="install-heading">
+    <h2 data-site="installTitle">Install once. Ask better questions.</h2>
+    <p data-site="installDescription">
+      Bring Repo Visualizer to the coding agent you already use.
+    </p>
+  </div>
+  <div
+    class="install-agent-switch"
+    role="group"
+    data-site-aria="agentLabel"
+    aria-label="Install for agent"
+  >
+    <button data-install-agent="both" aria-pressed="true">
+      Codex + Claude Code</button
+    ><button data-install-agent="codex" aria-pressed="false">Codex</button
+    ><button data-install-agent="claude-code" aria-pressed="false">
+      Claude Code
+    </button>
+  </div>
+  <div class="command-box">
+    <pre
+      tabindex="0"
+      data-site-aria="commandLabel"
+      aria-label="Installation command"
+    ><code id="install-command">npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer -a codex -a claude-code</code></pre>
+    <button id="copy-install" class="primary-action" data-site="copyCommand">
+      Copy command
+    </button>
+  </div>
+  <p
+    id="install-feedback"
+    class="install-feedback"
+    role="status"
+    data-site="installHint"
+  >
+    Run in your repository. Add -g to install across projects. Requires Node.js
+    22.20+.
+  </p>
+  <div class="prompt-example">
+    <span data-site="thenAsk">Then ask your agent</span>
+    <blockquote data-site="prompt">
+      Use repo-visualizer to explain how this feature works. Include its
+      components, relationships and failure paths. Export an interactive HTML
+      graph and a GIF.
+    </blockquote>
+  </div>
+  <p class="install-alternative">
+    <a href="downloads/repo-visualizer.zip" download data-site="downloadZip"
+      >Download the skill ZIP</a
+    ><span data-site="requirements">
+      · Python 3.9+ for core build. Animation uses optional rendering
+      dependencies.</span
+    >
+    <a
+      href="https://github.com/HonzaCuhel/repo-visualizer/blob/main/skills/repo-visualizer/references/exports.md"
+      data-site="exportGuide"
+      >Export guide</a
+    >
+  </p>
 </section>
 <section id="guide" class="landing-section guide-section">
- <div class="section-heading"><h2>One graph, all the way through.</h2><p>The agent explains the code. The player makes that explanation visible.</p></div>
- <div class="guide-steps"><article><h3>Start with a question.</h3><p>“What happens after a cache miss?” is a better starting point than a wall of every file. The agent reads the relevant implementation and extracts the components, relationships, branches and failure paths.</p></article><article><h3>Keep the evidence.</h3><p>The canonical JSON graph includes source ranges and fingerprints. Select a component or relationship to read its evidence. Inferences are labeled; source matching checks the files, not the correctness of the agent’s interpretation.</p></article><article><h3>Choose how to explore.</h3><p>Map shows the complete topology. Focus emphasizes direct neighbors. Path highlights an optional walkthrough over that same graph. Cycles and parallel relationships stay intact.</p></article></div>
+  <div class="section-heading">
+    <h2 data-site="guideTitle">One graph. Every format.</h2>
+    <p data-site="guideDescription">
+      The agent reads the code. A single graph carries the explanation.
+    </p>
+  </div>
+  <div class="guide-steps">
+    <article>
+      <h3 data-site="questionTitle">Start with a question.</h3>
+      <p data-site="questionDescription">
+        “What happens after a cache miss?” gives the agent a useful scope. It
+        reads the implementation and extracts responsibilities, branches,
+        retries and failure exits.
+      </p>
+    </article>
+    <article>
+      <h3 data-site="evidenceTitle">Keep the evidence.</h3>
+      <p data-site="evidenceDescription">
+        Select a component or relationship to inspect its source ranges.
+        Fingerprints catch code drift. Inferences are labeled; matching a source
+        does not prove the explanation is correct.
+      </p>
+    </article>
+    <article>
+      <h3 data-site="viewsTitle">Choose how to explore.</h3>
+      <p data-site="viewsDescription">
+        Map keeps the complete topology. Focus emphasizes direct neighbors. Path
+        highlights a walkthrough. All three preserve the same graph.
+      </p>
+    </article>
+  </div>
 </section>
 <section id="exports" class="landing-section exports-section">
- <div class="section-heading"><h2>A graph you can take with you.</h2><p>Send a working HTML explorer. Put a GIF in a README. Share a video of the same explanation.</p></div>
- <div class="export-showcase"><figure><video controls playsinline preload="none" poster="media/poster.png"><source src="media/walkthrough.mp4" type="video/mp4">Your browser cannot play this video. <a href="media/walkthrough.mp4">Download the MP4</a>.</video><figcaption>A source walkthrough of the public example above. Video retains the visual explanation; HTML retains clickable evidence.</figcaption></figure><div class="download-list"><a href="portable-builder.html" download><strong>Interactive HTML</strong><span>Portable explorer with embedded code</span><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a><a href="media/walkthrough.gif" download><strong>Animated GIF</strong><span>For a README or a quick explanation</span><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a><a href="media/walkthrough.mp4" download><strong>MP4 video</strong><span>For sharing and presentations</span><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a><a href="downloads/component-map.svg" download><strong>Vector SVG</strong><span>The complete graph at any scale</span><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a><a href="downloads/repo-visualizer.zip" download><strong>Skill ZIP</strong><span>Instructions, renderer and export tools</span><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a></div></div>
- <p class="privacy-note">Generated HTML contains source excerpts. Keep private-repository artifacts private. The skill needs no gallery account or additional hosted service; your coding agent’s existing data settings still apply.</p>
+  <div class="section-heading">
+    <h2 data-site="exportsTitle">Make the explanation portable.</h2>
+    <p data-site="exportsDescription">
+      Share the explorer, put a GIF in your README, or take a video to a
+      presentation.
+    </p>
+  </div>
+  <div class="export-showcase">
+    <figure>
+      <video controls playsinline preload="none" poster="media/poster.png">
+        <source src="media/walkthrough.mp4" type="video/mp4" />
+        <a href="media/walkthrough.mp4" data-site="downloadVideo"
+          >Download the MP4</a
+        >
+      </video>
+      <figcaption data-site="videoCaption">
+        A walkthrough of the public example. HTML keeps clickable source
+        references; video carries the visual explanation.
+      </figcaption>
+    </figure>
+    <div class="download-list">
+      <a href="portable-builder.html" download
+        ><strong data-i18n="html">Interactive HTML</strong
+        ><span data-site="htmlDescription"
+          >Offline explorer with embedded source</span
+        ><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v16m-6-6 6 6 6-6" /></svg
+      ></a>
+      <a href="media/walkthrough.gif" download
+        ><strong data-i18n="gif">Animated GIF</strong
+        ><span data-site="gifDescription">A quick explanation for a README</span
+        ><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v16m-6-6 6 6 6-6" /></svg
+      ></a>
+      <a href="media/walkthrough.mp4" download
+        ><strong data-i18n="mp4">Video MP4</strong
+        ><span data-site="mp4Description">For sharing and presentations</span
+        ><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v16m-6-6 6 6 6-6" /></svg
+      ></a>
+      <a href="downloads/component-map.svg" download
+        ><strong data-i18n="svg">Vector SVG</strong
+        ><span data-site="svgDescription">The complete graph at any scale</span
+        ><svg class="download-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v16m-6-6 6 6 6-6" /></svg
+      ></a>
+    </div>
+  </div>
+  <p class="privacy-note" data-site="privacy">
+    HTML embeds source excerpts. Keep private-repository artifacts private. The
+    skill adds no hosted service; your coding agent’s existing data settings
+    still apply.
+  </p>
 </section>

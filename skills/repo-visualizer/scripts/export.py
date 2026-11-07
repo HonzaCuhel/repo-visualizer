@@ -16,7 +16,7 @@ import sys
 
 
 @contextmanager
-def scene(path, width, height, browser_path=None):
+def scene(path, width, height, browser_path=None, theme=None, language=None):
     try:
         from playwright.sync_api import sync_playwright
     except ImportError as error:
@@ -36,6 +36,11 @@ def scene(path, width, height, browser_path=None):
             page.goto(Path(path).resolve().as_uri(), wait_until='load')
             page.evaluate('document.body.classList.add("export-frame")')
             page.evaluate('window.repoReady')
+            if theme:
+                page.evaluate('(theme)=>window.repoAppearance.setTheme(theme)', theme)
+            if language:
+                page.evaluate('(language)=>window.repoAppearance.setLanguage(language)', language)
+                page.evaluate('window.repoLocaleReady')
             page.evaluate('document.fonts.ready')
             if errors:
                 raise RuntimeError('Player failed: '+ '; '.join(errors))
@@ -55,7 +60,7 @@ def ffmpeg_binary():
         raise RuntimeError('MP4/WebM need FFmpeg on PATH or the imageio-ffmpeg export extra') from error
 
 
-def export_scene(source, output, *, width=1440, height=900, fps=12, at=0, browser_path=None, scenario=None):
+def export_scene(source, output, *, width=1440, height=900, fps=12, at=0, browser_path=None, scenario=None, theme=None, language=None):
     source, output = Path(source), Path(output)
     if output.resolve() == source.resolve():
         raise ValueError('Export output must differ from the input HTML')
@@ -68,7 +73,7 @@ def export_scene(source, output, *, width=1440, height=900, fps=12, at=0, browse
     with tempfile.TemporaryDirectory(prefix='repo-visualizer-export-', dir=output.parent) as directory:
         temporary = Path(directory)
         candidate = temporary / ('output.'+kind)
-        with scene(source, width, height, browser_path) as page:
+        with scene(source, width, height, browser_path, theme, language) as page:
             if scenario:
                 page.evaluate('(id)=>window.repoPlayer.setScenario(id)', scenario)
             if kind in {'gif', 'mp4', 'webm'}:
@@ -117,10 +122,12 @@ def main(argv=None):
     parser.add_argument('--fps', type=int, default=12)
     parser.add_argument('--at', type=float, default=0, help='Static capture position in milliseconds')
     parser.add_argument('--scenario', help='Optional authored scenario ID')
+    parser.add_argument('--theme', choices=['light', 'dark', 'system'], help='Appearance for this export')
+    parser.add_argument('--language', help='Interface language; graph text changes only when a translation is supplied')
     parser.add_argument('--browser', type=Path, help='Existing Chromium-family executable; otherwise Playwright Chromium')
     args = parser.parse_args(argv)
     try:
-        result = export_scene(args.html, args.output, width=args.width, height=args.height, fps=args.fps, at=args.at, browser_path=args.browser, scenario=args.scenario)
+        result = export_scene(args.html, args.output, width=args.width, height=args.height, fps=args.fps, at=args.at, browser_path=args.browser, scenario=args.scenario, theme=args.theme, language=args.language)
         print(json.dumps(result, indent=2))
         return 0
     except (RuntimeError, ValueError, OSError, subprocess.SubprocessError) as error:

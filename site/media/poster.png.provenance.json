@@ -1,17 +1,15 @@
 {
   "kind": "runtime-render",
-  "generator": "Playwright screenshot via export.py",
+  "generator": "Repo Visualizer export.py (Playwright, Pillow, FFmpeg)",
   "settings": {
     "width": 1200,
     "height": 800,
-    "at_ms": 3000
+    "fps": 8,
+    "at": 3000,
+    "theme": "light",
+    "language": "en"
   },
-  "sources": {
-    "examples/stack-diagram/portable-builder.json": "be1a4f33229c429b1ef87aabef90a142e8552882065e2ab19cdc42361350ad09",
-    "site/portable-builder.html": "22230aa612380f2981982c6a4b6005770dfc26785529c6d3c52813582f2905d2"
-  },
-  "source_repository": "https://github.com/caru-ini/stack-diagram",
-  "source_revision": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
-  "source_license": "MIT",
-  "note": "Rendered from the real canonical graph; static source explanation, not runtime tracing. No image generation model used."
+  "source_html_sha256": "4c2dddcfa00288b0a785eaaef89d97c6681459b9e6eaa1afd94b1409cf48b552",
+  "artifact_sha256": "b35fb124f8903f6e5d78dea20ad7d3d5c0c74b6dacc66e4dc46a50a8b39bff87",
+  "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
 }

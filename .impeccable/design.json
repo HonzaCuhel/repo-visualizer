@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-07T18:21:29.149721+00:00",
+  "generatedAt": "2026-11-07T19:24:36.060780+00:00",
   "title": "Design System: Repo Visualizer",
   "extensions": {
     "colorMeta": {
@@ -258,6 +258,14 @@
         "name": "page-scroll",
         "value": "smooth",
         "purpose": "Root scroll-behavior; becomes auto under prefers-reduced-motion: reduce. No general transition-duration scale is established."
+      },
+      {
+        "name": "section-reveal",
+        "duration": "460ms",
+        "easing": "cubic-bezier(0.16,1,0.3,1)",
+        "translation": "12px",
+        "blur": "1px",
+        "reducedMotion": "skip decorative reveal; content remains visible"
       }
     ],
     "breakpoints": [
@@ -345,7 +353,27 @@
         "Finish disposition remains fix solely for tooling/provenance: hero/open and pending sections/motion/responsive against an obsolete illustrative baseline; seed corroboration UNKNOWN. Actual-viewport approval and user-authorized publication are recorded separately. This document is not a green or closed gate claim.",
         "Unicode action-arrow substitutions are resolved per finish-verdict.md; no unresolved UI repair or observed regression is canonized. No ledger or UI files were modified.",
         "Small helper metadata and graph-coordinate font sizes are observed details, not a universal minimum text-size rule. No universal reduced-motion playback/export policy or unimplemented field-error styling is invented."
-      ]
+      ],
+      "approvedRefinement": "User requested smaller fonts/buttons, clear installation CTA, light/dark mode, scroll reveals and multilingual pages on 2026-11-07."
+    },
+    "themes": {
+      "dark": {
+        "paper": "#10141b",
+        "ink": "#e7edf7",
+        "muted": "#a8b4c5",
+        "line": "#303b4c",
+        "blue": "#8bb9ff",
+        "blue-light": "#1c3150",
+        "action": "#306ac0"
+      }
+    },
+    "standaloneIntro": {
+      "titleSize": "clamp(23px, 2vw, 30px)",
+      "mobileTitleSize": "23px",
+      "leadSize": "14px",
+      "metadataSize": "11px",
+      "revisionSize": "10px",
+      "description": "Concise lead, source-linked orientation, counts/duration/short revision metadata, expandable full summary."
     }
   },
   "components": [
@@ -355,7 +383,7 @@
       "refersTo": "button-primary",
       "description": "Primary link action from the header.",
       "html": "<a class=\"ds-install\" href=\"#install\">Install skill</a>",
-      "css": ".ds-install{font-family:Atkinson,system-ui,sans-serif;display:inline-block;color:#fff;background:var(--blue,#2164c7);border:1px solid var(--blue,#2164c7);border-radius:6px;padding:.35em .8em;font-size:clamp(16px,1.43vw,24px);font-weight:600;text-decoration:none;white-space:nowrap}.ds-install:hover{background:#184e9e}.ds-install:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+      "css": ".ds-install{font-family:Atkinson,system-ui,sans-serif;display:inline-block;color:#fff;background:var(--blue,#2164c7);border:1px solid var(--blue,#2164c7);border-radius:6px;padding:8px 13px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}.ds-install:hover{background:#184e9e}.ds-install:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
     },
     {
       "name": "Graph view controls",

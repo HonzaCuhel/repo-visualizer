@@ -1,5 +1,19 @@
 # Release verification
 
+## Version 0.2
+
+The compact player adds user-controlled light/dark/system themes and English/Czech UI. Graph content can carry display-only translations; custom interface dictionaries support other output languages independently of the agent.
+
+A fresh Codex run received a Czech prompt explicitly requesting French. It independently authored an 8-component, 9-relationship graph and all 103 French interface strings from public source, then produced offline HTML and a GIF with 72 distinct decoded frames. A separate verifier rechecked source fingerprints, dictionary completeness, format placeholders, offline operation and unchanged target files.
+
+New regression checks exercise source-preserving language switches, custom translation safety, dark SVG/HTML downloads and edge endpoint attachment through nested groups. ELK may return root-level edges with coordinates relative to a declared nested container; honoring that container fixes the displaced edges visible in an earlier local repository output. The same correction is applied to all rebuilt examples.
+
+Browser QA covers 320, 390, 1280, 1440 and 1672 pixel layouts, both themes, both bundled languages, persistence, unavailable storage, system preferences, installation copy controls, reduced motion and scroll reveals.
+
+The independent Impeccable review returned `ship` for the scoped version 0.2 refinements after seven landing and five standalone viewport captures. It found no material visual repair within this scope. The version 0.1 workflow-ledger exception below remains historical and is not claimed as closed.
+
+## Version 0.1
+
 Verified locally on 7 November 2026. These checks establish artifact behavior and source matching, not the semantic correctness of every explanation.
 
 ## Fresh coding-agent runs
@@ -27,7 +41,7 @@ The public example has also been exported through the real HyperFrames renderer:
 - Browser export needs an installed compatible Chromium and optional dependencies. OS sandbox approval may be required.
 - A selected path illustrates source-derived behavior; it is not a recorded runtime execution.
 
-## Design review exception
+## Historical version 0.1 design review exception
 
 The independent Impeccable review checked the complete page at 320, 390, 1280, 1440 and 1672 pixels. Its requested SVG icon correction was resolved with no observed regression or remaining UI repair. The user approved the actual nonlinear graph workspace and explicitly authorized publication.
 

@@ -29,6 +29,7 @@ The user confirmed Codex and Claude Code as first-release targets. The skill wor
 - Map, Focus and Path use one shared graph model. HTML, PNG, SVG, GIF, MP4 and WebM are supported; HyperFrames is an optional adapter.
 - The requested public presentation is GitHub Pages. The user wants a release prepared for 8 November 2026.
 - Research, proposals, and joint selection precede the final implementation.
+- The user-requested compact refinement adds light/dark/system themes, English/Czech interface and site, restrained scroll reveals, clear installation CTA and compact standalone introductions. Explanation language follows the user, independent of agent vendor.
 - Repo Visualizer is the product name. Original code is MIT-licensed with separately licensed vendored assets. The public repository is HonzaCuhel/repo-visualizer; private test examples are not authorized for publication.
 
 ## Brand Commitments

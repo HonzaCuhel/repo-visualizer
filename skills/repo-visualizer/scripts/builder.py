@@ -35,6 +35,10 @@ def build_html(data, *, landing=False):
             source['url'] = f"{origin}/blob/{commit}/{quote(source['path'], safe='/')}#L{source['start']}-L{source['end']}"
     template = (ASSETS / 'player.html').read_text(encoding='utf-8')
     replacements = {
+        '@@APPEARANCE@@': (ASSETS / 'appearance.js').read_text(encoding='utf-8'),
+        '@@BODY_CLASS@@': 'landing' if landing else 'standalone',
+        '@@UI_CONFIG@@': safe_json({'language': story['language'], 'ui_strings': story.get('ui_strings', {}), 'landing': landing}),
+        '@@LOCALES@@': safe_json({language: json.loads((ASSETS / 'locales' / (language+'.json')).read_text(encoding='utf-8')) for language in ('en', 'cs')}),
         '@@LANG@@': html.escape(story['language'], quote=True),
         '@@TITLE@@': html.escape(story['title']),
         '@@STORY@@': safe_json(story),

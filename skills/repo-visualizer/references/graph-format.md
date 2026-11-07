@@ -38,3 +38,9 @@ Sources: repository-relative POSIX `path`, 1-based inclusive `start`, `end`. Pre
 Optional steps: `id`, `title`, `description`, `node_ids` nonempty, `edge_ids`, `source_ids`, `duration_ms` (100–60000, default 2400), evidence. These are highlights over the same graph; they never determine its topology. Scenarios: `id`, `label`, nonempty `step_ids`. Without steps the player provides a clearly labeled component tour, not an execution sequence.
 
 Unknowns: use `uncertainties` for omitted dynamic behavior, unresolved dependencies and limits of inspection. A valid file means structurally valid and matching source bytes, not semantically proven.
+
+## Compact introduction
+
+Keep `summary` concise. The explorer formats component/relationship counts, current walkthrough duration and a short revision separately. A long summary remains available in a disclosure instead of occupying the first viewport.
+
+Optional `overview` supports a short `lead` and a `path` of existing component references, for example `{"lead":"A local property appraisal tool.","path":[{"node_id":"ui","label":"React"},{"node_id":"api","label":"FastAPI"}]}`. Every `node_id` must exist. Labels are plain display text; topology and source evidence stay in the original graph. This orientation row does not imply direct calls or recorded execution.

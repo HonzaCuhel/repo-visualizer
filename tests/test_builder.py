@@ -20,9 +20,9 @@ class BuilderTests(unittest.TestCase):
             root=Path(directory);(root/'code.py').write_text('value = 1\n')
             graph=prepare_story({'schema_version':1,'title':payload,'question':'Why?', 'sources':[{'id':'s','path':'code.py','start':1,'end':1}], 'nodes':[{'id':'n','label':payload,'source_ids':['s']}]},root)
             (root/'LICENSE').write_text('MIT fixture license')
-            assets=root/'assets';(assets/'fonts').mkdir(parents=True);(assets/'vendor').mkdir()
+            assets=root/'assets';(assets/'fonts').mkdir(parents=True);(assets/'vendor').mkdir();(assets/'locales').mkdir()
             (assets/'player.html').write_text('<title>@@TITLE@@</title><script type="application/json">@@STORY@@</script><script>@@JS@@</script>')
-            for file,content in [('player.css','body{}'),('player.js','/*real-player*/'),('interaction.js','/*controls*/'),('vendor/elk.bundled.js','/*elk*/'),('vendor/ELK-LICENSE.md','license'),('vendor/gifenc.js','/*gif*/'),('vendor/GIFENC-LICENSE.txt','license'),('fonts/OFL-AtkinsonHyperlegibleNext.txt','license')]:
+            for file,content in [('appearance.js','/*appearance*/'),('locales/en.json','{}'),('locales/cs.json','{}'),('player.css','body{}'),('player.js','/*real-player*/'),('interaction.js','/*controls*/'),('vendor/elk.bundled.js','/*elk*/'),('vendor/ELK-LICENSE.md','license'),('vendor/gifenc.js','/*gif*/'),('vendor/GIFENC-LICENSE.txt','license'),('fonts/OFL-AtkinsonHyperlegibleNext.txt','license')]:
                 (assets/file).write_text(content)
             (assets/'fonts/AtkinsonHyperlegibleNext.ttf').write_bytes(b'font')
             with patch('builder.ASSETS',assets):

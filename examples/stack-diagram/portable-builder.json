@@ -361,5 +361,101 @@
     "status": "files-and-ranges-checked",
     "scope": "Source existence, line ranges and fingerprints. The author must verify the interpretation; this is not a runtime trace."
   },
-  "source_license": "MIT License\n\nCopyright (c) 2026 caru-ini\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  "source_license": "MIT License\n\nCopyright (c) 2026 caru-ini\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n",
+  "translations": {
+    "cs": {
+      "title": "stack-diagram",
+      "question": "Jak sestavení převede návrh na přenositelný diagram?",
+      "summary": "Od vložení písem a ikon ke kontrole značek a samostatnému vykreslení PNG. Výklad veřejného zdrojového kódu.",
+      "nodes": {
+        "draft": {
+          "label": "HTML návrh",
+          "description": "Načte vytvořený HTML návrh jako UTF-8. Zástupné značky určují, které soubory se mají vložit."
+        },
+        "fonts": {
+          "label": "Soubory písem",
+          "description": "Je-li zadáno --fonts, nahradí odpovídající značky písem jejich obsahem v Base64."
+        },
+        "icons": {
+          "label": "Soubory ikon",
+          "description": "Prochází podporované obrázky v seřazeném pořadí. Nahradí pouze značky přítomné v návrhu."
+        },
+        "encode": {
+          "label": "Enkodér Base64",
+          "description": "Sdílená funkce b64 načte soubor a vrátí jeho obsah v Base64. Používají ji písma i ikony."
+        },
+        "validate": {
+          "label": "Kontrola značek",
+          "description": "Po vložení hledá nezpracované značky %%...%%. Chybějící soubory zastaví proces před zápisem."
+        },
+        "stop": {
+          "label": "Chyba sestavení",
+          "description": "Skončí s názvy nezpracovaných značek. V této větvi se nové HTML nezapíše."
+        },
+        "html": {
+          "label": "Přenositelné HTML",
+          "description": "Zapíše dokončené HTML, jakmile jsou všechny odpovídající značky nahrazené."
+        }
+      },
+      "edges": {
+        "draft-fonts": {
+          "label": "značky písem"
+        },
+        "draft-icons": {
+          "label": "značky ikon"
+        },
+        "font-encode": {
+          "label": "volá b64()"
+        },
+        "icon-encode": {
+          "label": "volá b64()"
+        },
+        "draft-check": {
+          "label": "upravený návrh"
+        },
+        "encode-check": {
+          "label": "vložené bajty"
+        },
+        "invalid": {
+          "label": "nezpracované značky"
+        },
+        "valid": {
+          "label": "vše nahrazeno"
+        }
+      },
+      "groups": {
+        "build": {
+          "label": "Sestavení přenositelného dokumentu"
+        }
+      },
+      "steps": {
+        "read": {
+          "title": "Načíst návrh",
+          "description": "Návrh obsahuje značky souborů, které sestavení musí nahradit."
+        },
+        "assets": {
+          "title": "Vložit odpovídající soubory",
+          "description": "Písma jsou volitelná. Písma i ikony sdílejí enkodér Base64; vazby neurčují souběžné provádění."
+        },
+        "gate": {
+          "title": "Ověřit zbylé značky",
+          "description": "Chybějící soubory vedou k výslovnému chybovému výstupu před zápisem."
+        },
+        "write": {
+          "title": "Zapsat přenositelné HTML",
+          "description": "Úspěšná větev zapíše soběstačný dokument."
+        }
+      },
+      "scenarios": {
+        "builder": {
+          "label": "Sestavit přenositelný diagram"
+        }
+      },
+      "uncertainties": [
+        "Statická analýza veřejného zdroje na konkrétní revizi; nikoli záznam skutečného běhu.",
+        "Samostatné vykreslení PNG, stahování ikon a sdílecí služba jsou mimo rozsah této zaměřené ukázky.",
+        "Zdroj: caru-ini/stack-diagram, MIT, copyright 2026 caru-ini."
+      ]
+    }
+  }
 }

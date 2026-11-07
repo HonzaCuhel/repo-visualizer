@@ -1,0 +1,15 @@
+{
+  "kind": "runtime-render",
+  "generator": "Repo Visualizer export.py (Playwright, Pillow, FFmpeg)",
+  "settings": {
+    "width": 1200,
+    "height": 800,
+    "fps": 8,
+    "at": 3000,
+    "theme": "light",
+    "language": "cs"
+  },
+  "source_html_sha256": "4c2dddcfa00288b0a785eaaef89d97c6681459b9e6eaa1afd94b1409cf48b552",
+  "artifact_sha256": "9481600e68a54beb5d5167a65137c8862a1fca96ff3437597abee020dee55ea4",
+  "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
+}

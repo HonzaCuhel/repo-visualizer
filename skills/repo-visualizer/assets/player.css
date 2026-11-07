@@ -1,4 +1,15 @@
 :root {
+  --paper: #fff;
+  --hover: #f1f4f8;
+  --selected-ink: #1558b7;
+  --action: #2164c7;
+  --action-hover: #184e9e;
+  --group-fill: #fafbfd;
+  --node-line: #a9b2bf;
+  --edge-line: #8490a1;
+  --code-surface: #f5f7fa;
+  --control-line: #cbd3df;
+
   --ink: #151720;
   --muted: #5e6674;
   --line: #dce1e8;
@@ -16,7 +27,7 @@
   font-family: Atkinson, system-ui, sans-serif;
   font-synthesis: none;
   color: var(--ink);
-  background: #fff;
+  background: var(--paper);
   font-size: 16px;
   line-height: 1.45;
   scroll-behavior: smooth;
@@ -94,7 +105,7 @@ input {
   position: fixed;
   top: 8px;
   left: 12px;
-  background: #fff;
+  background: var(--paper);
   border: 1px solid var(--blue);
   padding: 10px 14px;
   z-index: 20;
@@ -134,7 +145,7 @@ input {
   text-decoration: underline;
 }
 .agent-names {
-  border-left: 1px solid #cbd1dc;
+  border-left: 1px solid var(--line);
   padding-left: 3vw;
   margin-left: 4.6vw;
   color: var(--muted);
@@ -143,7 +154,7 @@ input {
 }
 .install-button {
   color: #fff;
-  background: var(--blue);
+  background: var(--action);
   border: 1px solid var(--blue);
   border-radius: 6px;
   padding: 0.35em 0.8em;
@@ -153,7 +164,7 @@ input {
   white-space: nowrap;
 }
 .install-button:hover {
-  background: #184e9e;
+  background: var(--action-hover);
 }
 .intro {
   padding: 3.05vw var(--r-headline-x) 2.42vw;
@@ -178,7 +189,7 @@ input {
   grid-template-columns: var(--r-left-width) var(--r-graph-width) minmax(0, 1fr);
   width: var(--r-workspace-w);
   margin: 0 auto;
-  border: 1px solid #d3d9e3;
+  border: 1px solid var(--line);
   border-radius: 7px;
   height: var(--r-workspace-h);
   min-height: 530px;
@@ -253,7 +264,7 @@ input {
   outline-offset: 1px;
 }
 .search input::placeholder {
-  color: #68717e;
+  color: var(--muted);
 }
 .component-list {
   display: flex;
@@ -279,11 +290,11 @@ input {
   line-height: 1.15;
 }
 .component-item:hover {
-  background: #f4f6f9;
+  background: var(--hover);
 }
 .component-item[aria-pressed="true"] {
   background: var(--blue-light);
-  color: #1558b7;
+  color: var(--selected-ink);
   font-weight: 600;
 }
 .component-item .component-mark {
@@ -351,12 +362,12 @@ input {
   color: var(--muted);
 }
 .view-switch button[aria-pressed="true"] {
-  background: #eff3f9;
+  background: var(--hover);
   color: var(--ink);
   font-weight: 600;
 }
 .view-switch button:hover {
-  background: #f2f4f8;
+  background: var(--hover);
 }
 .export-menu {
   position: relative;
@@ -367,11 +378,11 @@ input {
   align-items: center;
   list-style: none;
   cursor: pointer;
-  border: 1px solid #ccd3df;
+  border: 1px solid var(--control-line);
   border-radius: 5px;
   padding: 6px 13px;
   font-size: 16px;
-  background: #fff;
+  background: var(--paper);
 }
 .export-menu summary::-webkit-details-marker {
   display: none;
@@ -388,7 +399,7 @@ input {
   top: calc(100% + 7px);
   right: 0;
   z-index: 5;
-  background: #fff;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 7px;
   padding: 5px;
@@ -439,7 +450,7 @@ input {
   display: flex;
   border: 1px solid var(--line);
   border-radius: 5px;
-  background: #fff;
+  background: var(--paper);
   overflow: hidden;
 }
 .zoom-controls button {
@@ -451,24 +462,24 @@ input {
   font-size: 14px;
 }
 .zoom-controls button:hover {
-  background: #f0f3f8;
+  background: var(--hover);
 }
 .graph-count {
   position: absolute;
   bottom: 17px;
   right: 4px;
   font-size: 11px;
-  color: #69717c;
+  color: var(--muted);
   pointer-events: none;
   font-variant-numeric: tabular-nums;
 }
 .graph-group rect {
-  fill: #fafbfd;
-  stroke: #e0e5ed;
+  fill: var(--group-fill);
+  stroke: var(--line);
   stroke-width: 1;
 }
 .graph-group text {
-  fill: #6b7484;
+  fill: var(--muted);
   font-family: Atkinson, system-ui, sans-serif;
   font-size: 13px;
   font-weight: 600;
@@ -477,38 +488,38 @@ input {
   cursor: pointer;
 }
 .graph-node rect {
-  fill: #fff;
-  stroke: #a9b2bf;
+  fill: var(--paper);
+  stroke: var(--node-line);
   stroke-width: 1.2;
 }
 .graph-node .node-title {
-  fill: #252b36;
+  fill: var(--ink);
   font-family: Atkinson, system-ui, sans-serif;
   font-size: 17px;
   font-weight: 600;
 }
 .graph-node .node-kind {
-  fill: #6b7484;
+  fill: var(--muted);
   font-family: Atkinson, system-ui, sans-serif;
   font-size: 11px;
   font-weight: 400;
 }
 .graph-node.is-selected rect,
 .graph-node.is-active rect {
-  fill: #eaf2ff;
-  stroke: #2164c7;
+  fill: var(--blue-light);
+  stroke: var(--blue);
   stroke-width: 2;
 }
 .graph-node.is-selected .node-title,
 .graph-node.is-active .node-title {
-  fill: #154f9e;
+  fill: var(--selected-ink);
 }
 .graph-node:hover rect {
-  stroke: #2164c7;
+  stroke: var(--blue);
   stroke-width: 2;
 }
 .graph-node:focus-visible rect {
-  stroke: #2164c7;
+  stroke: var(--blue);
   stroke-width: 3;
 }
 .graph-node:focus-visible {
@@ -519,14 +530,14 @@ input {
 }
 .graph-edge .edge-line {
   fill: none;
-  stroke: #9da7b6;
+  stroke: var(--edge-line);
   stroke-width: 1.4;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 .graph-edge.is-active .edge-line,
 .graph-edge.is-selected .edge-line {
-  stroke: #2164c7;
+  stroke: var(--blue);
   stroke-width: 2;
 }
 .graph-edge.is-inferred .edge-line {
@@ -538,20 +549,20 @@ input {
   stroke-width: 14;
 }
 .graph-edge text {
-  fill: #626c7b;
+  fill: var(--muted);
   font-size: 11px;
   font-family: Atkinson, system-ui, sans-serif;
   paint-order: stroke;
-  stroke: #fff;
+  stroke: var(--paper);
   stroke-width: 4;
   stroke-linejoin: round;
 }
 .graph-edge.is-active text,
 .graph-edge.is-selected text {
-  fill: #1857ac;
+  fill: var(--selected-ink);
 }
 .graph-edge:focus-visible .edge-line {
-  stroke: #2164c7;
+  stroke: var(--blue);
   stroke-width: 3;
 }
 .graph-edge:focus-visible {
@@ -561,7 +572,7 @@ input {
   opacity: 0.22;
 }
 .edge-pulse {
-  fill: #2164c7;
+  fill: var(--blue);
   pointer-events: none;
 }
 .playback {
@@ -587,7 +598,7 @@ input {
   flex: none;
 }
 .icon-button:hover {
-  background: #eef2f8;
+  background: var(--hover);
 }
 .icon-button svg {
   width: 19px;
@@ -599,7 +610,7 @@ input {
   stroke-linejoin: round;
 }
 #play {
-  background: #f1f4f8;
+  background: var(--hover);
 }
 .elapsed {
   font-size: 13px;
@@ -637,7 +648,7 @@ input[type="range"] {
 .tour-caption select {
   font-size: 11px;
   border: 0;
-  background: #fff;
+  background: var(--paper);
   color: var(--muted);
   max-width: 52%;
   text-overflow: ellipsis;
@@ -649,7 +660,7 @@ input[type="range"] {
   border-left: 1px solid var(--line);
 }
 .selection-meta {
-  color: #677183;
+  color: var(--muted);
   font-size: clamp(12px, 1.15vw, 19px);
   line-height: 1.3;
   overflow-wrap: anywhere;
@@ -731,14 +742,14 @@ input[type="range"] {
   overflow-wrap: anywhere;
   font-family: Menlo, ui-monospace, monospace;
   font-size: 11px;
-  color: #566273;
+  color: var(--muted);
   line-height: 1.6;
 }
 .source-heading a {
   white-space: nowrap;
   font-size: clamp(16px, 1.3vw, 22px);
   text-decoration: none;
-  border: 1px solid #ccd3df;
+  border: 1px solid var(--control-line);
   border-radius: 5px;
   padding: 12px 16px;
   display: block;
@@ -747,7 +758,7 @@ input[type="range"] {
   text-decoration: underline;
 }
 .source-entry pre {
-  background: #f5f7fa;
+  background: var(--code-surface);
   margin: 12px 0 0;
   padding: 12px;
   overflow: auto;
@@ -764,7 +775,7 @@ input[type="range"] {
 }
 .source-entry .source-revision {
   font-size: 10px;
-  color: #727b89;
+  color: var(--muted);
   margin: 6px 0 0;
 }
 .player-status {
@@ -800,7 +811,7 @@ input[type="range"] {
 .export-progress {
   position: absolute;
   inset: auto 24px 88px;
-  background: #fff;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: 12px;
@@ -812,7 +823,7 @@ input[type="range"] {
   font-size: 13px;
 }
 .export-progress button {
-  background: #f1f4f8;
+  background: var(--hover);
   border: 0;
   border-radius: 4px;
   padding: 6px 12px;
@@ -1244,4 +1255,470 @@ input[type="range"] {
   font-size: 9px;
 }
 
-.source-heading a svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vertical-align: -2px; }
+.source-heading a svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -2px;
+}
+
+/* User-requested compact scale, shared by the site and portable explorer. */
+:root[data-theme="dark"] {
+  --paper: #10141b;
+  --ink: #e7edf7;
+  --muted: #a8b4c5;
+  --line: #303b4c;
+  --surface: #181f2a;
+  --hover: #202a38;
+  --blue: #8bb9ff;
+  --blue-light: #1c3150;
+  --selected-ink: #b4d3ff;
+  --action: #306ac0;
+  --action-hover: #3978d1;
+  --group-fill: #171e29;
+  --node-line: #687992;
+  --edge-line: #91a0b5;
+  --code-surface: #19222f;
+  --control-line: #3c4b60;
+  --danger: #ffaaa3;
+}
+::selection {
+  background: var(--blue-light);
+  color: var(--ink);
+}
+* {
+  scrollbar-color: var(--node-line) transparent;
+}
+body {
+  background: var(--paper);
+}
+.site-header {
+  height: 64px;
+  gap: 24px;
+  padding-inline: 28px;
+}
+.wordmark {
+  font-size: 23px;
+}
+.site-nav {
+  font-size: 14px;
+  gap: 28px;
+}
+.appearance-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: 8px;
+}
+.appearance-controls label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  height: 34px;
+  background: var(--paper);
+}
+.appearance-controls select {
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+  padding: 7px 9px;
+  font-size: 12px;
+  max-width: 96px;
+  height: 100%;
+}
+.theme-control {
+  width: 34px;
+  justify-content: center;
+}
+.theme-control svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+}
+.theme-control select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+}
+.theme-control:focus-within {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+.install-button {
+  font-size: 13px;
+  padding: 8px 13px;
+  border-color: var(--action);
+  line-height: 1.3;
+}
+.intro {
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: 48px 28px 30px;
+}
+.intro h1 {
+  font-size: clamp(29px, 3.05vw, 44px);
+  line-height: 1.12;
+  max-width: 24ch;
+}
+.intro p {
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 73ch;
+  margin-top: 14px;
+}
+.workspace {
+  width: calc(100% - 48px);
+  max-width: 1320px;
+  height: 590px;
+  min-height: 540px;
+  max-height: none;
+  grid-template-columns: 23% 50% 27%;
+}
+.component-pane,
+.inspector {
+  padding: 18px;
+}
+.repo-reference {
+  font-size: 11px;
+}
+.component-pane h2 {
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 18px 0;
+}
+.component-item {
+  font-size: 14px;
+  padding: 9px 8px;
+  min-height: 38px;
+}
+.view-switch button,
+.export-menu summary {
+  font-size: 13px;
+}
+.inspector h2 {
+  font-size: 23px;
+  line-height: 1.25;
+}
+.selection-description {
+  font-size: 15px;
+  line-height: 1.6;
+}
+.selection-meta {
+  font-size: 11px;
+}
+.source-heading a {
+  font-size: 13px;
+  padding: 9px 10px;
+}
+.source-heading button {
+  font-size: 10px;
+}
+.player-status,
+.player-footer {
+  max-width: 1320px;
+  margin-inline: auto;
+}
+.player-status {
+  padding-inline: 28px;
+}
+.player-footer {
+  padding: 24px 28px;
+}
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.loading[hidden] {
+  display: none;
+}
+.loading::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--line);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: layout-spin 850ms linear infinite;
+}
+@keyframes layout-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+@media (min-width: 1600px) {
+  .site-header {
+    max-width: 1376px;
+    margin-inline: auto;
+  }
+  .workspace {
+    max-width: 1320px;
+    height: 620px;
+  }
+}
+@media (max-width: 900px) {
+  .site-header {
+    gap: 16px;
+    padding-inline: 20px;
+  }
+  .site-nav {
+    gap: 18px;
+  }
+  .workspace {
+    height: 760px;
+    grid-template-columns: 31% 69%;
+    grid-template-rows: 490px minmax(0, 1fr);
+  }
+  .inspector {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 35% minmax(0, 1fr);
+    gap: 8px 24px;
+  }
+  .inspector .selection-meta,
+  .inspector h2 {
+    grid-column: 1;
+  }
+  .inspector #overview-content {
+    grid-column: 1;
+    grid-row: 3/6;
+  }
+  .inspector-tabs,
+  #source-content {
+    grid-column: 2;
+  }
+  .inspector-tabs {
+    grid-row: 1/3;
+  }
+  #source-content {
+    grid-row: 3/6;
+  }
+  .intro {
+    padding-top: 36px;
+  }
+  .intro h1 {
+    font-size: 36px;
+  }
+}
+@media (max-width: 600px) {
+  .site-header {
+    height: 58px;
+    padding-inline: 16px;
+    gap: 12px;
+  }
+  .wordmark {
+    font-size: 20px;
+  }
+  .site-nav,
+  .site-header > .install-button {
+    display: none;
+  }
+  .appearance-controls {
+    margin-inline-start: auto;
+    gap: 6px;
+  }
+  .appearance-controls select {
+    font-size: 11px;
+    max-width: 72px;
+  }
+  .intro {
+    padding: 32px 20px 24px;
+  }
+  .intro h1 {
+    font-size: 30px;
+  }
+  .intro p {
+    font-size: 15px;
+  }
+  .workspace {
+    width: calc(100% - 24px);
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .component-pane {
+    padding: 16px;
+  }
+  .component-pane h2 {
+    font-size: 17px;
+    margin: 12px 0;
+  }
+  .component-item {
+    font-size: 12px;
+    padding: 7px 9px;
+    min-height: 34px;
+    white-space: nowrap;
+  }
+  .component-pane .search input {
+    font-size: 16px;
+  }
+  .graph-pane {
+    height: 450px;
+    padding-inline: 12px;
+  }
+  .inspector {
+    display: block;
+    padding: 18px;
+  }
+  .inspector h2 {
+    font-size: 22px;
+  }
+  .selection-description {
+    font-size: 15px;
+  }
+  .source-heading a {
+    font-size: 13px;
+  }
+  .source-heading button {
+    font-size: 10px;
+  }
+  .player-footer {
+    padding: 20px;
+  }
+  .player-status {
+    padding-inline: 20px;
+  }
+  .export-frame .appearance-controls {
+    display: none;
+  }
+}
+.export-frame .appearance-controls {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading::before {
+    animation: none;
+  }
+}
+/* Standalone explanations are a work surface, with a compact, structured intro. */
+.standalone .site-header {
+  height: 56px;
+}
+.standalone .wordmark {
+  font-size: 21px;
+}
+.standalone .appearance-controls {
+  margin-inline-start: auto;
+}
+.standalone .intro {
+  padding: 24px 28px 22px;
+}
+.standalone .intro h1 {
+  font-size: clamp(23px, 2vw, 30px);
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  max-width: 58ch;
+}
+.standalone .intro > p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 10px;
+  max-width: 85ch;
+}
+.intro-metadata {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-top: 12px;
+}
+.intro-metadata code {
+  font-family: Menlo, ui-monospace, monospace;
+  font-size: 10px;
+}
+.overview-path {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 12px 0 0;
+  list-style: none;
+}
+.overview-path li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.overview-path svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.overview-path button {
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 5px 8px;
+  line-height: 1.3;
+  background: var(--surface);
+  color: var(--ink);
+}
+.overview-path button:hover {
+  background: var(--hover);
+}
+.intro-details {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.intro-details summary {
+  cursor: pointer;
+}
+.intro .intro-details p {
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: 8px;
+  max-width: 90ch;
+}
+@media (max-width: 600px) {
+  .standalone .site-header {
+    height: 54px;
+  }
+  .standalone .wordmark {
+    font-size: 19px;
+  }
+  .standalone .intro {
+    padding: 22px 20px 18px;
+  }
+  .standalone .intro h1 {
+    font-size: 23px;
+  }
+  .standalone .intro > p {
+    font-size: 14px;
+  }
+  .intro-metadata {
+    font-size: 11px;
+    gap: 6px 14px;
+  }
+  .overview-path {
+    gap: 6px;
+  }
+  .overview-path button {
+    font-size: 11px;
+  }
+  .standalone .site-header > .install-button {
+    display: none;
+  }
+}
+.export-frame.standalone .site-header{height:48px}

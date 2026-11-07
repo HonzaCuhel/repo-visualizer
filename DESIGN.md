@@ -2,96 +2,109 @@
 name: Repo Visualizer
 description: A quiet source workspace for inspecting component graphs.
 colors:
-  ink: "#151720"
-  muted: "#5e6674"
-  line: "#dce1e8"
-  surface: "#f7f8fa"
-  blue: "#2164c7"
-  blue-light: "#eaf2ff"
-  paper: "#fff"
-  selected-ink: "#1558b7"
-  blue-hover: "#184e9e"
-  code-surface: "#f5f7fa"
-  install-surface: "#f6f8fb"
-  control-line: "#cbd3df"
-  node-line: "#a9b2bf"
-  edge-line: "#9da7b6"
+  ink: '#151720'
+  muted: '#5e6674'
+  line: '#dce1e8'
+  surface: '#f7f8fa'
+  blue: '#2164c7'
+  blue-light: '#eaf2ff'
+  paper: '#fff'
+  selected-ink: '#1558b7'
+  blue-hover: '#184e9e'
+  code-surface: '#f5f7fa'
+  install-surface: '#f6f8fb'
+  control-line: '#cbd3df'
+  node-line: '#a9b2bf'
+  edge-line: '#9da7b6'
 typography:
   display:
-    fontFamily: "Atkinson, system-ui, sans-serif"
-    fontSize: "clamp(32px, 3.71vw, 62px)"
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: clamp(29px, 3.05vw, 44px)
     fontWeight: 700
-    lineHeight: 1.1
-    letterSpacing: "-0.03em"
+    lineHeight: 1.12
+    letterSpacing: -0.03em
   headline:
-    fontFamily: "Atkinson, system-ui, sans-serif"
-    fontSize: "clamp(29px, 2.55vw, 43px)"
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: clamp(25px, 2.2vw, 31px)
     fontWeight: 650
-    lineHeight: 1.14
-    letterSpacing: "-0.025em"
+    lineHeight: 1.2
+    letterSpacing: -0.025em
   title:
-    fontFamily: "Atkinson, system-ui, sans-serif"
-    fontSize: "25px"
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 18px
     fontWeight: 600
-    letterSpacing: "-0.015em"
+    letterSpacing: -0.01em
   body:
-    fontFamily: "Atkinson, system-ui, sans-serif"
-    fontSize: "16px"
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 16px
     fontWeight: 400
     lineHeight: 1.45
   label:
-    fontFamily: "Atkinson, system-ui, sans-serif"
-    fontSize: "14px"
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 14px
     fontWeight: 400
   code:
-    fontFamily: "ui-monospace, monospace"
-    fontSize: "11px"
+    fontFamily: ui-monospace, monospace
+    fontSize: 11px
     fontWeight: 400
     lineHeight: 1.7
+  control:
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 13px
+    fontWeight: 400
+  caption:
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 12px
+    fontWeight: 400
+  source-identity:
+    fontFamily: Menlo, ui-monospace, monospace
+    fontSize: 10px
+    fontWeight: 400
 rounded:
-  inset: "4px"
-  control: "5px"
-  primary: "6px"
-  container: "7px"
-  graph-group: "10px"
+  inset: 4px
+  control: 5px
+  primary: 6px
+  container: 7px
+  graph-group: 10px
+  installation: 8px
 spacing:
-  tight: "4px"
-  small: "8px"
-  inset: "12px"
-  base: "16px"
-  pane-small: "18px"
-  pane: "24px"
-  pane-large: "28px"
+  tight: 4px
+  small: 8px
+  inset: 12px
+  base: 16px
+  pane-small: 18px
+  pane: 24px
+  pane-large: 28px
 components:
   button-primary:
-    backgroundColor: "{colors.blue}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.primary}"
-    padding: "0.35em 0.8em"
+    backgroundColor: '{colors.blue}'
+    textColor: '{colors.paper}'
+    rounded: '{rounded.control}'
+    padding: 8px 13px
   button-primary-hover:
-    backgroundColor: "{colors.blue-hover}"
+    backgroundColor: '{colors.blue-hover}'
   button-view:
-    textColor: "{colors.muted}"
-    rounded: "{rounded.control}"
-    padding: "6px 13px"
+    textColor: '{colors.muted}'
+    rounded: '{rounded.control}'
+    padding: 6px 13px
   component-selected:
-    backgroundColor: "{colors.blue-light}"
-    textColor: "{colors.selected-ink}"
-    rounded: "{rounded.control}"
-    padding: "11px 10px"
+    backgroundColor: '{colors.blue-light}'
+    textColor: '{colors.selected-ink}'
+    rounded: '{rounded.control}'
+    padding: 11px 10px
   search:
-    textColor: "{colors.muted}"
-    rounded: "{rounded.control}"
-    padding: "7px 9px"
+    textColor: '{colors.muted}'
+    rounded: '{rounded.control}'
+    padding: 7px 9px
   code:
-    backgroundColor: "{colors.code-surface}"
-    typography: "{typography.code}"
-    rounded: "{rounded.inset}"
-    padding: "12px"
+    backgroundColor: '{colors.code-surface}'
+    typography: '{typography.code}'
+    rounded: '{rounded.inset}'
+    padding: 12px
   command:
-    backgroundColor: "{colors.paper}"
-    rounded: "{rounded.container}"
-    padding: "14px 16px"
+    backgroundColor: '{colors.paper}'
+    rounded: '{rounded.container}'
+    padding: 14px 16px
 ---
 
 # Design System: Repo Visualizer
@@ -100,9 +113,11 @@ components:
 
 **Creative North Star: "The Professional Source Workspace"**
 
-A bright, extremely simple working environment puts the repository and its evidence first. White and cool near-white surfaces, charcoal text, a restrained blue and thin neutral rules carry the interface. The user-confirmed rejection is explicit: no childish orange 3D plates, glow, plastic surfaces, oversized gradient actions or neon instrument styling.
+A compact, extremely simple working environment puts the repository and its evidence first. White and cool near-white surfaces, charcoal text, a restrained blue and thin neutral rules carry the interface. The user-confirmed rejection is explicit: no childish orange 3D plates, glow, plastic surfaces, oversized gradient actions or neon instrument styling.
 
 The interface is compact and conventional. Clear sans typography explains the work; monospaced text carries source paths, revisions and code. The graph is a flat, selectable representation of relationships. Its geometry belongs to the data rather than to decoration.
+
+Version 0.2 applies the user-requested smaller type and controls, explicit installation CTA, light/dark/system appearance, English/Czech UI and restrained scroll reveals. This is a refinement of the professional source workspace.
 
 **Key Characteristics:**
 - White and cool-neutral surfaces with charcoal text.
@@ -132,6 +147,9 @@ One restrained primary accent sits within a cool neutral working palette. Frontm
 - **Control Rule** (`control-line`): installation controls and command container.
 - **Node Rule** (`node-line`) and **Relationship Rule** (`edge-line`): unselected diagram structure.
 
+### Dark appearance
+Dark mode uses #10141b paper, #e7edf7 ink, #a8b4c5 supporting text, #303b4c rules, #8bb9ff links/selection strokes, #1c3150 selected surfaces and #306ac0 solid actions. Graph nodes, group bounds, source blocks and exported SVG/canvas all use the same theme tokens. The system preference is the default; user choice persists locally.
+
 ### Named Rules
 **The Meaningful Blue Rule.** Blue marks an action, focus, selection or highlighted relationship; surrounding structure remains neutral.
 
@@ -144,26 +162,26 @@ One restrained primary accent sits within a cool neutral working palette. Frontm
 **Character:** One clear sans family provides hierarchy through weight, scale and restrained negative tracking. Monospace identifies literal code and source identity.
 
 ### Hierarchy
-- **Display:** the frontmatter display role is the wide-layout page heading. At widths up to 900px it becomes 38px; up to 600px it becomes 34px with line-height 1.08.
-- **Headline:** landing section headings use the frontmatter headline role; up to 700px they become 32px.
-- **Title:** example and guide headings use the frontmatter title role; up to 700px they become 23px. Inspector and component-pane headings have their own responsive clamps in the source.
-- **Body:** the frontmatter body role is the root baseline. Explanatory landing prose uses 17–20px and 1.5–1.65 line height, with recurring 65–70ch reading measures.
-- **Label:** compact search and button text uses the label role; graph-view/export controls use 16px on wide layouts and 14px on narrower layouts.
-- **Code:** the frontmatter code role describes inset source excerpts. Installation commands use 15px and 1.6 line height, reducing to 13px and then 12px at the landing breakpoints.
-- **Graph labels:** SVG titles use 17px at weight 600; kind and relationship labels use 11px, and group labels use 13px at weight 600. These are SVG-coordinate values; fitted viewport scale changes their apparent size.
+- **Display:** 29–44px with 1.12 line height; 36px on tablet and 30px on mobile.
+- **Headline:** 25–31px section headings; 26px on mobile.
+- **Title:** 18px example, guide and component-navigation headings. Inspector headings use 23px, becoming 22px on mobile.
+- **Body:** root 16px; explanatory prose uses 15–17px, with 16px for mobile reading paragraphs.
+- **Controls:** 13–14px for graph and primary actions; header preferences and secondary metadata use 11–12px. Search inputs use 16px on mobile to avoid focus zoom.
+- **Source:** Menlo distinguishes paths/revisions; source blocks retain ui-monospace at 11px. Text may scroll inside its pane.
+- **Graph:** SVG-coordinate titles remain 17px, kinds/relations 11px and groups 13px. Fitted scaling is independent of the surrounding typography.
 
 ### Named Rules
 **The Source Identity Rule.** Keep source paths, revisions and literal code visually distinct through monospace; keep explanation in Atkinson.
 
 ## Layout
 
-The explorer uses bounded, independently scrollable working panes and a dominant graph area. Wide-layout columns are 22.3%, 51.6% and the remaining width; workspace width is 98.74%, height is 38.15vw bounded by 530px and 760px. At 1800px and above it has a 1900px maximum width. These describe the explorer, not a required composition for every future surface.
+The desktop workspace is bounded at 1320px with 23% navigation, 50% graph and 27% evidence. It is 590px high, becoming 620px at wide viewports. Header controls are compact, with a 64px sticky site header. The installation action is repeated beside the introduction and in the command section so the primary task is immediately available.
 
-At up to 1200px the explorer uses 23% / 49% / 28% columns and a 570px minimum height. At up to 900px the inspector moves below the navigation and graph; its content becomes two columns. At up to 600px all panes stack, component navigation becomes a horizontal scroller, the inspector returns to block flow, and the graph pane keeps a 455px height. The graph SVG reserves a 42px strip for navigation controls outside its drawable area.
+At 900px and below, navigation and graph use 31% / 69% above the inspector. At 600px and below the panes stack, component navigation scrolls horizontally and the graph is 450px high. The mobile header keeps language and theme controls; the visible hero carries the primary installation CTA. Code and the command remain internally scrollable.
 
-Landing sections use a 1672px maximum width and 76px vertical padding; up to 700px this becomes 48px with 20px horizontal padding. Example and download collections use ruled rows, not decorative card grids. Guide and export layouts collapse to one column on small screens. The landing also has an intermediate 1100px breakpoint.
+Standalone explanations cap the main heading at 30px (23px on mobile) and use a 14px short lead. Counts, duration and a seven-character commit are a separate 11px metadata row. An optional source-linked orientation row references existing components; long summaries are available in a disclosure.
 
-Spacing is contextual rather than a rigid mathematical scale. The extracted recurring steps cover small control gaps, code insets and 18–28px pane padding. Large landing-section spacing remains specific to that content hierarchy. Export-frame mode intentionally fits the same explorer into a fixed viewport and omits page-level navigation and introduction.
+Landing sections are bounded at 1200px with 64px vertical and 28px horizontal padding, becoming 44px / 20px on mobile. Examples and downloads are ruled rows. The installation block has one neutral surface and 8px corners. Guides and exports collapse to one column on mobile. Export-frame mode uses its fixed-frame composition rather than scrolling page layout.
 
 ## Elevation & Depth
 
@@ -180,7 +198,7 @@ Controls have small, practical curves: inset source blocks and icon buttons use 
 
 ### Buttons
 Compact, familiar actions.
-- The installation action uses the primary variant, a matching blue border, semibold text and a darker hover fill. Mobile overrides use 14px text and 6px 10px padding.
+- The installation action uses the primary variant, a matching blue border, semibold text and a darker hover fill. The hero action uses 14px text; the header uses 13px. Both share one action color.
 - View controls use neutral text, transparent default backgrounds and a quiet selected fill; selection also strengthens the text weight.
 - Export summaries use a thin neutral border, white background and the control radius. Menu rows highlight with pale selection blue.
 - Keyboard focus uses a two-pixel blue outline with a three-pixel offset; search uses focus-within with a one-pixel offset. Disabled buttons reduce opacity to 0.5 and use a waiting cursor.
@@ -199,9 +217,9 @@ Search is a thin-bordered control with an inline stroke SVG and a transparent in
 The main navigation is text-based, charcoal and unadorned until hover underlines it. It disappears at the 600px breakpoint while the primary installation action remains. Inspector tabs use muted text and a thin blue active underline. The component list is the working navigation and follows the responsive behavior above.
 
 ### Component Graph
-White nodes and thin neutral relationships sit within pale group bounds. Active and selected nodes use pale blue interiors and stronger blue outlines; highlighted edges use the same blue. Inferred edges are dashed (`5 4`). Focus strengthens outlines further. Focus/path modes dim unrelated graph content to opacity 0.22. Labels and topology are data-derived.
+Theme-aware nodes and thin neutral relationships sit within subtle group bounds. Edge sections are positioned relative to their declared ELK container, preserving endpoint attachment through nested groups. Active and selected nodes use pale blue interiors and stronger blue outlines; highlighted edges use the same blue. Inferred edges are dashed (`5 4`). Focus strengthens outlines further. Focus/path modes dim unrelated graph content to opacity 0.22. Labels and topology are data-derived.
 
-Playback is an explicit interaction: a small pulse follows highlighted relationships, while a range control supports deterministic seeking. No decorative entrance-transition vocabulary is established. The source reduces smooth page scrolling to automatic scrolling when reduced motion is requested; this does not establish a broader reduced-motion policy for every playback/export mode.
+Playback is an explicit interaction: a small pulse follows highlighted relationships, while a range control supports deterministic seeking. Below-fold sections reveal once on intersection over 460ms with a restrained 12px rise, opacity and 1px blur. Content is visible by default, and reduced motion skips the reveal. Scrolling does not start graph playback. The source reduces smooth page scrolling to automatic scrolling when reduced motion is requested; this does not establish a broader reduced-motion policy for every playback/export mode.
 
 ## Do's and Don'ts
 

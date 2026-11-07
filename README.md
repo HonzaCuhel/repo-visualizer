@@ -1,19 +1,29 @@
+<div align="center">
+
 # Repo Visualizer
 
-Explain how a repository works as a component graph, with inspectable code and animated exports. An open skill for Codex and Claude Code.
+**Understand the mechanism behind the code.**
 
-[Explore the live example](https://honzacuhel.github.io/repo-visualizer/) · [Download the skill](https://github.com/HonzaCuhel/repo-visualizer/releases) · [Verification](docs/verification.md)
+An open skill that turns repository questions into component graphs—with source you can inspect and animations you can share.
 
-![A source-grounded walkthrough of stack-diagram](site/media/walkthrough.gif)
+[Explore the live demo](https://honzacuhel.github.io/repo-visualizer/) · [Install the skill](#install) · [Download a release](https://github.com/HonzaCuhel/repo-visualizer/releases)
 
-The coding agent reads the repository, extracts responsibilities and relationships, and writes one canonical graph. The player visualizes that graph. Optional paths explain a feature without flattening the architecture into a linear diagram.
+[![Check skill](https://github.com/HonzaCuhel/repo-visualizer/actions/workflows/check.yml/badge.svg)](https://github.com/HonzaCuhel/repo-visualizer/actions/workflows/check.yml)
+[![Release](https://img.shields.io/github/v/release/HonzaCuhel/repo-visualizer?color=2164c7)](https://github.com/HonzaCuhel/repo-visualizer/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-64748b)](LICENSE)
 
-- Source references pinned to the analyzed revision, with embedded excerpts for offline inspection.
-- Cycles, branches, parallel relationships, disconnected components and nested groups.
-- A professional component explorer with graph and source inspection.
-- Portable HTML plus PNG, SVG, GIF, MP4 and WebM through the same deterministic scene.
+English · [Česky](README.cs.md)
 
-## Install the skill
+</div>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="site/media/walkthrough-dark.gif">
+  <img src="site/media/walkthrough.gif" alt="A real component graph of stack-diagram, highlighting asset embedding and the validation branch, with inspectable source code." width="100%">
+</picture>
+
+The agent reads the implementation and authors a graph of responsibilities and relationships. The explorer renders that graph: branches stay branches, retries stay loops, and an optional walkthrough highlights a path through the same topology.
+
+## Install
 
 Run inside your repository:
 
@@ -21,40 +31,71 @@ Run inside your repository:
 npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer -a codex -a claude-code
 ```
 
-This installs project skills for both agents through the open [skills CLI](https://github.com/vercel-labs/skills). Choose one agent by keeping only its `-a` option; add `-g` for a personal installation across projects. The installer requires Node.js 22.20+. For a pinned release, use `HonzaCuhel/repo-visualizer@v0.1.0` as the source.
+Keep one `-a` option to choose a single agent. Add `-g` for a personal installation across projects. The installer uses the existing [skills CLI](https://github.com/vercel-labs/skills); skills are fetched from this GitHub repository.
 
-Alternatively, extract the release ZIP and copy the complete `repo-visualizer` folder into your agent's supported skill directory. Scripts, assets and notices must stay together. Core scan, validation and HTML assembly use Python 3.9+ and need no server. Animated exports need the [optional rendering environment](skills/repo-visualizer/references/exports.md).
+Then ask:
 
-Ask your agent:
+> Use repo-visualizer to explain how this feature works. Extract its components and relationships, include failure paths, and export an interactive HTML graph and a short GIF.
 
-> Use repo-visualizer to explain how this feature works. Extract its main components and relationships, include failure paths, and give me an interactive graph with code references and a short animated walkthrough.
+Prefer a file? Download the complete skill ZIP from [Releases](https://github.com/HonzaCuhel/repo-visualizer/releases). Each release includes its SHA-256 checksum. Keep the skill folder intact when installing manually.
 
-The skill's [instructions](skills/repo-visualizer/SKILL.md) describe the full workflow. [Graph format](skills/repo-visualizer/references/graph-format.md) and [exports](skills/repo-visualizer/references/exports.md) are documented separately.
+| Requirement | Used for |
+| --- | --- |
+| Codex or Claude Code | Read the repository and author the explanation |
+| Node.js 22.20+ | Install through `npx skills` |
+| Python 3.9+ | Inventory, source validation and HTML assembly |
+| Optional rendering environment | Animated and image exports; see the [export guide](skills/repo-visualizer/references/exports.md) |
 
-## How extraction works
+## Explore the code, at your own pace
 
-`scan` inventories source modules and Python static imports without importing or executing target code. It provides a starting point, not a complete architecture detector. The coding agent inspects real implementations and refines the inventory into meaningful components and typed relationships. Source fingerprints catch code drift; they do not prove the agent's interpretation.
+| View | What it shows |
+| --- | --- |
+| **Map** | The complete component graph, including branches, cycles, parallel edges and nested groups |
+| **Focus** | The selected component and its immediate relationships |
+| **Path** | A source-derived walkthrough over the same graph |
 
-```sh
-python3 skills/repo-visualizer/scripts/repo_story.py scan --repo /path/to/repository -o /path/to/artifacts/inventory.json
-python3 skills/repo-visualizer/scripts/repo_story.py prepare graph.json --repo /path/to/repository -o prepared.json
-python3 skills/repo-visualizer/scripts/repo_story.py build prepared.json -o explorer.html
-```
+Select a component or relationship to read embedded code excerpts and open revision-pinned source links. Search, zoom, pan, seek and keyboard controls work in the portable HTML, including offline.
 
-Generated HTML contains source excerpts. Keep private repositories' artifacts private unless publication is authorized.
+[Try the portable builder](https://honzacuhel.github.io/repo-visualizer/portable-builder.html) · [Explore the complete public example](https://honzacuhel.github.io/repo-visualizer/full-pipeline.html)
 
-## What has been tested
+## One graph, multiple outputs
 
-Fresh Codex and Claude Code sessions independently read the public stack-diagram source and produced their own graphs, offline HTML and changing GIF frames. A separate verification checked source fingerprints, graph interaction, offline operation and unchanged target source. Codex on macOS required approval of the trusted browser export command outside its OS sandbox. See [the test record and limits](docs/verification.md).
+**Interactive HTML · JSON · SVG · PNG · GIF · MP4 · WebM**
+
+The player and local exporters use the same graph and seekable scene. HTML keeps clickable evidence. Image and video exports carry the visual explanation. An optional [HyperFrames adapter](skills/repo-visualizer/references/exports.md#hyperframes) renders that same scene locally.
+
+Light, dark and system appearance are user choices. Explanations follow the user's requested language, independently of the agent. English and Czech interface translations are bundled; other languages can provide an explicit translated dictionary. [Language and appearance](skills/repo-visualizer/references/localization.md).
+
+## How it stays grounded
+
+1. **Read.** Inventory the repository without importing or running its code; inspect the relevant implementation.
+2. **Model.** Describe responsibilities, typed relationships, uncertainty and optional walkthroughs in canonical JSON.
+3. **Verify.** Check source ranges, fingerprints and revision before assembling the explorer.
+4. **Share.** Inspect the result, then export the same explanation in the format you need.
+
+The semantic explanation is authored by the coding agent. Static imports are hints; matching a fingerprint does **not** prove the interpretation is correct. A walkthrough illustrates source-derived behavior, not a recorded execution.
+
+Generated HTML embeds source excerpts. Keep private-repository artifacts private. The renderer and exports run locally; your coding agent's existing data settings still apply.
+
+## Verification
+
+Fresh Codex and Claude Code sessions have independently produced graphs, offline HTML and changing GIFs from public source. Separate checks cover source fingerprints, graph interaction, packaging, topology, offline operation and decoded video frames. [Test record and limitations](docs/verification.md).
+
+On macOS, the agent's OS sandbox may require approval for the specific trusted browser export command. Dense diagrams are best explored in HTML with zoom; scope a video around one useful question.
 
 ## Development
 
 ```sh
 python3 -m unittest discover -s tests -v
 uv sync --locked --extra export
+python3 scripts/build_site.py
 python3 scripts/package_skill.py
 ```
 
-The optional export environment requires Python 3.10+. Playwright Chromium must be installed, or an existing Chromium executable supplied with `--browser`.
+Set `REPO_VISUALIZER_BROWSER` to an existing Chromium executable to include browser integration checks. The optional export environment uses Python 3.10+. See the [skill instructions](skills/repo-visualizer/SKILL.md), [graph format](skills/repo-visualizer/references/graph-format.md) and [export guide](skills/repo-visualizer/references/exports.md).
 
-Original code: MIT. Vendored ELK layout engine: EPL-2.0. Font: OFL-1.1. See [third-party notices](skills/repo-visualizer/NOTICE.md). Inspired by [stack-diagram](https://github.com/caru-ini/stack-diagram); its public source example retains its own MIT attribution.
+## Credits and license
+
+Inspired by [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). The public example analyzes its MIT-licensed source at a pinned revision and retains attribution.
+
+Original code is **MIT**. Vendored ELK is **EPL-2.0**, gifenc is **MIT**, and Atkinson Hyperlegible Next is **OFL-1.1**. Full licenses and provenance ship with the skill. [Third-party notices](skills/repo-visualizer/NOTICE.md).

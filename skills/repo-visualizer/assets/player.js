@@ -1,8 +1,23 @@
 (() => {
   "use strict";
   const $ = (id) => document.getElementById(id),
-    S = JSON.parse($("repo-data").textContent),
+    baseStory = JSON.parse($("repo-data").textContent),
     NS = "http://www.w3.org/2000/svg";
+  const t = (key, values) => window.repoAppearance.t(key, values);
+  function localizedStory() {
+    const value = JSON.parse(JSON.stringify(baseStory));
+    const display = baseStory.translations?.[window.repoAppearance.language];
+    if (!display) return value;
+    for (const [key, translated] of Object.entries(display)) {
+      if (["nodes", "edges", "groups", "steps", "scenarios"].includes(key)) {
+        for (const item of value[key])
+          Object.assign(item, translated[item.id] || {});
+      } else value[key] = translated;
+    }
+    value.language = window.repoAppearance.language;
+    return value;
+  }
+  let S = localizedStory();
   const nodes = new Map(S.nodes.map((n) => [n.id, n])),
     edges = new Map(S.edges.map((e) => [e.id, e])),
     sources = new Map(S.sources.map((s) => [s.id, s])),
@@ -57,10 +72,7 @@
       '<svg viewBox="0 0 24 24" aria-hidden="true">' +
       playerIcons[playing ? "pause" : "play"] +
       "</svg>";
-    $("play").setAttribute(
-      "aria-label",
-      playing ? "Pause walkthrough" : "Play walkthrough",
-    );
+    $("play").setAttribute("aria-label", playing ? t("pause") : t("play"));
   }
   $("previous").innerHTML =
     '<svg viewBox="0 0 24 24" aria-hidden="true">' +
@@ -132,6 +144,68 @@
     const sec = Math.floor(ms / 1000);
     return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
   }
+  function refreshIntro() {
+    if (window.REPO_LANDING) return;
+    $("page-title").removeAttribute("data-i18n");
+    $("page-title").textContent = S.title;
+    const full = S.summary || S.question;
+    const first = full.split(/(?<=[.!?])\s+/)[0];
+    let lead = S.overview?.lead || (full.length > 220 ? first : full);
+    if (lead.length > 240)
+      lead = lead.slice(0, 237).replace(/\s+\S*$/, "") + "…";
+    $("page-description").textContent = lead;
+    $("intro-details").hidden = full === lead;
+    $("intro-details-copy").textContent = full;
+    const meta = $("intro-metadata");
+    meta.hidden = false;
+    meta.replaceChildren();
+    meta.append(
+      text(
+        "span",
+        t("counts", { nodes: S.nodes.length, edges: S.edges.length }),
+      ),
+    );
+    meta.append(
+      text(
+        "span",
+        t("path") +
+          ": " +
+          new Intl.NumberFormat(window.repoAppearance.language, {
+            maximumFractionDigits: 1,
+          }).format(duration() / 1000) +
+          " s",
+      ),
+    );
+    meta.append(text("span", t("staticAnalysis")));
+    if (S.repo.commit) {
+      const revision = text("code", S.repo.commit.slice(0, 7));
+      revision.title = S.repo.commit;
+      meta.append(revision);
+    }
+    const list = $("overview-path");
+    list.replaceChildren();
+    list.hidden = !S.overview?.path?.length;
+    list.setAttribute("aria-label", t("overview"));
+    for (const [index, part] of (S.overview?.path || []).entries()) {
+      const item = text("li", "");
+      if (index)
+        item.insertAdjacentHTML(
+          "beforeend",
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>',
+        );
+      const button = text(
+        "button",
+        part.label || nodes.get(part.node_id).label,
+      );
+      button.title = nodes.get(part.node_id).description;
+      button.addEventListener("click", () => {
+        select("node", part.node_id);
+        $("workspace").scrollIntoView({ block: "start" });
+      });
+      item.append(button);
+      list.append(item);
+    }
+  }
   function configureTimeline() {
     const select = $("scenario");
     select.replaceChildren();
@@ -140,15 +214,14 @@
       option.value = sc.id;
       select.append(option);
     }
-    const option = text("option", "Component tour");
+    const option = text("option", t("tour"));
     option.value = "tour";
     select.append(option);
     select.value = scenarioId;
     $("seek").max = String(duration());
     $("tour-note").textContent =
-      scenarioId === "tour"
-        ? "Component tour · not execution order"
-        : "Source walkthrough · not a runtime trace";
+      scenarioId === "tour" ? t("tourNote") : t("pathNote");
+    refreshIntro();
   }
   function select(type, id, { fromTimeline = false, announce = true } = {}) {
     if (
@@ -161,10 +234,12 @@
     inspect();
     if (announce)
       status(
-        (type === "node" ? "Selected component: " : "Selected relationship: ") +
-          (type === "node"
-            ? nodes.get(id).label
-            : edges.get(id).label || edges.get(id).relation),
+        t(type === "node" ? "selectedNode" : "selectedEdge", {
+          label:
+            type === "node"
+              ? nodes.get(id).label
+              : edges.get(id).label || edges.get(id).relation,
+        }),
       );
   }
   function adjacency(id) {
@@ -245,9 +320,11 @@
         : edges.get(selected.id);
     $("selection-meta").textContent =
       (selected.type === "node"
-        ? item.kind
-        : "relationship · " + item.relation) +
-      (item.evidence === "inferred" ? " · inferred" : " · source-grounded");
+        ? t(item.kind)
+        : t("relationship") + " · " + item.relation) +
+      (item.evidence === "inferred"
+        ? " · " + t("inferred")
+        : " · " + t("grounded"));
     $("selection-title").textContent =
       selected.type === "node" ? item.label : item.label || item.relation;
     const description =
@@ -255,8 +332,8 @@
         ? item.description
         : nodes.get(item.from).label + " → " + nodes.get(item.to).label;
     $("selection-description").textContent =
-      (description || "Inspect the source references for this component.") +
-      (item.evidence === "inferred" ? " Inference: " + item.reason : "");
+      (description || t("inspectSource")) +
+      (item.evidence === "inferred" ? " " + t("inference") + item.reason : "");
     const connections = $("connections");
     connections.replaceChildren();
     for (const edge of selected.type === "node"
@@ -270,7 +347,7 @@
       button.append(
         text(
           "span",
-          (edge.from === selected.id ? "" : "From ") +
+          (edge.from === selected.id ? "" : t("from")) +
             other.label +
             " · " +
             (edge.label || edge.relation),
@@ -289,12 +366,15 @@
           "button",
           source.path + " · L" + source.start + "–" + source.end,
         );
-      open.title = "Show embedded source code";
+      open.title = t("showCode");
       open.addEventListener("click", () => setCodeMode(!codeMode));
       head.append(open);
       if (source.url) {
-        const a = text("a", "Open source ");
-        a.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>');
+        const a = text("a", t("openSource") + " ");
+        a.insertAdjacentHTML(
+          "beforeend",
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>',
+        );
         a.href = source.url;
         a.target = "_blank";
         a.rel = "noopener";
@@ -311,7 +391,7 @@
         "p",
         (source.revision === "commit"
           ? source.commit.slice(0, 7)
-          : "working tree") +
+          : t("workingTree")) +
           " · SHA256 " +
           source.sha256.slice(0, 12),
         "source-revision",
@@ -321,13 +401,7 @@
       container.append(entry);
     }
     if (!item.source_ids.length)
-      container.append(
-        text(
-          "p",
-          "No direct source reference. This relationship is explicitly inferred.",
-          "source-revision",
-        ),
-      );
+      container.append(text("p", t("noSource"), "source-revision"));
     $("overview-content").hidden = codeMode;
     $("overview-tab").setAttribute("aria-pressed", String(!codeMode));
     $("code-tab").setAttribute("aria-pressed", String(codeMode));
@@ -372,10 +446,10 @@
     paint();
     status(
       value === "focus"
-        ? "Showing the selected component and its direct relationships."
+        ? t("focusStatus")
         : value === "path"
-          ? "Highlighting a path over the complete graph."
-          : "Showing the complete component graph.",
+          ? t("pathStatus")
+          : t("mapStatus"),
     );
   }
   function pathFromPoints(points) {
@@ -515,8 +589,8 @@
     nodeElements.clear();
     const defs = svg("defs");
     for (const [id, color] of [
-      ["arrow", "#9da7b6"],
-      ["arrow-active", "#2164c7"],
+      ["arrow", "var(--edge-line)"],
+      ["arrow-active", "var(--blue)"],
     ]) {
       const marker = svg("marker", {
         id,
@@ -537,9 +611,11 @@
       nodeLayer = svg("g");
     diagram.append(groupsLayer, edgeLayer, nodeLayer);
     const routed = [];
+    const containerPositions = new Map();
     function walk(item, ox = 0, oy = 0) {
       const x = ox + (item.x || 0),
         y = oy + (item.y || 0);
+      containerPositions.set(item.id, { x, y });
       if (item.id !== "root") {
         if (nodes.has(item.id)) {
           positions.set(item.id, {
@@ -568,7 +644,11 @@
       for (const child of item.children || []) walk(child, x, y);
     }
     walk(layout);
-    for (const { edge, x, y } of routed) {
+    for (const routedEdge of routed) {
+      const { edge } = routedEdge;
+      // ELK can return an edge on the root while expressing its section and
+      // label coordinates in a nested container's coordinate system.
+      const { x, y } = containerPositions.get(edge.container) || routedEdge;
       const e = edges.get(edge.id);
       if (!e) continue;
       const g = svg("g", {
@@ -629,7 +709,7 @@
         "data-node": n.id,
         role: "button",
         tabindex: 0,
-        "aria-label": n.label + " · " + n.kind,
+        "aria-label": n.label + " · " + t(n.kind),
       });
       g.append(svg("rect", { width: p.width, height: p.height, rx: 7 }));
       const label = svg("text", {
@@ -653,7 +733,7 @@
             y: p.height - 12,
             "text-anchor": "middle",
           },
-          n.kind + (n.evidence === "inferred" ? " · inferred" : ""),
+          t(n.kind) + (n.evidence === "inferred" ? " · " + t("inferred") : ""),
         ),
       );
       g.addEventListener("click", () => select("node", n.id));
@@ -667,8 +747,10 @@
       nodeElements.set(n.id, g);
     }
     bounds = { x: -10, y: -10, w: layout.width + 20, h: layout.height + 20 };
-    $("graph-count").textContent =
-      S.nodes.length + " components · " + S.edges.length + " relationships";
+    $("graph-count").textContent = t("counts", {
+      nodes: S.nodes.length,
+      edges: S.edges.length,
+    });
   }
   function applyCamera() {
     if (camera)
@@ -761,12 +843,21 @@
       ),
     );
     copy.insertBefore(style, copy.firstChild);
+    const computed = getComputedStyle(document.documentElement);
+    const tokenValues = [...computed]
+      .filter((key) => key.startsWith("--"))
+      .map((key) => key + ":" + computed.getPropertyValue(key))
+      .join(";");
+    style.textContent += "\nsvg{" + tokenValues + "}";
+    copy.setAttribute("data-theme", window.repoAppearance.resolvedTheme);
     const background = svg("rect", {
       x: bounds.x,
       y: bounds.y,
       width: bounds.w,
       height: bounds.h,
-      fill: "#fff",
+      fill: getComputedStyle(document.documentElement)
+        .getPropertyValue("--paper")
+        .trim(),
     });
     copy.insertBefore(background, style.nextSibling);
     copy.prepend(svg("title", {}, S.question));
@@ -798,7 +889,9 @@
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue("--paper")
+      .trim();
     ctx.fillRect(0, 0, width, height);
     const image = new Image(),
       url = URL.createObjectURL(
@@ -807,8 +900,7 @@
     try {
       await new Promise((resolve, reject) => {
         image.onload = resolve;
-        image.onerror = () =>
-          reject(Error("The browser could not rasterize the graph SVG"));
+        image.onerror = () => reject(Error(t("rasterFailed")));
         image.src = url;
       });
       const scale = Math.min(
@@ -818,19 +910,23 @@
         w = bounds.w * scale,
         h = bounds.h * scale;
       ctx.drawImage(image, (width - w) / 2, 70 + (height - 135 - h) / 2, w, h);
-      ctx.fillStyle = "#151720";
+      ctx.fillStyle = getComputedStyle(document.documentElement)
+        .getPropertyValue("--ink")
+        .trim();
       ctx.font = "600 22px Atkinson";
       ctx.fillText(S.title, 24, 33, width - 48);
       const active = activeAt(current);
       ctx.font = "16px Atkinson";
-      ctx.fillStyle = "#1558b7";
+      ctx.fillStyle = getComputedStyle(document.documentElement)
+        .getPropertyValue("--selected-ink")
+        .trim();
       ctx.fillText(active.step.title, 24, height - 36, width - 48);
       ctx.font = "11px Atkinson";
-      ctx.fillStyle = "#657082";
+      ctx.fillStyle = getComputedStyle(document.documentElement)
+        .getPropertyValue("--muted")
+        .trim();
       ctx.fillText(
-        (scenarioId === "tour"
-          ? "Component tour · not execution order"
-          : "Source walkthrough · not a runtime trace") +
+        (scenarioId === "tour" ? t("tourNote") : t("pathNote")) +
           "   " +
           time(ms) +
           " / " +
@@ -858,9 +954,25 @@
         const copy = document.documentElement.cloneNode(true);
         copy
           .querySelector("body")
-          .classList.remove("export-busy", "export-frame");
+          .classList.remove("export-busy", "export-frame", "landing");
+        copy.querySelector("body").classList.add("standalone");
         copy.querySelector("#export-progress").hidden = true;
-        copy.querySelectorAll(".landing-section").forEach((el) => el.remove());
+        copy
+          .querySelectorAll(
+            ".landing-section,.landing-only,#site-script,#site-style,#site-locales",
+          )
+          .forEach((el) => el.remove());
+        const settings = JSON.parse(
+          copy.querySelector("#appearance-config").textContent,
+        );
+        settings.landing = false;
+        settings.preference = {
+          language: window.repoAppearance.language,
+          theme: window.repoAppearance.resolvedTheme,
+        };
+        copy.querySelector("#appearance-config").textContent = JSON.stringify(
+          settings,
+        ).replace(/</g, "\\u003c");
         const documentText = copy.outerHTML
           .replace(
             "url(assets/AtkinsonHyperlegibleNext.ttf)",
@@ -887,25 +999,22 @@
           slug() + ".svg",
         );
       else if (format === "png") {
-        message("Rendering graph PNG…");
+        message(t("exportPng"));
         const canvas = await rasterFrame(current, 1440, 960);
         const blob = await new Promise((resolve) =>
           canvas.toBlob(resolve, "image/png"),
         );
-        if (!blob) throw Error("PNG encoding failed");
+        if (!blob) throw Error(t("pngFailed"));
         download(blob, slug() + ".png");
       } else if (format === "gif") {
         setView("path");
         const fps = 8,
           count = Math.ceil((duration() / 1000) * fps);
-        if (count > 960)
-          throw Error(
-            "Use the command-line exporter for GIFs longer than two minutes.",
-          );
+        if (count > 960) throw Error(t("longGif"));
         const gif = Gifenc.GIFEncoder();
         for (let i = 0; i < count; i++) {
-          if (cancelled) throw Error("Export cancelled");
-          message("Rendering GIF · " + Math.round((i / count) * 100) + "%");
+          if (cancelled) throw Error(t("cancelled"));
+          message(t("renderGif", { percent: Math.round((i / count) * 100) }));
           const canvas = await rasterFrame((i * 1000) / fps, 800, 540),
             ctx = canvas.getContext("2d"),
             rgba = ctx.getImageData(0, 0, 800, 540).data,
@@ -931,10 +1040,7 @@
             ? "video/mp4;codecs=avc1.42001f"
             : "video/webm;codecs=vp9";
         if (!window.MediaRecorder || !MediaRecorder.isTypeSupported(mime))
-          throw Error(
-            format.toUpperCase() +
-              " recording is unavailable in this browser. Choose another format or use the skill’s local video exporter.",
-          );
+          throw Error(t("videoUnavailable", { format: format.toUpperCase() }));
         setView("path");
         const fps = 12,
           canvas = document.createElement("canvas");
@@ -953,18 +1059,17 @@
             if (e.data.size) chunks.push(e.data);
           };
           recorder.onstop = resolve;
-          recorder.onerror = () => reject(Error("Video recording failed"));
+          recorder.onerror = () => reject(Error(t("videoFailed")));
         });
         recorder.start();
         try {
           for (let ms = 0; ms < duration(); ms += 1000 / fps) {
-            if (cancelled) throw Error("Export cancelled");
+            if (cancelled) throw Error(t("cancelled"));
             message(
-              "Recording " +
-                format.toUpperCase() +
-                " · " +
-                Math.round((ms / duration()) * 100) +
-                "%",
+              t("recordVideo", {
+                format: format.toUpperCase(),
+                percent: Math.round((ms / duration()) * 100),
+              }),
             );
             ctx.drawImage(await rasterFrame(ms), 0, 0);
             track.requestFrame();
@@ -980,11 +1085,7 @@
           slug() + "." + format,
         );
       }
-      status(
-        "Exported " +
-          format.toUpperCase() +
-          ". The HTML retains clickable source references.",
-      );
+      status(t("exported", { format: format.toUpperCase() }));
     } catch (error) {
       status(error.message);
       throw error;
@@ -1120,14 +1221,16 @@
     if (!menu.contains(event.target)) menu.open = false;
   });
   $("repo-name").textContent = S.title;
-  $("repo-revision").textContent = S.repo.commit?.slice(0, 7) || "local";
+  $("repo-revision").textContent = S.repo.commit?.slice(0, 7) || t("local");
   $("question").textContent = S.question;
   if (!window.REPO_LANDING) {
+    $("page-title").removeAttribute("data-i18n");
     $("page-title").textContent = S.title;
     $("page-description").textContent = S.summary || S.question;
     document.querySelector(".site-nav").hidden = true;
-    document.querySelector(".agent-names").hidden = true;
-    document.querySelector(".install-button").textContent = "Explore source";
+
+    document.querySelector(".install-button").dataset.i18n = "exploreSource";
+    document.querySelector(".install-button").textContent = t("exploreSource");
     document.querySelector(".install-button").href = "#workspace";
   }
   for (const note of S.uncertainties)
@@ -1135,20 +1238,48 @@
   configureTimeline();
   fillComponents();
   renderAt(0);
+  document.addEventListener("repo-language-change", () => {
+    if (exporting) return;
+    window.repoLocaleReady = (async () => {
+      await window.repoReady;
+      pause();
+      const previous = { ...selected };
+      S = localizedStory();
+      for (const [collection, map] of [
+        [S.nodes, nodes],
+        [S.edges, edges],
+        [S.steps, steps],
+      ]) {
+        map.clear();
+        for (const item of collection) map.set(item.id, item);
+      }
+      inspectedKey = null;
+      $("question").textContent = S.question;
+      $("repo-name").textContent = S.title;
+      $("uncertainties").replaceChildren(
+        ...S.uncertainties.map((note) => text("li", note)),
+      );
+      if (!window.REPO_LANDING) {
+        $("page-title").textContent = S.title;
+        $("page-description").textContent = S.summary || S.question;
+      }
+      configureTimeline();
+      fillComponents();
+      await layOut();
+      renderAt(current);
+      select(previous.type, previous.id, { announce: false });
+      setPlayIcon();
+      status(t("ready", { nodes: S.nodes.length, edges: S.edges.length }));
+    })();
+  });
   window.repoReady = (async () => {
     await document.fonts.ready;
     await layOut();
     setView(S.default_view || "map");
-    status(
-      S.nodes.length +
-        " components and " +
-        S.edges.length +
-        " relationships. Select a component to inspect its evidence.",
-    );
+    status(t("ready", { nodes: S.nodes.length, edges: S.edges.length }));
     return true;
   })().catch((error) => {
-    $("loading").textContent =
-      "The graph could not be laid out. " + error.message;
+    $("loading").textContent = t("layoutFailed") + error.message;
     status("Layout failed: " + error.message);
     throw error;
   });
