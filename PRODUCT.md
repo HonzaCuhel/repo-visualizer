@@ -26,10 +26,10 @@ The user confirmed Codex and Claude Code as first-release targets. The skill wor
 
 - Primary artifact: a component graph with inspectable sources, branches, cycles, parallel relationships and groups. A selected feature can have an animated path through that graph; a path is optional and does not determine the graph's topology.
 - Users can choose a visualization and an export format; animated GIF is an explicit requirement.
-- Exact additional views and export formats remain open; research recommends a shared model for all outputs.
+- Map, Focus and Path use one shared graph model. HTML, PNG, SVG, GIF, MP4 and WebM are supported; HyperFrames is an optional adapter.
 - The requested public presentation is GitHub Pages. The user wants a release prepared for 8 November 2026.
 - Research, proposals, and joint selection precede the final implementation.
-- Repo Visualizer is the current product name. Original code is MIT-licensed with separately licensed vendored assets. Private test examples are not authorized for public publication. The repository and release have not yet been published.
+- Repo Visualizer is the product name. Original code is MIT-licensed with separately licensed vendored assets. The public repository is HonzaCuhel/repo-visualizer; private test examples are not authorized for publication.
 
 ## Brand Commitments
 

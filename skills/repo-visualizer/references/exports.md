@@ -18,6 +18,8 @@ uv run --with playwright --with pillow --with imageio-ffmpeg python <skill>/scri
 
 Install Chromium in that environment using `python -m playwright install chromium`, or pass `--browser /path/to/an/existing/chromium`. Export blocks outbound HTTP(S) requests. `--width`, `--height`, `--fps`, `--scenario` set output; `--at` is a static capture position in milliseconds. PNG captures the explorer viewport. SVG exports the complete vector graph at its layout bounds, including embedded styles/font. GIF, MP4 and WebM animate the authored path, or a clearly labeled component tour if no path exists. They use the same `window.renderAt(ms)` as the interactive player. MP4/WebM pad odd dimensions by one pixel for codec compatibility.
 
+On macOS, a coding agent's OS sandbox can prevent Chromium from launching even when HTML assembly succeeds. Request approval for the specific trusted export command using the agent's normal approval mechanism. Do not disable browser or agent protections to work around this. If approval is unavailable, deliver the working HTML and report the animation as incomplete.
+
 The output is replaced only after a successful render. GIF encoding retains frames in memory: use lower resolution/fps for long graphs. Prefer MP4 for long explanations and GIF for compact README previews. A video cannot retain clickable source links; ship the HTML alongside it.
 
 ## HyperFrames

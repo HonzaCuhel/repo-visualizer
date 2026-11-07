@@ -1,0 +1,17 @@
+{
+  "kind": "runtime-render",
+  "generator": "hyperframes_export.py and HyperFrames 0.9.20",
+  "settings": {
+    "width": 960,
+    "height": 640,
+    "fps": 8
+  },
+  "sources": {
+    "examples/stack-diagram/portable-builder.json": "be1a4f33229c429b1ef87aabef90a142e8552882065e2ab19cdc42361350ad09",
+    "site/portable-builder.html": "22230aa612380f2981982c6a4b6005770dfc26785529c6d3c52813582f2905d2"
+  },
+  "source_repository": "https://github.com/caru-ini/stack-diagram",
+  "source_revision": "1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838",
+  "source_license": "MIT",
+  "note": "Rendered from the real canonical graph; static source explanation, not runtime tracing. No image generation model used."
+}

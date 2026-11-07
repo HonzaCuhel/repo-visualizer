@@ -1,50 +1,220 @@
 <!doctype html>
 <html lang="@@LANG@@">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="referrer" content="no-referrer">
-<meta name="color-scheme" content="light">
-<title>@@TITLE@@ · Repo Visualizer</title>
-<style id="player-style">@font-face{font-family:Atkinson;src:url(@@FONT_URL@@) format('truetype');font-weight:100 900;font-display:swap}@@CSS@@</style>
-</head>
-<body>
-<a class="skip-link" href="#workspace">Skip to graph</a>
-<header class="site-header">
-  <a class="wordmark" href="#" aria-label="Repo Visualizer home">repo-visualizer</a>
-  <nav class="site-nav" aria-label="Main navigation"><a href="#examples">Examples</a><a href="#guide">Guide</a><a href="https://github.com/HonzaCuhel/repo-visualizer" target="_blank" rel="noopener">GitHub</a></nav>
-  <span class="agent-names">Codex / Claude Code</span><a class="install-button" href="#install">Install skill</a>
-</header>
-<main>
-  <section class="intro" aria-labelledby="page-title"><h1 id="page-title">Understand how the code works.</h1><p id="page-description">Turn a repository question into a short, animated walkthrough with an inspectable code reference.</p></section>
-  <section id="workspace" class="workspace" aria-label="Repository graph explorer" tabindex="-1">
-    <aside class="component-pane" aria-label="Component navigation">
-      <div class="repo-reference"><span id="repo-name"></span><span id="repo-revision"></span></div>
-      <h2 id="question"></h2>
-      <label class="search"><span class="sr-only">Find a component</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg><input id="component-search" type="search" placeholder="Find a component" autocomplete="off"></label>
-      <div id="component-list" class="component-list"></div><p id="no-components" hidden>No matching components.</p>
-      <details class="analysis-notes"><summary>Scope and uncertainties</summary><p>Source analysis, not a recorded runtime trace.</p><ul id="uncertainties"></ul></details>
-    </aside>
-    <section class="graph-pane" aria-label="Graph and playback">
-      <div class="graph-heading"><div class="view-switch" role="group" aria-label="Graph view"><button data-view="map" aria-pressed="true">Map</button><button data-view="focus" aria-pressed="false">Focus</button><button data-view="path" aria-pressed="false">Path</button></div>
-        <details class="export-menu"><summary>Export <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="export-options" role="group" aria-label="Export format"><button data-export="html">Interactive HTML</button><button data-export="json">Graph JSON</button><button data-export="svg">Vector SVG</button><button data-export="png">Graph PNG</button><button data-export="gif">Animated GIF</button><button data-export="mp4">Video MP4</button><button data-export="webm">Video WebM</button></div></details>
-      </div>
-      <div class="graph-stage" id="graph-stage"><div class="loading" id="loading" role="status">Laying out the graph…</div><svg id="diagram" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Component relationships"></svg><div class="zoom-controls" role="group" aria-label="Graph zoom"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-fit">Fit</button><button id="zoom-in" aria-label="Zoom in">+</button></div><span class="graph-count" id="graph-count"></span></div>
-      <div class="playback"><button id="play" class="icon-button" aria-label="Play walkthrough" title="Play / pause (Space)"></button><button id="previous" class="icon-button" aria-label="Previous highlight" title="Previous (Left arrow)"></button><button id="next" class="icon-button" aria-label="Next highlight" title="Next (Right arrow)"></button><span id="elapsed" class="elapsed">0:00 / 0:00</span><label class="seek-label"><span class="sr-only">Walkthrough position</span><input id="seek" type="range" min="0" max="1" value="0" step="1"></label><span id="step-count" class="step-count"></span></div>
-      <div class="tour-caption"><select id="scenario" aria-label="Walkthrough or component tour"></select><span id="tour-note">Component tour · not execution order</span></div>
-      <div class="export-progress" id="export-progress" role="status" hidden><span id="export-message"></span><button id="cancel-export">Cancel</button></div>
-    </section>
-    <aside class="inspector" aria-label="Selected component and source code"><div class="selection-meta" id="selection-meta"></div><h2 id="selection-title"></h2><div id="overview-content"><p id="selection-description" class="selection-description"></p><div id="connections" class="connections"></div></div><div class="inspector-tabs" role="group" aria-label="Inspector view"><button id="overview-tab" aria-pressed="true">Overview</button><button id="code-tab" aria-pressed="false">Code</button></div><div id="source-content"></div></aside>
-  </section>
-  <p id="player-status" class="player-status" role="status"></p>
-</main>
-<footer class="player-footer"><span>Repo Visualizer · source-grounded graphs</span><details><summary>Licenses and source</summary><p>Original player: MIT. Layout: elkjs 0.12.1, EPL-2.0; <a href="https://github.com/kieler/elkjs/tree/v0.12.1">corresponding source</a>. GIF encoding: gifenc 1.0.3, MIT. Font: Atkinson Hyperlegible Next, OFL-1.1. Repository excerpts retain their original license.</p><pre>@@PLAYER_LICENSE@@</pre><pre>@@SOURCE_LICENSE@@</pre><pre>@@ELK_LICENSE@@</pre><pre>@@FONT_LICENSE@@</pre><pre>@@GIF_LICENSE@@</pre></details></footer>
-<script id="repo-font" type="application/json">"@@FONT@@"</script>
-<script id="repo-data" type="application/json">@@STORY@@</script>
-<script id="layout-engine">@@ELK@@</script>
-<script>var Gifenc=(()=>{var exports={};@@GIFENC@@
-return exports;})();</script>
-<script>window.REPO_LANDING=@@LANDING@@;@@JS@@</script>
-<script id="interaction-script">@@INTERACTION@@</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="color-scheme" content="light" />
+    <title>@@TITLE@@ · Repo Visualizer</title>
+    <style id="player-style">
+      @font-face{font-family:Atkinson;src:url(@@FONT_URL@@) format('truetype');font-weight:100 900;font-display:swap}@@CSS@@
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to graph</a>
+    <header class="site-header">
+      <a class="wordmark" href="#" aria-label="Repo Visualizer home"
+        >repo-visualizer</a
+      >
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#examples">Examples</a><a href="#guide">Guide</a
+        ><a
+          href="https://github.com/HonzaCuhel/repo-visualizer"
+          target="_blank"
+          rel="noopener"
+          >GitHub</a
+        >
+      </nav>
+      <span class="agent-names">Codex / Claude Code</span
+      ><a class="install-button" href="#install">Install skill</a>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <h1 id="page-title">Understand how the code works.</h1>
+        <p id="page-description">
+          Turn a repository question into a short, animated walkthrough with an
+          inspectable code reference.
+        </p>
+      </section>
+      <section
+        id="workspace"
+        class="workspace"
+        aria-label="Repository graph explorer"
+        tabindex="-1"
+      >
+        <aside class="component-pane" aria-label="Component navigation">
+          <div class="repo-reference">
+            <span id="repo-name"></span><span id="repo-revision"></span>
+          </div>
+          <h2 id="question"></h2>
+          <label class="search"
+            ><span class="sr-only">Find a component</span
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10" cy="10" r="6.5" />
+              <path d="m15 15 5 5" /></svg
+            ><input
+              id="component-search"
+              type="search"
+              placeholder="Find a component"
+              autocomplete="off"
+          /></label>
+          <div id="component-list" class="component-list"></div>
+          <p id="no-components" hidden>No matching components.</p>
+          <details class="analysis-notes">
+            <summary>Scope and uncertainties</summary>
+            <p>Source analysis, not a recorded runtime trace.</p>
+            <ul id="uncertainties"></ul>
+          </details>
+        </aside>
+        <section class="graph-pane" aria-label="Graph and playback">
+          <div class="graph-heading">
+            <div class="view-switch" role="group" aria-label="Graph view">
+              <button data-view="map" aria-pressed="true">Map</button
+              ><button data-view="focus" aria-pressed="false">Focus</button
+              ><button data-view="path" aria-pressed="false">Path</button>
+            </div>
+            <details class="export-menu">
+              <summary>
+                Export
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="m4 6 4 4 4-4" />
+                </svg>
+              </summary>
+              <div
+                class="export-options"
+                role="group"
+                aria-label="Export format"
+              >
+                <button data-export="html">Interactive HTML</button
+                ><button data-export="json">Graph JSON</button
+                ><button data-export="svg">Vector SVG</button
+                ><button data-export="png">Graph PNG</button
+                ><button data-export="gif">Animated GIF</button
+                ><button data-export="mp4">Video MP4</button
+                ><button data-export="webm">Video WebM</button>
+              </div>
+            </details>
+          </div>
+          <div class="graph-stage" id="graph-stage">
+            <div class="loading" id="loading" role="status">
+              Laying out the graph…
+            </div>
+            <svg
+              id="diagram"
+              xmlns="http://www.w3.org/2000/svg"
+              role="group"
+              aria-label="Component relationships"
+            ></svg>
+            <div class="zoom-controls" role="group" aria-label="Graph zoom">
+              <button id="zoom-out" aria-label="Zoom out">−</button
+              ><button id="zoom-fit">Fit</button
+              ><button id="zoom-in" aria-label="Zoom in">+</button>
+            </div>
+            <span class="graph-count" id="graph-count"></span>
+          </div>
+          <div class="playback">
+            <button
+              id="play"
+              class="icon-button"
+              aria-label="Play walkthrough"
+              title="Play / pause (Space)"
+            ></button
+            ><button
+              id="previous"
+              class="icon-button"
+              aria-label="Previous highlight"
+              title="Previous (Left arrow)"
+            ></button
+            ><button
+              id="next"
+              class="icon-button"
+              aria-label="Next highlight"
+              title="Next (Right arrow)"
+            ></button
+            ><span id="elapsed" class="elapsed">0:00 / 0:00</span
+            ><label class="seek-label"
+              ><span class="sr-only">Walkthrough position</span
+              ><input
+                id="seek"
+                type="range"
+                min="0"
+                max="1"
+                value="0"
+                step="1" /></label
+            ><span id="step-count" class="step-count"></span>
+          </div>
+          <div class="tour-caption">
+            <select
+              id="scenario"
+              aria-label="Walkthrough or component tour"
+            ></select
+            ><span id="tour-note">Component tour · not execution order</span>
+          </div>
+          <div
+            class="export-progress"
+            id="export-progress"
+            role="status"
+            hidden
+          >
+            <span id="export-message"></span
+            ><button id="cancel-export">Cancel</button>
+          </div>
+        </section>
+        <aside
+          class="inspector"
+          aria-label="Selected component and source code"
+        >
+          <div class="selection-meta" id="selection-meta"></div>
+          <h2 id="selection-title"></h2>
+          <div id="overview-content">
+            <p id="selection-description" class="selection-description"></p>
+            <div id="connections" class="connections"></div>
+          </div>
+          <div class="inspector-tabs" role="group" aria-label="Inspector view">
+            <button id="overview-tab" aria-pressed="true">Overview</button
+            ><button id="code-tab" aria-pressed="false">Code</button>
+          </div>
+          <div id="source-content"></div>
+        </aside>
+      </section>
+      <p id="player-status" class="player-status" role="status"></p>
+    </main>
+    <footer class="player-footer">
+      <span>Repo Visualizer · source-grounded graphs</span>
+      <details>
+        <summary>Licenses and source</summary>
+        <p>
+          Original player: MIT. Layout: elkjs 0.12.1, EPL-2.0;
+          <a href="https://github.com/kieler/elkjs/tree/v0.12.1"
+            >corresponding source</a
+          >. GIF encoding: gifenc 1.0.3, MIT. Font: Atkinson Hyperlegible Next,
+          OFL-1.1. Repository excerpts retain their original license.
+        </p>
+        <pre>@@PLAYER_LICENSE@@</pre>
+        <pre>@@SOURCE_LICENSE@@</pre>
+        <pre>@@ELK_LICENSE@@</pre>
+        <pre>@@FONT_LICENSE@@</pre>
+        <pre>@@GIF_LICENSE@@</pre>
+      </details>
+    </footer>
+    <script id="repo-font" type="application/json">
+      "@@FONT@@"
+    </script>
+    <script id="repo-data" type="application/json">
+      @@STORY@@
+    </script>
+    <script id="layout-engine">
+      @@ELK@@
+    </script>
+    <script>
+      var Gifenc=(()=>{var exports={};@@GIFENC@@
+      return exports;})();
+    </script>
+    <script>
+      window.REPO_LANDING=@@LANDING@@;@@JS@@
+    </script>
+    <script id="interaction-script">
+      @@INTERACTION@@
+    </script>
+  </body>
 </html>

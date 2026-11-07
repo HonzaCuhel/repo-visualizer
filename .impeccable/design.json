@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-07T18:21:29.149721+00:00",
+  "title": "Design System: Repo Visualizer",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "canonical": "#151720",
+        "tonalRamp": [
+          "oklch(15% 0.00636 274.94)",
+          "oklch(26% 0.01181 274.94)",
+          "oklch(38% 0.01636 274.94)",
+          "oklch(50% 0.01818 274.94)",
+          "oklch(62% 0.01818 274.94)",
+          "oklch(74% 0.01545 274.94)",
+          "oklch(86% 0.01000 274.94)",
+          "oklch(95% 0.00364 274.94)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Slate Text",
+        "canonical": "#5e6674",
+        "tonalRamp": [
+          "oklch(15% 0.00852 261.70)",
+          "oklch(26% 0.01582 261.70)",
+          "oklch(38% 0.02191 261.70)",
+          "oklch(50% 0.02434 261.70)",
+          "oklch(62% 0.02434 261.70)",
+          "oklch(74% 0.02069 261.70)",
+          "oklch(86% 0.01339 261.70)",
+          "oklch(95% 0.00487 261.70)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Fine Rule",
+        "canonical": "#dce1e8",
+        "tonalRamp": [
+          "oklch(15% 0.00384 256.70)",
+          "oklch(26% 0.00713 256.70)",
+          "oklch(38% 0.00987 256.70)",
+          "oklch(50% 0.01096 256.70)",
+          "oklch(62% 0.01096 256.70)",
+          "oklch(74% 0.00932 256.70)",
+          "oklch(86% 0.00603 256.70)",
+          "oklch(95% 0.00219 256.70)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Cool Surface",
+        "canonical": "#f7f8fa",
+        "tonalRamp": [
+          "oklch(15% 0.00100 264.54)",
+          "oklch(26% 0.00186 264.54)",
+          "oklch(38% 0.00258 264.54)",
+          "oklch(50% 0.00287 264.54)",
+          "oklch(62% 0.00287 264.54)",
+          "oklch(74% 0.00244 264.54)",
+          "oklch(86% 0.00158 264.54)",
+          "oklch(95% 0.00057 264.54)"
+        ]
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Working Blue",
+        "canonical": "#2164c7",
+        "tonalRamp": [
+          "oklch(15% 0.05890 258.78)",
+          "oklch(26% 0.10939 258.78)",
+          "oklch(38% 0.15146 258.78)",
+          "oklch(50% 0.16829 258.78)",
+          "oklch(62% 0.16829 258.78)",
+          "oklch(74% 0.14304 258.78)",
+          "oklch(86% 0.09256 258.78)",
+          "oklch(95% 0.03366 258.78)"
+        ]
+      },
+      "blue-light": {
+        "role": "primary",
+        "displayName": "Pale Selection Blue",
+        "canonical": "#eaf2ff",
+        "tonalRamp": [
+          "oklch(15% 0.00681 260.17)",
+          "oklch(26% 0.01265 260.17)",
+          "oklch(38% 0.01752 260.17)",
+          "oklch(50% 0.01946 260.17)",
+          "oklch(62% 0.01946 260.17)",
+          "oklch(74% 0.01654 260.17)",
+          "oklch(86% 0.01071 260.17)",
+          "oklch(95% 0.00389 260.17)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "White Paper",
+        "canonical": "#fff",
+        "tonalRamp": [
+          "oklch(15% 0.00000 89.88)",
+          "oklch(26% 0.00000 89.88)",
+          "oklch(38% 0.00000 89.88)",
+          "oklch(50% 0.00000 89.88)",
+          "oklch(62% 0.00000 89.88)",
+          "oklch(74% 0.00000 89.88)",
+          "oklch(86% 0.00000 89.88)",
+          "oklch(95% 0.00000 89.88)"
+        ]
+      },
+      "selected-ink": {
+        "role": "primary",
+        "displayName": "Selected Blue Ink",
+        "canonical": "#1558b7",
+        "tonalRamp": [
+          "oklch(15% 0.05740 258.64)",
+          "oklch(26% 0.10660 258.64)",
+          "oklch(38% 0.14761 258.64)",
+          "oklch(50% 0.16401 258.64)",
+          "oklch(62% 0.16401 258.64)",
+          "oklch(74% 0.13941 258.64)",
+          "oklch(86% 0.09020 258.64)",
+          "oklch(95% 0.03280 258.64)"
+        ]
+      },
+      "blue-hover": {
+        "role": "primary",
+        "displayName": "Deep Action Blue",
+        "canonical": "#184e9e",
+        "tonalRamp": [
+          "oklch(15% 0.04966 258.81)",
+          "oklch(26% 0.09223 258.81)",
+          "oklch(38% 0.12770 258.81)",
+          "oklch(50% 0.14189 258.81)",
+          "oklch(62% 0.14189 258.81)",
+          "oklch(74% 0.12061 258.81)",
+          "oklch(86% 0.07804 258.81)",
+          "oklch(95% 0.02838 258.81)"
+        ]
+      },
+      "code-surface": {
+        "role": "neutral",
+        "displayName": "Code Paper",
+        "canonical": "#f5f7fa",
+        "tonalRamp": [
+          "oklch(15% 0.00159 258.32)",
+          "oklch(26% 0.00295 258.32)",
+          "oklch(38% 0.00408 258.32)",
+          "oklch(50% 0.00453 258.32)",
+          "oklch(62% 0.00453 258.32)",
+          "oklch(74% 0.00385 258.32)",
+          "oklch(86% 0.00249 258.32)",
+          "oklch(95% 0.00091 258.32)"
+        ]
+      },
+      "install-surface": {
+        "role": "neutral",
+        "displayName": "Installation Paper",
+        "canonical": "#f6f8fb",
+        "tonalRamp": [
+          "oklch(15% 0.00159 258.32)",
+          "oklch(26% 0.00295 258.32)",
+          "oklch(38% 0.00408 258.32)",
+          "oklch(50% 0.00453 258.32)",
+          "oklch(62% 0.00453 258.32)",
+          "oklch(74% 0.00385 258.32)",
+          "oklch(86% 0.00249 258.32)",
+          "oklch(95% 0.00091 258.32)"
+        ]
+      },
+      "control-line": {
+        "role": "neutral",
+        "displayName": "Control Rule",
+        "canonical": "#cbd3df",
+        "tonalRamp": [
+          "oklch(15% 0.00656 258.36)",
+          "oklch(26% 0.01219 258.36)",
+          "oklch(38% 0.01688 258.36)",
+          "oklch(50% 0.01875 258.36)",
+          "oklch(62% 0.01875 258.36)",
+          "oklch(74% 0.01594 258.36)",
+          "oklch(86% 0.01031 258.36)",
+          "oklch(95% 0.00375 258.36)"
+        ]
+      },
+      "node-line": {
+        "role": "neutral",
+        "displayName": "Node Rule",
+        "canonical": "#a9b2bf",
+        "tonalRamp": [
+          "oklch(15% 0.00741 257.49)",
+          "oklch(26% 0.01376 257.49)",
+          "oklch(38% 0.01906 257.49)",
+          "oklch(50% 0.02117 257.49)",
+          "oklch(62% 0.02117 257.49)",
+          "oklch(74% 0.01800 257.49)",
+          "oklch(86% 0.01165 257.49)",
+          "oklch(95% 0.00423 257.49)"
+        ]
+      },
+      "edge-line": {
+        "role": "neutral",
+        "displayName": "Relationship Rule",
+        "canonical": "#9da7b6",
+        "tonalRamp": [
+          "oklch(15% 0.00859 258.37)",
+          "oklch(26% 0.01595 258.37)",
+          "oklch(38% 0.02208 258.37)",
+          "oklch(50% 0.02453 258.37)",
+          "oklch(62% 0.02453 258.37)",
+          "oklch(74% 0.02085 258.37)",
+          "oklch(86% 0.01349 258.37)",
+          "oklch(95% 0.00491 258.37)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Page heading",
+        "purpose": "Responsive wide-layout page heading; explicit 900px and 600px overrides."
+      },
+      "headline": {
+        "displayName": "Section heading",
+        "purpose": "Landing-section headings; explicit 700px override."
+      },
+      "title": {
+        "displayName": "Row title",
+        "purpose": "Example and guide headings."
+      },
+      "body": {
+        "displayName": "Root body",
+        "purpose": "Baseline; explanatory prose has contextual larger sizes."
+      },
+      "label": {
+        "displayName": "Compact label",
+        "purpose": "Search and compact button text."
+      },
+      "code": {
+        "displayName": "Source excerpt",
+        "purpose": "Literal code in inset scrollable source blocks."
+      }
+    },
+    "shadows": [
+      {
+        "name": "floating-export-menu",
+        "value": "0 8px 22px #1d2b4514",
+        "purpose": "Ambient shadow for the floating export options only."
+      },
+      {
+        "name": "selected-inspector-tab",
+        "value": "0 1px 0 var(--blue)",
+        "purpose": "State underline, not an elevation tier."
+      }
+    ],
+    "motion": [
+      {
+        "name": "page-scroll",
+        "value": "smooth",
+        "purpose": "Root scroll-behavior; becomes auto under prefers-reduced-motion: reduce. No general transition-duration scale is established."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1800px"
+      },
+      {
+        "name": "explorer-compact",
+        "value": "1200px"
+      },
+      {
+        "name": "landing-compact",
+        "value": "1100px"
+      },
+      {
+        "name": "explorer-stacked-inspector",
+        "value": "900px"
+      },
+      {
+        "name": "landing-mobile",
+        "value": "700px"
+      },
+      {
+        "name": "explorer-mobile",
+        "value": "600px"
+      }
+    ],
+    "provenance": {
+      "mode": "built-source extraction",
+      "sources": [
+        {
+          "path": "skills/repo-visualizer/assets/player.css",
+          "sha256": "a9fd7f1e7c4a80eb81bfeff79d9575b9dd425a46983c3742fb4b38ead9375be4"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/player.html",
+          "sha256": "9314434e9a1ef0c9fd8d03cb2fd9858f8c4568a5f736c742e9a10c10535de89f"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/player.js",
+          "sha256": "ec28b2ae1e9c7955948451f03fee4da64a59172323f03f4b6ccf59721b4fe22a"
+        },
+        {
+          "path": "site-src/site.css",
+          "sha256": "4b8a3cc697169b92fc714f7e3e2ce1f5b5a6cbaa6d39f87c1d0baebaf5dc9bab"
+        },
+        {
+          "path": "site-src/sections.html",
+          "sha256": "f40d528b77998c80f755a8c540c0601115a30177551759fd38b0e98d6fe75a9d"
+        },
+        {
+          "path": "site/index.html",
+          "sha256": "59794e844245bfafaa4d1b2b86df3ba6fd60400b98e5341cfd73c9365960eb50"
+        },
+        {
+          "path": "PRODUCT.md",
+          "sha256": "fc516d3f0ab62a9e7b138ecf7b0d33d457a3301aaeff87ee3003bb1ccb425629"
+        },
+        {
+          "path": ".impeccable/surfaces/site-index-html.md",
+          "sha256": "31c28e5af6e27d787bc7966b0d2fe835c85d114835f7ee54a98b9d52978700aa"
+        },
+        {
+          "path": ".work/finish-review.md",
+          "sha256": "9c9c754ed1dfd97b0233285401c64c33fd9e03fc322688ad2d7b01f877c9dc13"
+        },
+        {
+          "path": ".work/finish-verdict.md",
+          "sha256": "eca289612001ed55de86eacedd2ff802b5d6ebb5706ddc3c378ee6b2b74ecffb"
+        }
+      ],
+      "qualitativeAuthority": "User-confirmed extremely simple/professional B direction: white/cool neutral, charcoal, restrained blue, compact controls and thin rules; orange 3D rejected. No new branding interview performed.",
+      "tokenSources": {
+        "colors": "player.css :root plus repeated component states and site-src/site.css; literal CSS formats preserved.",
+        "typography": "player.css :root, .intro h1, .search input, .source-entry pre; site-src/site.css section and row headings.",
+        "rounded": "Repeated 4–7px component rules; 10px graph-group rectangle in player.js.",
+        "spacing": "Recurring literal gaps and insets in player.css and site-src/site.css; descriptive keys are documentation labels, not a newly installed CSS scale.",
+        "components": "player.html and sections.html markup with player.css/site.css rules; SVG graph node geometry from player.js. Preview copy is representative, not an additional product claim."
+      },
+      "tonalRampSource": "Preview-only OKLCH derivations from each canonical source color. These synthesized ramps are not implemented palette tokens or normative future-use instructions.",
+      "snippetScope": "Self-contained CSS with actual :root variable names and source-value fallbacks. Atkinson must be available from the host to reproduce the bundled font; no font file is embedded in the sidecar. Snippets preserve visual states but do not attach application event handlers. The component-choice SVG uses the shipped module icon geometry.",
+      "documentationLimits": [
+        "Source extraction and supplied finish-review evidence; no independent new browser audit was performed by the documenter.",
+        "Finish disposition remains fix solely for tooling/provenance: hero/open and pending sections/motion/responsive against an obsolete illustrative baseline; seed corroboration UNKNOWN. Actual-viewport approval and user-authorized publication are recorded separately. This document is not a green or closed gate claim.",
+        "Unicode action-arrow substitutions are resolved per finish-verdict.md; no unresolved UI repair or observed regression is canonized. No ledger or UI files were modified.",
+        "Small helper metadata and graph-coordinate font sizes are observed details, not a universal minimum text-size rule. No universal reduced-motion playback/export policy or unimplemented field-error styling is invented."
+      ]
+    }
+  },
+  "components": [
+    {
+      "name": "Installation action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary link action from the header.",
+      "html": "<a class=\"ds-install\" href=\"#install\">Install skill</a>",
+      "css": ".ds-install{font-family:Atkinson,system-ui,sans-serif;display:inline-block;color:#fff;background:var(--blue,#2164c7);border:1px solid var(--blue,#2164c7);border-radius:6px;padding:.35em .8em;font-size:clamp(16px,1.43vw,24px);font-weight:600;text-decoration:none;white-space:nowrap}.ds-install:hover{background:#184e9e}.ds-install:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+    },
+    {
+      "name": "Graph view controls",
+      "kind": "button",
+      "refersTo": "button-view",
+      "description": "Neutral view choices with a stronger selected state.",
+      "html": "<div class=\"ds-view\" role=\"group\" aria-label=\"Graph view\"><button aria-pressed=\"true\">Map</button><button aria-pressed=\"false\">Focus</button><button aria-pressed=\"false\">Path</button></div>",
+      "css": ".ds-view{display:flex;gap:3px}.ds-view button{font-family:Atkinson,system-ui,sans-serif;padding:6px 13px;border:0;border-radius:5px;background:none;font-size:16px;color:var(--muted,#5e6674);cursor:pointer}.ds-view button[aria-pressed=\"true\"]{background:#eff3f9;color:var(--ink,#151720);font-weight:600}.ds-view button:hover{background:#f2f4f8}.ds-view button:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+    },
+    {
+      "name": "Component choice",
+      "kind": "chip",
+      "refersTo": "component-selected",
+      "description": "Selected working navigation row; compact bordered choice on mobile.",
+      "html": "<button class=\"ds-component\" aria-pressed=\"true\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 4h16v16H4zM4 9h16M9 9v11\"/></svg>HTML draft</button>",
+      "css": ".ds-component{font-family:Atkinson,system-ui,sans-serif;display:flex;gap:12px;align-items:center;text-align:left;width:100%;border:0;border-radius:5px;padding:11px 10px;background:var(--blue-light,#eaf2ff);color:#1558b7;min-height:45px;font-size:clamp(15px,1.25vw,21px);line-height:1.15;font-weight:600;cursor:pointer}.ds-component svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;flex:none}.ds-component:hover{background:#f4f6f9}.ds-component[aria-pressed=\"true\"]{background:var(--blue-light,#eaf2ff)}.ds-component:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+    },
+    {
+      "name": "Component search",
+      "kind": "input",
+      "refersTo": "search",
+      "description": "Thin-bordered search with a blue focus-within outline.",
+      "html": "<label class=\"ds-search\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"10\" cy=\"10\" r=\"6.5\"/><path d=\"m15 15 5 5\"/></svg><input aria-label=\"Find a component\" type=\"search\" placeholder=\"Find a component\"/></label>",
+      "css": ".ds-search{font-family:Atkinson,system-ui,sans-serif;display:flex;align-items:center;gap:8px;color:var(--muted,#5e6674);border:1px solid var(--line,#dce1e8);border-radius:5px;padding:7px 9px}.ds-search svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;flex:none}.ds-search input{font-family:Atkinson,system-ui,sans-serif;color:var(--ink,#151720);width:100%;min-width:0;border:0;background:transparent;font-size:14px;outline:none;caret-color:var(--blue,#2164c7)}.ds-search input::placeholder{color:#68717e}.ds-search:focus-within{outline:2px solid var(--blue,#2164c7);outline-offset:1px}"
+    },
+    {
+      "name": "Source excerpt",
+      "kind": "card",
+      "refersTo": "code",
+      "description": "Inset source block with literal whitespace and overflow.",
+      "html": "<pre class=\"ds-code\"><code>def build_html(story):\n    validate(story)\n    return embed_assets(story)</code></pre>",
+      "css": ".ds-code{background:#f5f7fa;color:var(--ink,#151720);margin:12px 0 0;padding:12px;overflow:auto;font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;tab-size:4;max-height:250px;border-radius:4px}.ds-code code{font-family:inherit;white-space:pre}"
+    },
+    {
+      "name": "Installation command",
+      "kind": "card",
+      "refersTo": "command",
+      "description": "Command and copy control inside one ruled white container.",
+      "html": "<div class=\"ds-command\"><pre><code>npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer</code></pre><button>Copy command</button></div>",
+      "css": ".ds-command{display:flex;gap:16px;align-items:center;background:#fff;color:var(--ink,#151720);border:1px solid #cbd3df;border-radius:7px;padding:14px 16px}.ds-command pre{overflow:auto;margin:0;flex:1;min-width:0;padding:7px 0;font-size:15px;line-height:1.6}.ds-command code{font-family:ui-monospace,SFMono-Regular,monospace}.ds-command button{font-family:Atkinson,system-ui,sans-serif;flex:none;border:1px solid #cbd3df;background:#fff;color:var(--ink,#151720);border-radius:5px;padding:10px 15px;font-size:14px;min-height:42px;cursor:pointer}.ds-command button:hover{background:#edf3fc}.ds-command button:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+    },
+    {
+      "name": "Main navigation",
+      "kind": "nav",
+      "description": "Quiet charcoal links with hover underlines.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><a href=\"#examples\">Examples</a><a href=\"#guide\">Guide</a><a href=\"https://github.com/HonzaCuhel/repo-visualizer\">GitHub</a></nav>",
+      "css": ".ds-nav{font-family:Atkinson,system-ui,sans-serif;display:flex;gap:3.8vw;font-size:clamp(16px,1.43vw,24px)}.ds-nav a{color:var(--ink,#151720);text-decoration:none;text-underline-offset:4px}.ds-nav a:hover{text-decoration:underline}.ds-nav a:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+    },
+    {
+      "name": "Graph node",
+      "kind": "custom",
+      "description": "Selected SVG component; coordinate typography is scaled by the graph camera.",
+      "html": "<svg class=\"ds-graph\" viewBox=\"0 0 220 84\" xmlns=\"http://www.w3.org/2000/svg\"><g class=\"ds-node\" role=\"button\" tabindex=\"0\" aria-label=\"HTML draft · module\"><rect x=\"5\" y=\"5\" width=\"210\" height=\"74\" rx=\"7\"/><text class=\"ds-node-title\" x=\"110\" y=\"35\" text-anchor=\"middle\">HTML draft</text><text class=\"ds-node-kind\" x=\"110\" y=\"63\" text-anchor=\"middle\">module</text></g></svg>",
+      "css": ".ds-graph{width:220px;max-width:100%;height:auto}.ds-node{cursor:pointer}.ds-node rect{fill:#eaf2ff;stroke:#2164c7;stroke-width:2}.ds-node-title{fill:#154f9e;font-family:Atkinson,system-ui,sans-serif;font-size:17px;font-weight:600}.ds-node-kind{fill:#6b7484;font-family:Atkinson,system-ui,sans-serif;font-size:11px;font-weight:400}.ds-node:hover rect{stroke:#2164c7;stroke-width:2}.ds-node:focus-visible{outline:none}.ds-node:focus-visible rect{stroke:#2164c7;stroke-width:3}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Professional Source Workspace",
+    "overview": "A bright, extremely simple working environment puts the repository and its evidence first. White and cool near-white surfaces, charcoal text, a restrained blue and thin neutral rules carry the interface. The user-confirmed rejection is explicit: no childish orange 3D plates, glow, plastic surfaces, oversized gradient actions or neon instrument styling.\n\nThe interface is compact and conventional. Clear sans typography explains the work; monospaced text carries source paths, revisions and code. The graph is a flat, selectable representation of relationships. Its geometry belongs to the data rather than to decoration.",
+    "keyCharacteristics": [
+      "White and cool-neutral surfaces with charcoal text.",
+      "Restrained blue for selection, links, focus and the primary action.",
+      "Thin rules and compact, gently rounded controls.",
+      "Clear prose paired with readable source code.",
+      "Flat diagrams with explicit selection and inferred relationships."
+    ],
+    "rules": [
+      {
+        "name": "The Meaningful Blue Rule",
+        "body": "Blue marks an action, focus, selection or highlighted relationship; surrounding structure remains neutral.",
+        "section": "colors"
+      },
+      {
+        "name": "The Source Identity Rule",
+        "body": "Keep source paths, revisions and literal code visually distinct through monospace; keep explanation in Atkinson.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Workspace Rule",
+        "body": "Use borders and tone for persistent structure; reserve ambient shadow for the floating export menu.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use restrained blue to identify actions, keyboard focus and graph selection.",
+      "Do preserve thin neutral rules, cool white surfaces and compact conventional controls.",
+      "Do use Atkinson for explanation and monospace for literal code and source identity.",
+      "Do reflow the working panes and allow code and component navigation to scroll where the source does.",
+      "Do preserve selection, inferred-relationship styling and source meaning across projections."
+    ],
+    "donts": [
+      "Don't introduce orange 3D plates, glow, plastic surfaces, oversized gradient actions or neon instrument styling.",
+      "Don't replace authored action SVG with Unicode arrow icon substitutes.",
+      "Don't impose a linear chain on graph data that contains branches, parallel relationships or cycles.",
+      "Don't turn tiny helper metadata, SVG-coordinate label sizes or isolated colors into a universal body-text or palette scale."
+    ]
+  }
+}

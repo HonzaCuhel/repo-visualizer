@@ -2,7 +2,9 @@
 
 Explain how a repository works as a component graph, with inspectable code and animated exports. An open skill for Codex and Claude Code.
 
-**Current status:** working local preview. The graph explorer, source inspection, standalone HTML and export engines are implemented and tested. Website review and public release are still in progress; no deployed site or published release is claimed yet.
+[Explore the live example](https://honzacuhel.github.io/repo-visualizer/) · [Download the skill](https://github.com/HonzaCuhel/repo-visualizer/releases) · [Verification](docs/verification.md)
+
+![A source-grounded walkthrough of stack-diagram](site/media/walkthrough.gif)
 
 The coding agent reads the repository, extracts responsibilities and relationships, and writes one canonical graph. The player visualizes that graph. Optional paths explain a feature without flattening the architecture into a linear diagram.
 
@@ -13,13 +15,15 @@ The coding agent reads the repository, extracts responsibilities and relationshi
 
 ## Install the skill
 
-From a local checkout, the tested installer command is:
+Run inside your repository:
 
 ```sh
-npx skills@1.7.6 add ./skills/repo-visualizer --agent codex --agent claude-code --copy --yes
+npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer -a codex -a claude-code
 ```
 
-This installs project skills for both agents. Alternatively, copy `skills/repo-visualizer` into your agent's personal skills directory, or your repository's supported skill directory. Keep the folder intact: scripts, assets and notices are required. No npm package or server is needed for scan, validation and HTML assembly. Python 3.9+ is sufficient for those commands.
+This installs project skills for both agents through the open [skills CLI](https://github.com/vercel-labs/skills). Choose one agent by keeping only its `-a` option; add `-g` for a personal installation across projects. The installer requires Node.js 22.20+. For a pinned release, use `HonzaCuhel/repo-visualizer@v0.1.0` as the source.
+
+Alternatively, extract the release ZIP and copy the complete `repo-visualizer` folder into your agent's supported skill directory. Scripts, assets and notices must stay together. Core scan, validation and HTML assembly use Python 3.9+ and need no server. Animated exports need the [optional rendering environment](skills/repo-visualizer/references/exports.md).
 
 Ask your agent:
 
@@ -38,6 +42,10 @@ python3 skills/repo-visualizer/scripts/repo_story.py build prepared.json -o expl
 ```
 
 Generated HTML contains source excerpts. Keep private repositories' artifacts private unless publication is authorized.
+
+## What has been tested
+
+Fresh Codex and Claude Code sessions independently read the public stack-diagram source and produced their own graphs, offline HTML and changing GIF frames. A separate verification checked source fingerprints, graph interaction, offline operation and unchanged target source. Codex on macOS required approval of the trusted browser export command outside its OS sandbox. See [the test record and limits](docs/verification.md).
 
 ## Development
 

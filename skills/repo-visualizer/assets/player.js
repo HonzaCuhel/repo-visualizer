@@ -1,78 +1,1155 @@
-(()=>{
-'use strict';
-const $=id=>document.getElementById(id), S=JSON.parse($('repo-data').textContent), NS='http://www.w3.org/2000/svg';
-const nodes=new Map(S.nodes.map(n=>[n.id,n])), edges=new Map(S.edges.map(e=>[e.id,e])), sources=new Map(S.sources.map(s=>[s.id,s])), steps=new Map(S.steps.map(s=>[s.id,s]));
-const diagram=$('diagram'), positions=new Map(), nodeLines=new Map(), edgeElements=new Map(), nodeElements=new Map();
-let inspectedKey=null;
-let layout=null, bounds=null, camera=null, view=S.default_view||'map', selected={type:'node',id:S.nodes[0].id}, scenarioId=S.scenarios[0]?.id||'tour', current=0, playing=false, codeMode=false, exporting=false, cancelled=false;
-const iconPaths={module:'M4 4h16v16H4zM4 9h16M9 9v11',function:'M8 5H6L3 12l3 7h2M16 5h2l3 7-3 7h-2',service:'M4 4h16v6H4zM4 14h16v6H4zM7 7h.1M7 17h.1',store:'M4 6c0-4 16-4 16 0v12c0 4-16 4-16 0zM4 6c0 4 16 4 16 0M4 12c0 4 16 4 16 0',queue:'M4 6h16M4 12h16M4 18h16',decision:'m12 2 10 10-10 10L2 12z',external:'M14 3h7v7M21 3l-10 10M10 4H4v16h16v-6',input:'M10 4h10v16H10M3 12h12M10 7l5 5-5 5',output:'M14 4H4v16h10M10 12h11M16 7l5 5-5 5',actor:'M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0M4 21v-3c0-6 16-6 16 0v3',artifact:'M5 3h9l5 5v13H5zM14 3v6h5',process:'M4 6h16v12H4zM8 10h8M8 14h5'};
-const playerIcons={play:'<path d="m8 5 11 7-11 7z"/>',pause:'<path d="M8 5v14M16 5v14"/>',previous:'<path d="M6 5v14m12-14-9 7 9 7z"/>',next:'<path d="M18 5v14M6 5l9 7-9 7z"/>'};
-function icon(name){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+(iconPaths[name]||iconPaths.module)+'"/></svg>'}
-function setPlayIcon(){ $('play').innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+playerIcons[playing?'pause':'play']+'</svg>'; $('play').setAttribute('aria-label',playing?'Pause walkthrough':'Play walkthrough'); }
-$('previous').innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+playerIcons.previous+'</svg>';$('next').innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+playerIcons.next+'</svg>';setPlayIcon();
-function text(tag,value,className){const el=document.createElement(tag);el.textContent=value??'';if(className)el.className=className;return el}
-function svg(tag,attributes={},value){const el=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attributes))el.setAttribute(k,v);if(value!==undefined)el.textContent=value;return el}
-function slug(){return S.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,70)||'repository-graph'}
-function status(message){$('player-status').textContent=message}
-function tour(){if(scenarioId==='tour'||!S.scenarios.length)return S.nodes.map(n=>({id:'tour-'+n.id,title:n.label,description:n.description,node_ids:[n.id],edge_ids:[],source_ids:n.source_ids,duration_ms:2200,tour:true}));const scenario=S.scenarios.find(s=>s.id===scenarioId);return scenario.step_ids.map(id=>steps.get(id))}
-function duration(){return tour().reduce((a,s)=>a+s.duration_ms,0)}
-function activeAt(ms){const ts=tour();let start=0,index=0;for(;index<ts.length-1;index++){if(ms<start+ts[index].duration_ms)break;start+=ts[index].duration_ms}return {step:ts[index],index,progress:Math.min(1,Math.max(0,(ms-start)/ts[index].duration_ms)),start}}
-function time(ms){const sec=Math.floor(ms/1000);return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')}
-function configureTimeline(){const select=$('scenario');select.replaceChildren();for(const sc of S.scenarios){const option=text('option',sc.label);option.value=sc.id;select.append(option)}const option=text('option','Component tour');option.value='tour';select.append(option);select.value=scenarioId;$('seek').max=String(duration());$('tour-note').textContent=scenarioId==='tour'?'Component tour · not execution order':'Source walkthrough · not a runtime trace'}
-function select(type,id,{fromTimeline=false,announce=true}={}){if(type==='node'?!nodes.has(id):type==='edge'?!edges.has(id):true)throw Error('Unknown graph selection: '+type+' '+id);if(!fromTimeline)pause();selected={type,id};paint();inspect();if(announce)status((type==='node'?'Selected component: ':'Selected relationship: ')+(type==='node'?nodes.get(id).label:edges.get(id).label||edges.get(id).relation))}
-function adjacency(id){const found=new Set([id]);for(const e of S.edges)if(e.from===id||e.to===id){found.add(e.from);found.add(e.to)}return found}
-function paint(active=null){if(!layout)return;const highlight=active||activeAt(current);const ids=new Set(view==='path'?highlight.step.node_ids:selected.type==='node'?[selected.id]:[edges.get(selected.id).from,edges.get(selected.id).to]);const near=selected.type==='node'?adjacency(selected.id):ids;
- for(const [id,el]of nodeElements){el.classList.toggle('is-selected',selected.type==='node'&&selected.id===id);el.classList.toggle('is-active',view==='path'&&ids.has(id));el.classList.toggle('is-dimmed',view==='focus'?!near.has(id):view==='path'?!ids.has(id):false)}
- for(const [id,el]of edgeElements){const e=edges.get(id),activeEdge=view==='path'&&highlight.step.edge_ids.includes(id);el.classList.toggle('is-selected',selected.type==='edge'&&selected.id===id);el.classList.toggle('is-active',activeEdge);el.classList.toggle('is-dimmed',view==='focus'?!(e.from===selected.id||e.to===selected.id):view==='path'?!activeEdge:false);const pulse=el.querySelector('.edge-pulse'),path=el.querySelector('.edge-line');pulse.setAttribute('visibility',activeEdge?'visible':'hidden');if(activeEdge&&path.getTotalLength()){const p=path.getPointAtLength(path.getTotalLength()*highlight.progress);pulse.setAttribute('cx',p.x);pulse.setAttribute('cy',p.y)}}
- for(const button of $('component-list').querySelectorAll('button'))button.setAttribute('aria-pressed',String(selected.type==='node'&&button.dataset.node===selected.id));
-}
-function inspect(){const key=selected.type+':'+selected.id+':'+codeMode;if(key===inspectedKey)return;inspectedKey=key;const item=selected.type==='node'?nodes.get(selected.id):edges.get(selected.id);$('selection-meta').textContent=(selected.type==='node'?item.kind:'relationship · '+item.relation)+(item.evidence==='inferred'?' · inferred':' · source-grounded');$('selection-title').textContent=selected.type==='node'?item.label:item.label||item.relation;
- const description=selected.type==='node'?item.description:(nodes.get(item.from).label+' → '+nodes.get(item.to).label);$('selection-description').textContent=(description||'Inspect the source references for this component.')+(item.evidence==='inferred'?' Inference: '+item.reason:'');
- const connections=$('connections');connections.replaceChildren();for(const edge of (selected.type==='node'?S.edges.filter(e=>e.from===selected.id||e.to===selected.id):[])){
-  const button=document.createElement('button');button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18m-6-6 6 6-6 6"/></svg>';const other=edge.from===selected.id?nodes.get(edge.to):nodes.get(edge.from);button.append(text('span',(edge.from===selected.id?'':'From ')+other.label+' · '+(edge.label||edge.relation)));button.addEventListener('click',()=>select('edge',edge.id));connections.append(button)}
- const container=$('source-content');container.replaceChildren();for(const id of item.source_ids){const source=sources.get(id),entry=text('section','', 'source-entry'),head=text('div','', 'source-heading'),open=text('button',source.path+' · L'+source.start+'–'+source.end);open.title='Show embedded source code';open.addEventListener('click',()=>setCodeMode(!codeMode));head.append(open);if(source.url){const a=text('a','Open source ↗');a.href=source.url;a.target='_blank';a.rel='noopener';head.append(a)}entry.append(head);const pre=document.createElement('pre'),code=document.createElement('code');code.textContent=source.excerpt;pre.append(code);pre.hidden=!codeMode;entry.append(pre);const revision=text('p',(source.revision==='commit'?source.commit.slice(0,7):'working tree')+' · SHA256 '+source.sha256.slice(0,12),'source-revision');revision.hidden=!codeMode;entry.append(revision);container.append(entry)}
- if(!item.source_ids.length)container.append(text('p','No direct source reference. This relationship is explicitly inferred.','source-revision'));
- $('overview-content').hidden=codeMode;$('overview-tab').setAttribute('aria-pressed',String(!codeMode));$('code-tab').setAttribute('aria-pressed',String(codeMode));
-}
-function setCodeMode(value){codeMode=value;inspect()}
-function fillComponents(){const list=$('component-list');list.replaceChildren();const query=$('component-search').value.trim().toLowerCase();for(const n of S.nodes.filter(n=>(n.label+' '+n.kind+' '+n.description).toLowerCase().includes(query))){const b=document.createElement('button');b.className='component-item';b.dataset.node=n.id;b.setAttribute('aria-pressed',String(selected.type==='node'&&selected.id===n.id));const mark=text('span','','component-mark');mark.innerHTML=icon(n.kind);b.append(mark,text('span',n.label,'component-label'));b.addEventListener('click',()=>select('node',n.id));list.append(b)}$('no-components').hidden=Boolean(list.childElementCount)}
-function setView(value){if(!['map','focus','path'].includes(value))throw Error('Unknown graph view');view=value;for(const button of document.querySelectorAll('[data-view]'))button.setAttribute('aria-pressed',String(button.dataset.view===value));paint();status(value==='focus'?'Showing the selected component and its direct relationships.':value==='path'?'Highlighting a path over the complete graph.':'Showing the complete component graph.')}
-function pathFromPoints(points){if(points.length<2)return '';let d='M'+points[0].x+' '+points[0].y;for(let i=1;i<points.length-1;i++){const a=points[i-1],b=points[i],c=points[i+1],ab=Math.hypot(b.x-a.x,b.y-a.y),bc=Math.hypot(c.x-b.x,c.y-b.y),r=Math.min(7,ab/2,bc/2);if(!ab||!bc)continue;const p={x:b.x+(a.x-b.x)*r/ab,y:b.y+(a.y-b.y)*r/ab},q={x:b.x+(c.x-b.x)*r/bc,y:b.y+(c.y-b.y)*r/bc};d+=' L'+p.x+' '+p.y+' Q'+b.x+' '+b.y+' '+q.x+' '+q.y}const last=points[points.length-1];return d+' L'+last.x+' '+last.y}
-const measure=document.createElement('canvas').getContext('2d');
-function wrap(label,width=160){measure.font='600 17px Atkinson';const result=[];let line='';const words=label.replace(/([/_.])/g,'$1 ').split(/\s+/);for(let word of words){if(measure.measureText(word).width>width){if(line){result.push(line);line=''}while(measure.measureText(word).width>width){let cut=word.length-1;while(cut>1&&measure.measureText(word.slice(0,cut)).width>width)cut--;result.push(word.slice(0,cut));word=word.slice(cut)}}const next=line?line+' '+word:word;if(measure.measureText(next).width>width){result.push(line);line=word}else line=next}if(line)result.push(line);return result}
-async function layOut(){const groupMap=new Map(S.groups.map(g=>[g.id,{id:g.id,children:[],layoutOptions:{'elk.direction':'DOWN','elk.padding':'[top=37,left=20,bottom=20,right=20]','elk.spacing.nodeNode':'22','elk.layered.spacing.nodeNodeBetweenLayers':'20'}}]));const children=[];for(const g of S.groups){const item=groupMap.get(g.id);if(g.parent)groupMap.get(g.parent).children.push(item);else children.push(item)}for(const n of S.nodes){const lines=wrap(n.label),item={id:n.id,width:192,height:Math.max(70,37+lines.length*21)};nodeLines.set(n.id,lines);if(n.group)groupMap.get(n.group).children.push(item);else children.push(item)}const model={id:'root',layoutOptions:{'elk.algorithm':'layered','elk.direction':'DOWN','elk.hierarchyHandling':'INCLUDE_CHILDREN','elk.edgeRouting':'ORTHOGONAL','elk.randomSeed':'42','elk.spacing.nodeNode':'22','elk.layered.spacing.nodeNodeBetweenLayers':'24','elk.spacing.edgeNode':'22','elk.padding':'[top=18,left=18,bottom=18,right=18]'},children,edges:S.edges.map(e=>({id:e.id,sources:[e.from],targets:[e.to],labels:e.label?[{text:e.label,width:Math.min(200,e.label.length*5.8),height:15}]:[]}))};
- if(window.REPO_PRECOMPUTED_LAYOUT){layout=JSON.parse(JSON.stringify(window.REPO_PRECOMPUTED_LAYOUT))}else{const elk=new ELK();layout=await elk.layout(model)}draw();fit();$('loading').hidden=true;paint();}
-function draw(){diagram.replaceChildren();positions.clear();edgeElements.clear();nodeElements.clear();const defs=svg('defs');for(const [id,color]of [['arrow','#9da7b6'],['arrow-active','#2164c7']]){const marker=svg('marker',{id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse',markerUnits:'strokeWidth'});marker.append(svg('path',{d:'M1 1 9 5 1 9z',fill:color}));defs.append(marker)}diagram.append(defs);const groupsLayer=svg('g'),edgeLayer=svg('g'),nodeLayer=svg('g');diagram.append(groupsLayer,edgeLayer,nodeLayer);const routed=[];
- function walk(item,ox=0,oy=0){const x=ox+(item.x||0),y=oy+(item.y||0);if(item.id!=='root'){if(nodes.has(item.id)){positions.set(item.id,{x,y,width:item.width,height:item.height})}else{const group=S.groups.find(g=>g.id===item.id),g=svg('g',{'class':'graph-group'});g.append(svg('rect',{x,y,width:item.width,height:item.height,rx:10}),svg('text',{x:x+16,y:y+23},group?.label||item.id));groupsLayer.append(g)}}for(const edge of item.edges||[])routed.push({edge,x,y});for(const child of item.children||[])walk(child,x,y)}walk(layout);
- for(const {edge,x,y}of routed){const e=edges.get(edge.id);if(!e)continue;const g=svg('g',{'class':'graph-edge'+(e.evidence==='inferred'?' is-inferred':''),'data-edge':e.id,role:'button',tabindex:0,'aria-label':nodes.get(e.from).label+' '+(e.label||e.relation)+' '+nodes.get(e.to).label});for(const section of edge.sections||[]){const points=[section.startPoint,...(section.bendPoints||[]),section.endPoint].map(p=>({x:p.x+x,y:p.y+y}));const d=pathFromPoints(points);g.append(svg('path',{'class':'edge-hit',d}),svg('path',{'class':'edge-line',d,'marker-end':'url(#arrow)'}))}for(const label of edge.labels||[])g.append(svg('text',{x:x+label.x+label.width/2,y:y+label.y+11,'text-anchor':'middle'},e.label));g.append(svg('circle',{'class':'edge-pulse',r:3,visibility:'hidden'}));g.addEventListener('click',()=>select('edge',e.id));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select('edge',e.id)}});edgeLayer.append(g);edgeElements.set(e.id,g)}
- for(const n of S.nodes){const p=positions.get(n.id);if(!p)throw Error('Layout did not return component '+n.id);const g=svg('g',{'class':'graph-node',transform:`translate(${p.x},${p.y})`,'data-node':n.id,role:'button',tabindex:0,'aria-label':n.label+' · '+n.kind});g.append(svg('rect',{width:p.width,height:p.height,rx:7}));const label=svg('text',{'class':'node-title',x:p.width/2,y:25,'text-anchor':'middle'});nodeLines.get(n.id).forEach((line,i)=>label.append(svg('tspan',{x:p.width/2,dy:i?21:0},line)));g.append(label,svg('text',{'class':'node-kind',x:p.width/2,y:p.height-12,'text-anchor':'middle'},n.kind+(n.evidence==='inferred'?' · inferred':'')));g.addEventListener('click',()=>select('node',n.id));g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select('node',n.id)}});nodeLayer.append(g);nodeElements.set(n.id,g)}
- bounds={x:-10,y:-10,w:layout.width+20,h:layout.height+20};$('graph-count').textContent=S.nodes.length+' components · '+S.edges.length+' relationships';}
-function applyCamera(){if(camera)diagram.setAttribute('viewBox',[camera.x,camera.y,camera.w,camera.h].join(' '))}
-function fit(){if(!bounds)return;camera={...bounds};applyCamera()}
-function zoom(factor){if(!camera)return;const w=Math.max(bounds.w/8,Math.min(bounds.w*2,camera.w*factor)),h=w*camera.h/camera.w;camera={x:camera.x+(camera.w-w)/2,y:camera.y+(camera.h-h)/2,w,h};applyCamera()}
-function renderAt(ms){const total=duration();current=Math.max(0,Math.min(total-0.001,Number.isFinite(Number(ms))?Number(ms):0));const active=activeAt(current);selected={type:'node',id:active.step.node_ids[0]};$('seek').value=String(current);$('elapsed').textContent=time(current)+' / '+time(total);$('step-count').textContent=(active.index+1)+' / '+tour().length;paint(active);inspect();return {timeMs:current,durationMs:total,index:active.index,nodeIds:active.step.node_ids,edgeIds:active.step.edge_ids}}
-window.renderAt=renderAt;
-function pause(){window.repoClock?.pause();playing=false;setPlayIcon()}
-function togglePlay(){if(!exporting)window.repoClock?.toggle()}
-function skip(offset){pause();const active=activeAt(current),ts=tour(),next=Math.max(0,Math.min(ts.length-1,active.index+offset));renderAt(ts.slice(0,next).reduce((a,s)=>a+s.duration_ms,0));}
-function setScenario(id){if(id!=='tour'&&!S.scenarios.some(s=>s.id===id))throw Error('Unknown scenario: '+id);pause();scenarioId=id;configureTimeline();renderAt(0)}
-function exportSVG(){const copy=diagram.cloneNode(true);copy.removeAttribute('id');copy.setAttribute('xmlns',NS);copy.setAttribute('viewBox',[bounds.x,bounds.y,bounds.w,bounds.h].join(' '));copy.setAttribute('width',Math.ceil(bounds.w));copy.setAttribute('height',Math.ceil(bounds.h));copy.setAttribute('role','img');const style=svg('style',{},$('player-style').textContent.replace('url(assets/AtkinsonHyperlegibleNext.ttf)','url(data:font/ttf;base64,'+JSON.parse($('repo-font').textContent)+')'));copy.insertBefore(style,copy.firstChild);const background=svg('rect',{x:bounds.x,y:bounds.y,width:bounds.w,height:bounds.h,fill:'#fff'});copy.insertBefore(background,style.nextSibling);copy.prepend(svg('title',{},S.question));copy.append(svg('metadata',{},JSON.stringify({title:S.title,repo:S.repo,licenses:document.querySelector('.player-footer details').innerText,source:'https://github.com/HonzaCuhel/repo-visualizer'})));return new XMLSerializer().serializeToString(copy)}
-function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-async function rasterFrame(ms,width=960,height=640){renderAt(ms);const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);const image=new Image(),url=URL.createObjectURL(new Blob([exportSVG()],{type:'image/svg+xml;charset=utf-8'}));try{await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('The browser could not rasterize the graph SVG'));image.src=url});const scale=Math.min((width-48)/bounds.w,(height-135)/bounds.h),w=bounds.w*scale,h=bounds.h*scale;ctx.drawImage(image,(width-w)/2,70+(height-135-h)/2,w,h);ctx.fillStyle='#151720';ctx.font='600 22px Atkinson';ctx.fillText(S.title,24,33,width-48);const active=activeAt(current);ctx.font='16px Atkinson';ctx.fillStyle='#1558b7';ctx.fillText(active.step.title,24,height-36,width-48);ctx.font='11px Atkinson';ctx.fillStyle='#657082';ctx.fillText((scenarioId==='tour'?'Component tour · not execution order':'Source walkthrough · not a runtime trace')+'   '+time(ms)+' / '+time(duration()),24,height-15,width-48);return canvas}finally{URL.revokeObjectURL(url)}}
-async function browserExport(format){if(exporting)return;const old={time:current,view,selected:{...selected}};pause();exporting=true;cancelled=false;document.body.classList.add('export-busy');$('export-progress').hidden=false;const message=value=>$('export-message').textContent=value;try{
- if(format==='html'){const copy=document.documentElement.cloneNode(true);copy.querySelector('body').classList.remove('export-busy','export-frame');copy.querySelector('#export-progress').hidden=true;copy.querySelectorAll('.landing-section').forEach(el=>el.remove());const documentText=copy.outerHTML.replace('url(assets/AtkinsonHyperlegibleNext.ttf)','url(data:font/ttf;base64,'+JSON.parse($('repo-font').textContent)+')').replace('window.REPO_LANDING=true;','window.REPO_LANDING=false;');download(new Blob(['<!doctype html>\n'+documentText],{type:'text/html'}),slug()+'.html')}
- else if(format==='json'){const data=JSON.parse(JSON.stringify(S));download(new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'}),slug()+'.json')}
- else if(format==='svg')download(new Blob([exportSVG()],{type:'image/svg+xml'}),slug()+'.svg');
- else if(format==='png'){message('Rendering graph PNG…');const canvas=await rasterFrame(current,1440,960);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG encoding failed');download(blob,slug()+'.png')}
- else if(format==='gif'){setView('path');const fps=8,count=Math.ceil(duration()/1000*fps);if(count>960)throw Error('Use the command-line exporter for GIFs longer than two minutes.');const gif=Gifenc.GIFEncoder();for(let i=0;i<count;i++){if(cancelled)throw Error('Export cancelled');message('Rendering GIF · '+Math.round(i/count*100)+'%');const canvas=await rasterFrame(i*1000/fps,800,540),ctx=canvas.getContext('2d'),rgba=ctx.getImageData(0,0,800,540).data,palette=Gifenc.quantize(rgba,128),indexed=Gifenc.applyPalette(rgba,palette);gif.writeFrame(indexed,800,540,{palette,delay:Math.round((i+1)*100/fps)*10-Math.round(i*100/fps)*10,repeat:0});await new Promise(resolve=>setTimeout(resolve,0))}gif.finish();download(new Blob([gif.bytes()],{type:'image/gif'}),slug()+'.gif')}
- else{const mime=format==='mp4'?'video/mp4;codecs=avc1.42001f':'video/webm;codecs=vp9';if(!window.MediaRecorder||!MediaRecorder.isTypeSupported(mime))throw Error(format.toUpperCase()+' recording is unavailable in this browser. Choose another format or use the skill’s local video exporter.');setView('path');const fps=12,canvas=document.createElement('canvas');canvas.width=960;canvas.height=640;const ctx=canvas.getContext('2d'),stream=canvas.captureStream(0),track=stream.getVideoTracks()[0],chunks=[],recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:4000000});const done=new Promise((resolve,reject)=>{recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};recorder.onstop=resolve;recorder.onerror=()=>reject(Error('Video recording failed'))});recorder.start();try{for(let ms=0;ms<duration();ms+=1000/fps){if(cancelled)throw Error('Export cancelled');message('Recording '+format.toUpperCase()+' · '+Math.round(ms/duration()*100)+'%');ctx.drawImage(await rasterFrame(ms),0,0);track.requestFrame();await new Promise(resolve=>setTimeout(resolve,1000/fps))}}finally{recorder.stop();await done;stream.getTracks().forEach(t=>t.stop())}download(new Blob(chunks,{type:recorder.mimeType}),slug()+'.'+format)}
- status('Exported '+format.toUpperCase()+'. The HTML retains clickable source references.');
- }catch(error){status(error.message);throw error}finally{exporting=false;document.body.classList.remove('export-busy');$('export-progress').hidden=true;setView(old.view);renderAt(old.time);selected=old.selected;paint();inspect()}}
-window.repoPlayer={get durationMs(){return duration()},get timeMs(){return current},_setPlaying(value){playing=value;setPlayIcon()},get graph(){return S},get layout(){return layout},get view(){return view},get selection(){return {...selected}},get isPlaying(){return playing},setScenario,setView,selectNode:id=>select('node',id),selectEdge:id=>select('edge',id),exportSVG,export:browserExport,fit,pause};
-$('play').addEventListener('click',togglePlay);$('previous').addEventListener('click',()=>skip(-1));$('next').addEventListener('click',()=>skip(1));$('seek').addEventListener('input',()=>{pause();renderAt(Number($('seek').value))});$('scenario').addEventListener('change',event=>setScenario(event.target.value));$('component-search').addEventListener('input',fillComponents);$('overview-tab').addEventListener('click',()=>setCodeMode(false));$('code-tab').addEventListener('click',()=>setCodeMode(true));for(const b of document.querySelectorAll('[data-view]'))b.addEventListener('click',()=>setView(b.dataset.view));for(const b of document.querySelectorAll('[data-export]'))b.addEventListener('click',()=>{document.querySelector('.export-menu').open=false;browserExport(b.dataset.export).catch(()=>{})});$('cancel-export').addEventListener('click',()=>{cancelled=true});$('zoom-out').addEventListener('click',()=>zoom(1.25));$('zoom-in').addEventListener('click',()=>zoom(.8));$('zoom-fit').addEventListener('click',fit);
-let drag=null;diagram.addEventListener('pointerdown',event=>{if(event.target.closest('.graph-node,.graph-edge')||!camera)return;drag={x:event.clientX,y:event.clientY,camera:{...camera}};diagram.setPointerCapture(event.pointerId)});diagram.addEventListener('pointermove',event=>{if(!drag)return;const r=diagram.getBoundingClientRect(),scale=Math.max(camera.w/r.width,camera.h/r.height);camera={...drag.camera,x:drag.camera.x-(event.clientX-drag.x)*scale,y:drag.camera.y-(event.clientY-drag.y)*scale};applyCamera()});diagram.addEventListener('pointerup',()=>drag=null);diagram.addEventListener('pointercancel',()=>drag=null);diagram.addEventListener('wheel',event=>{if(event.ctrlKey||event.metaKey){event.preventDefault();zoom(event.deltaY>0?1.1:.9)}},{passive:false});
-document.addEventListener('keydown',event=>{if(event.target.closest('input,select,textarea,button,a,summary,[role=button]')||exporting)return;if(event.key===' '){event.preventDefault();togglePlay()}else if(event.key==='ArrowRight'){event.preventDefault();skip(1)}else if(event.key==='ArrowLeft'){event.preventDefault();skip(-1)}else if(event.key==='Escape'){pause();setView('map');document.querySelector('.export-menu').open=false}});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)pause()});document.addEventListener('click',event=>{const menu=document.querySelector('.export-menu');if(!menu.contains(event.target))menu.open=false});
-$('repo-name').textContent=S.title;$('repo-revision').textContent=S.repo.commit?.slice(0,7)||'local';$('question').textContent=S.question;if(!window.REPO_LANDING){$('page-title').textContent=S.title;$('page-description').textContent=S.summary||S.question;document.querySelector('.site-nav').hidden=true;document.querySelector('.agent-names').hidden=true;document.querySelector('.install-button').textContent='Explore source';document.querySelector('.install-button').href='#workspace'}for(const note of S.uncertainties)$('uncertainties').append(text('li',note));configureTimeline();fillComponents();renderAt(0);
-window.repoReady=(async()=>{await document.fonts.ready;await layOut();setView(S.default_view||'map');status(S.nodes.length+' components and '+S.edges.length+' relationships. Select a component to inspect its evidence.');return true})().catch(error=>{$('loading').textContent='The graph could not be laid out. '+error.message;status('Layout failed: '+error.message);throw error});
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id),
+    S = JSON.parse($("repo-data").textContent),
+    NS = "http://www.w3.org/2000/svg";
+  const nodes = new Map(S.nodes.map((n) => [n.id, n])),
+    edges = new Map(S.edges.map((e) => [e.id, e])),
+    sources = new Map(S.sources.map((s) => [s.id, s])),
+    steps = new Map(S.steps.map((s) => [s.id, s]));
+  const diagram = $("diagram"),
+    positions = new Map(),
+    nodeLines = new Map(),
+    edgeElements = new Map(),
+    nodeElements = new Map();
+  let inspectedKey = null;
+  let layout = null,
+    bounds = null,
+    camera = null,
+    view = S.default_view || "map",
+    selected = { type: "node", id: S.nodes[0].id },
+    scenarioId = S.scenarios[0]?.id || "tour",
+    current = 0,
+    playing = false,
+    codeMode = false,
+    exporting = false,
+    cancelled = false;
+  const iconPaths = {
+    module: "M4 4h16v16H4zM4 9h16M9 9v11",
+    function: "M8 5H6L3 12l3 7h2M16 5h2l3 7-3 7h-2",
+    service: "M4 4h16v6H4zM4 14h16v6H4zM7 7h.1M7 17h.1",
+    store:
+      "M4 6c0-4 16-4 16 0v12c0 4-16 4-16 0zM4 6c0 4 16 4 16 0M4 12c0 4 16 4 16 0",
+    queue: "M4 6h16M4 12h16M4 18h16",
+    decision: "m12 2 10 10-10 10L2 12z",
+    external: "M14 3h7v7M21 3l-10 10M10 4H4v16h16v-6",
+    input: "M10 4h10v16H10M3 12h12M10 7l5 5-5 5",
+    output: "M14 4H4v16h10M10 12h11M16 7l5 5-5 5",
+    actor: "M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0M4 21v-3c0-6 16-6 16 0v3",
+    artifact: "M5 3h9l5 5v13H5zM14 3v6h5",
+    process: "M4 6h16v12H4zM8 10h8M8 14h5",
+  };
+  const playerIcons = {
+    play: '<path d="m8 5 11 7-11 7z"/>',
+    pause: '<path d="M8 5v14M16 5v14"/>',
+    previous: '<path d="M6 5v14m12-14-9 7 9 7z"/>',
+    next: '<path d="M18 5v14M6 5l9 7-9 7z"/>',
+  };
+  function icon(name) {
+    return (
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' +
+      (iconPaths[name] || iconPaths.module) +
+      '"/></svg>'
+    );
+  }
+  function setPlayIcon() {
+    $("play").innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      playerIcons[playing ? "pause" : "play"] +
+      "</svg>";
+    $("play").setAttribute(
+      "aria-label",
+      playing ? "Pause walkthrough" : "Play walkthrough",
+    );
+  }
+  $("previous").innerHTML =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+    playerIcons.previous +
+    "</svg>";
+  $("next").innerHTML =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+    playerIcons.next +
+    "</svg>";
+  setPlayIcon();
+  function text(tag, value, className) {
+    const el = document.createElement(tag);
+    el.textContent = value ?? "";
+    if (className) el.className = className;
+    return el;
+  }
+  function svg(tag, attributes = {}, value) {
+    const el = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attributes)) el.setAttribute(k, v);
+    if (value !== undefined) el.textContent = value;
+    return el;
+  }
+  function slug() {
+    return (
+      S.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+        .slice(0, 70) || "repository-graph"
+    );
+  }
+  function status(message) {
+    $("player-status").textContent = message;
+  }
+  function tour() {
+    if (scenarioId === "tour" || !S.scenarios.length)
+      return S.nodes.map((n) => ({
+        id: "tour-" + n.id,
+        title: n.label,
+        description: n.description,
+        node_ids: [n.id],
+        edge_ids: [],
+        source_ids: n.source_ids,
+        duration_ms: 2200,
+        tour: true,
+      }));
+    const scenario = S.scenarios.find((s) => s.id === scenarioId);
+    return scenario.step_ids.map((id) => steps.get(id));
+  }
+  function duration() {
+    return tour().reduce((a, s) => a + s.duration_ms, 0);
+  }
+  function activeAt(ms) {
+    const ts = tour();
+    let start = 0,
+      index = 0;
+    for (; index < ts.length - 1; index++) {
+      if (ms < start + ts[index].duration_ms) break;
+      start += ts[index].duration_ms;
+    }
+    return {
+      step: ts[index],
+      index,
+      progress: Math.min(1, Math.max(0, (ms - start) / ts[index].duration_ms)),
+      start,
+    };
+  }
+  function time(ms) {
+    const sec = Math.floor(ms / 1000);
+    return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
+  }
+  function configureTimeline() {
+    const select = $("scenario");
+    select.replaceChildren();
+    for (const sc of S.scenarios) {
+      const option = text("option", sc.label);
+      option.value = sc.id;
+      select.append(option);
+    }
+    const option = text("option", "Component tour");
+    option.value = "tour";
+    select.append(option);
+    select.value = scenarioId;
+    $("seek").max = String(duration());
+    $("tour-note").textContent =
+      scenarioId === "tour"
+        ? "Component tour · not execution order"
+        : "Source walkthrough · not a runtime trace";
+  }
+  function select(type, id, { fromTimeline = false, announce = true } = {}) {
+    if (
+      type === "node" ? !nodes.has(id) : type === "edge" ? !edges.has(id) : true
+    )
+      throw Error("Unknown graph selection: " + type + " " + id);
+    if (!fromTimeline) pause();
+    selected = { type, id };
+    paint();
+    inspect();
+    if (announce)
+      status(
+        (type === "node" ? "Selected component: " : "Selected relationship: ") +
+          (type === "node"
+            ? nodes.get(id).label
+            : edges.get(id).label || edges.get(id).relation),
+      );
+  }
+  function adjacency(id) {
+    const found = new Set([id]);
+    for (const e of S.edges)
+      if (e.from === id || e.to === id) {
+        found.add(e.from);
+        found.add(e.to);
+      }
+    return found;
+  }
+  function paint(active = null) {
+    if (!layout) return;
+    const highlight = active || activeAt(current);
+    const ids = new Set(
+      view === "path"
+        ? highlight.step.node_ids
+        : selected.type === "node"
+          ? [selected.id]
+          : [edges.get(selected.id).from, edges.get(selected.id).to],
+    );
+    const near = selected.type === "node" ? adjacency(selected.id) : ids;
+    for (const [id, el] of nodeElements) {
+      el.classList.toggle(
+        "is-selected",
+        selected.type === "node" && selected.id === id,
+      );
+      el.classList.toggle("is-active", view === "path" && ids.has(id));
+      el.classList.toggle(
+        "is-dimmed",
+        view === "focus"
+          ? !near.has(id)
+          : view === "path"
+            ? !ids.has(id)
+            : false,
+      );
+    }
+    for (const [id, el] of edgeElements) {
+      const e = edges.get(id),
+        activeEdge = view === "path" && highlight.step.edge_ids.includes(id);
+      el.classList.toggle(
+        "is-selected",
+        selected.type === "edge" && selected.id === id,
+      );
+      el.classList.toggle("is-active", activeEdge);
+      el.classList.toggle(
+        "is-dimmed",
+        view === "focus"
+          ? !(e.from === selected.id || e.to === selected.id)
+          : view === "path"
+            ? !activeEdge
+            : false,
+      );
+      const pulse = el.querySelector(".edge-pulse"),
+        path = el.querySelector(".edge-line");
+      pulse.setAttribute("visibility", activeEdge ? "visible" : "hidden");
+      if (activeEdge && path.getTotalLength()) {
+        const p = path.getPointAtLength(
+          path.getTotalLength() * highlight.progress,
+        );
+        pulse.setAttribute("cx", p.x);
+        pulse.setAttribute("cy", p.y);
+      }
+    }
+    for (const button of $("component-list").querySelectorAll("button"))
+      button.setAttribute(
+        "aria-pressed",
+        String(selected.type === "node" && button.dataset.node === selected.id),
+      );
+  }
+  function inspect() {
+    const key = selected.type + ":" + selected.id + ":" + codeMode;
+    if (key === inspectedKey) return;
+    inspectedKey = key;
+    const item =
+      selected.type === "node"
+        ? nodes.get(selected.id)
+        : edges.get(selected.id);
+    $("selection-meta").textContent =
+      (selected.type === "node"
+        ? item.kind
+        : "relationship · " + item.relation) +
+      (item.evidence === "inferred" ? " · inferred" : " · source-grounded");
+    $("selection-title").textContent =
+      selected.type === "node" ? item.label : item.label || item.relation;
+    const description =
+      selected.type === "node"
+        ? item.description
+        : nodes.get(item.from).label + " → " + nodes.get(item.to).label;
+    $("selection-description").textContent =
+      (description || "Inspect the source references for this component.") +
+      (item.evidence === "inferred" ? " Inference: " + item.reason : "");
+    const connections = $("connections");
+    connections.replaceChildren();
+    for (const edge of selected.type === "node"
+      ? S.edges.filter((e) => e.from === selected.id || e.to === selected.id)
+      : []) {
+      const button = document.createElement("button");
+      button.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18m-6-6 6 6-6 6"/></svg>';
+      const other =
+        edge.from === selected.id ? nodes.get(edge.to) : nodes.get(edge.from);
+      button.append(
+        text(
+          "span",
+          (edge.from === selected.id ? "" : "From ") +
+            other.label +
+            " · " +
+            (edge.label || edge.relation),
+        ),
+      );
+      button.addEventListener("click", () => select("edge", edge.id));
+      connections.append(button);
+    }
+    const container = $("source-content");
+    container.replaceChildren();
+    for (const id of item.source_ids) {
+      const source = sources.get(id),
+        entry = text("section", "", "source-entry"),
+        head = text("div", "", "source-heading"),
+        open = text(
+          "button",
+          source.path + " · L" + source.start + "–" + source.end,
+        );
+      open.title = "Show embedded source code";
+      open.addEventListener("click", () => setCodeMode(!codeMode));
+      head.append(open);
+      if (source.url) {
+        const a = text("a", "Open source ");
+        a.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>');
+        a.href = source.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        head.append(a);
+      }
+      entry.append(head);
+      const pre = document.createElement("pre"),
+        code = document.createElement("code");
+      code.textContent = source.excerpt;
+      pre.append(code);
+      pre.hidden = !codeMode;
+      entry.append(pre);
+      const revision = text(
+        "p",
+        (source.revision === "commit"
+          ? source.commit.slice(0, 7)
+          : "working tree") +
+          " · SHA256 " +
+          source.sha256.slice(0, 12),
+        "source-revision",
+      );
+      revision.hidden = !codeMode;
+      entry.append(revision);
+      container.append(entry);
+    }
+    if (!item.source_ids.length)
+      container.append(
+        text(
+          "p",
+          "No direct source reference. This relationship is explicitly inferred.",
+          "source-revision",
+        ),
+      );
+    $("overview-content").hidden = codeMode;
+    $("overview-tab").setAttribute("aria-pressed", String(!codeMode));
+    $("code-tab").setAttribute("aria-pressed", String(codeMode));
+  }
+  function setCodeMode(value) {
+    codeMode = value;
+    inspect();
+  }
+  function fillComponents() {
+    const list = $("component-list");
+    list.replaceChildren();
+    const query = $("component-search").value.trim().toLowerCase();
+    for (const n of S.nodes.filter((n) =>
+      (n.label + " " + n.kind + " " + n.description)
+        .toLowerCase()
+        .includes(query),
+    )) {
+      const b = document.createElement("button");
+      b.className = "component-item";
+      b.dataset.node = n.id;
+      b.setAttribute(
+        "aria-pressed",
+        String(selected.type === "node" && selected.id === n.id),
+      );
+      const mark = text("span", "", "component-mark");
+      mark.innerHTML = icon(n.kind);
+      b.append(mark, text("span", n.label, "component-label"));
+      b.addEventListener("click", () => select("node", n.id));
+      list.append(b);
+    }
+    $("no-components").hidden = Boolean(list.childElementCount);
+  }
+  function setView(value) {
+    if (!["map", "focus", "path"].includes(value))
+      throw Error("Unknown graph view");
+    view = value;
+    for (const button of document.querySelectorAll("[data-view]"))
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.view === value),
+      );
+    paint();
+    status(
+      value === "focus"
+        ? "Showing the selected component and its direct relationships."
+        : value === "path"
+          ? "Highlighting a path over the complete graph."
+          : "Showing the complete component graph.",
+    );
+  }
+  function pathFromPoints(points) {
+    if (points.length < 2) return "";
+    let d = "M" + points[0].x + " " + points[0].y;
+    for (let i = 1; i < points.length - 1; i++) {
+      const a = points[i - 1],
+        b = points[i],
+        c = points[i + 1],
+        ab = Math.hypot(b.x - a.x, b.y - a.y),
+        bc = Math.hypot(c.x - b.x, c.y - b.y),
+        r = Math.min(7, ab / 2, bc / 2);
+      if (!ab || !bc) continue;
+      const p = {
+          x: b.x + ((a.x - b.x) * r) / ab,
+          y: b.y + ((a.y - b.y) * r) / ab,
+        },
+        q = {
+          x: b.x + ((c.x - b.x) * r) / bc,
+          y: b.y + ((c.y - b.y) * r) / bc,
+        };
+      d +=
+        " L" + p.x + " " + p.y + " Q" + b.x + " " + b.y + " " + q.x + " " + q.y;
+    }
+    const last = points[points.length - 1];
+    return d + " L" + last.x + " " + last.y;
+  }
+  const measure = document.createElement("canvas").getContext("2d");
+  function wrap(label, width = 160) {
+    measure.font = "600 17px Atkinson";
+    const result = [];
+    let line = "";
+    const words = label.replace(/([/_.])/g, "$1 ").split(/\s+/);
+    for (let word of words) {
+      if (measure.measureText(word).width > width) {
+        if (line) {
+          result.push(line);
+          line = "";
+        }
+        while (measure.measureText(word).width > width) {
+          let cut = word.length - 1;
+          while (
+            cut > 1 &&
+            measure.measureText(word.slice(0, cut)).width > width
+          )
+            cut--;
+          result.push(word.slice(0, cut));
+          word = word.slice(cut);
+        }
+      }
+      const next = line ? line + " " + word : word;
+      if (measure.measureText(next).width > width) {
+        result.push(line);
+        line = word;
+      } else line = next;
+    }
+    if (line) result.push(line);
+    return result;
+  }
+  async function layOut() {
+    const groupMap = new Map(
+      S.groups.map((g) => [
+        g.id,
+        {
+          id: g.id,
+          children: [],
+          layoutOptions: {
+            "elk.direction": "DOWN",
+            "elk.padding": "[top=37,left=20,bottom=20,right=20]",
+            "elk.spacing.nodeNode": "22",
+            "elk.layered.spacing.nodeNodeBetweenLayers": "20",
+          },
+        },
+      ]),
+    );
+    const children = [];
+    for (const g of S.groups) {
+      const item = groupMap.get(g.id);
+      if (g.parent) groupMap.get(g.parent).children.push(item);
+      else children.push(item);
+    }
+    for (const n of S.nodes) {
+      const lines = wrap(n.label),
+        item = {
+          id: n.id,
+          width: 192,
+          height: Math.max(70, 37 + lines.length * 21),
+        };
+      nodeLines.set(n.id, lines);
+      if (n.group) groupMap.get(n.group).children.push(item);
+      else children.push(item);
+    }
+    const model = {
+      id: "root",
+      layoutOptions: {
+        "elk.algorithm": "layered",
+        "elk.direction": "DOWN",
+        "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+        "elk.edgeRouting": "ORTHOGONAL",
+        "elk.randomSeed": "42",
+        "elk.spacing.nodeNode": "22",
+        "elk.layered.spacing.nodeNodeBetweenLayers": "24",
+        "elk.spacing.edgeNode": "22",
+        "elk.padding": "[top=18,left=18,bottom=18,right=18]",
+      },
+      children,
+      edges: S.edges.map((e) => ({
+        id: e.id,
+        sources: [e.from],
+        targets: [e.to],
+        labels: e.label
+          ? [
+              {
+                text: e.label,
+                width: Math.min(200, e.label.length * 5.8),
+                height: 15,
+              },
+            ]
+          : [],
+      })),
+    };
+    if (window.REPO_PRECOMPUTED_LAYOUT) {
+      layout = JSON.parse(JSON.stringify(window.REPO_PRECOMPUTED_LAYOUT));
+    } else {
+      const elk = new ELK();
+      layout = await elk.layout(model);
+    }
+    draw();
+    fit();
+    $("loading").hidden = true;
+    paint();
+  }
+  function draw() {
+    diagram.replaceChildren();
+    positions.clear();
+    edgeElements.clear();
+    nodeElements.clear();
+    const defs = svg("defs");
+    for (const [id, color] of [
+      ["arrow", "#9da7b6"],
+      ["arrow-active", "#2164c7"],
+    ]) {
+      const marker = svg("marker", {
+        id,
+        viewBox: "0 0 10 10",
+        refX: 9,
+        refY: 5,
+        markerWidth: 6,
+        markerHeight: 6,
+        orient: "auto-start-reverse",
+        markerUnits: "strokeWidth",
+      });
+      marker.append(svg("path", { d: "M1 1 9 5 1 9z", fill: color }));
+      defs.append(marker);
+    }
+    diagram.append(defs);
+    const groupsLayer = svg("g"),
+      edgeLayer = svg("g"),
+      nodeLayer = svg("g");
+    diagram.append(groupsLayer, edgeLayer, nodeLayer);
+    const routed = [];
+    function walk(item, ox = 0, oy = 0) {
+      const x = ox + (item.x || 0),
+        y = oy + (item.y || 0);
+      if (item.id !== "root") {
+        if (nodes.has(item.id)) {
+          positions.set(item.id, {
+            x,
+            y,
+            width: item.width,
+            height: item.height,
+          });
+        } else {
+          const group = S.groups.find((g) => g.id === item.id),
+            g = svg("g", { class: "graph-group" });
+          g.append(
+            svg("rect", {
+              x,
+              y,
+              width: item.width,
+              height: item.height,
+              rx: 10,
+            }),
+            svg("text", { x: x + 16, y: y + 23 }, group?.label || item.id),
+          );
+          groupsLayer.append(g);
+        }
+      }
+      for (const edge of item.edges || []) routed.push({ edge, x, y });
+      for (const child of item.children || []) walk(child, x, y);
+    }
+    walk(layout);
+    for (const { edge, x, y } of routed) {
+      const e = edges.get(edge.id);
+      if (!e) continue;
+      const g = svg("g", {
+        class: "graph-edge" + (e.evidence === "inferred" ? " is-inferred" : ""),
+        "data-edge": e.id,
+        role: "button",
+        tabindex: 0,
+        "aria-label":
+          nodes.get(e.from).label +
+          " " +
+          (e.label || e.relation) +
+          " " +
+          nodes.get(e.to).label,
+      });
+      for (const section of edge.sections || []) {
+        const points = [
+          section.startPoint,
+          ...(section.bendPoints || []),
+          section.endPoint,
+        ].map((p) => ({ x: p.x + x, y: p.y + y }));
+        const d = pathFromPoints(points);
+        g.append(
+          svg("path", { class: "edge-hit", d }),
+          svg("path", { class: "edge-line", d, "marker-end": "url(#arrow)" }),
+        );
+      }
+      for (const label of edge.labels || [])
+        g.append(
+          svg(
+            "text",
+            {
+              x: x + label.x + label.width / 2,
+              y: y + label.y + 11,
+              "text-anchor": "middle",
+            },
+            e.label,
+          ),
+        );
+      g.append(
+        svg("circle", { class: "edge-pulse", r: 3, visibility: "hidden" }),
+      );
+      g.addEventListener("click", () => select("edge", e.id));
+      g.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          select("edge", e.id);
+        }
+      });
+      edgeLayer.append(g);
+      edgeElements.set(e.id, g);
+    }
+    for (const n of S.nodes) {
+      const p = positions.get(n.id);
+      if (!p) throw Error("Layout did not return component " + n.id);
+      const g = svg("g", {
+        class: "graph-node",
+        transform: `translate(${p.x},${p.y})`,
+        "data-node": n.id,
+        role: "button",
+        tabindex: 0,
+        "aria-label": n.label + " · " + n.kind,
+      });
+      g.append(svg("rect", { width: p.width, height: p.height, rx: 7 }));
+      const label = svg("text", {
+        class: "node-title",
+        x: p.width / 2,
+        y: 25,
+        "text-anchor": "middle",
+      });
+      nodeLines
+        .get(n.id)
+        .forEach((line, i) =>
+          label.append(svg("tspan", { x: p.width / 2, dy: i ? 21 : 0 }, line)),
+        );
+      g.append(
+        label,
+        svg(
+          "text",
+          {
+            class: "node-kind",
+            x: p.width / 2,
+            y: p.height - 12,
+            "text-anchor": "middle",
+          },
+          n.kind + (n.evidence === "inferred" ? " · inferred" : ""),
+        ),
+      );
+      g.addEventListener("click", () => select("node", n.id));
+      g.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          select("node", n.id);
+        }
+      });
+      nodeLayer.append(g);
+      nodeElements.set(n.id, g);
+    }
+    bounds = { x: -10, y: -10, w: layout.width + 20, h: layout.height + 20 };
+    $("graph-count").textContent =
+      S.nodes.length + " components · " + S.edges.length + " relationships";
+  }
+  function applyCamera() {
+    if (camera)
+      diagram.setAttribute(
+        "viewBox",
+        [camera.x, camera.y, camera.w, camera.h].join(" "),
+      );
+  }
+  function fit() {
+    if (!bounds) return;
+    camera = { ...bounds };
+    applyCamera();
+  }
+  function zoom(factor) {
+    if (!camera) return;
+    const w = Math.max(bounds.w / 8, Math.min(bounds.w * 2, camera.w * factor)),
+      h = (w * camera.h) / camera.w;
+    camera = {
+      x: camera.x + (camera.w - w) / 2,
+      y: camera.y + (camera.h - h) / 2,
+      w,
+      h,
+    };
+    applyCamera();
+  }
+  function renderAt(ms) {
+    const total = duration();
+    current = Math.max(
+      0,
+      Math.min(total - 0.001, Number.isFinite(Number(ms)) ? Number(ms) : 0),
+    );
+    const active = activeAt(current);
+    selected = { type: "node", id: active.step.node_ids[0] };
+    $("seek").value = String(current);
+    $("elapsed").textContent = time(current) + " / " + time(total);
+    $("step-count").textContent = active.index + 1 + " / " + tour().length;
+    paint(active);
+    inspect();
+    return {
+      timeMs: current,
+      durationMs: total,
+      index: active.index,
+      nodeIds: active.step.node_ids,
+      edgeIds: active.step.edge_ids,
+    };
+  }
+  window.renderAt = renderAt;
+  function pause() {
+    window.repoClock?.pause();
+    playing = false;
+    setPlayIcon();
+  }
+  function togglePlay() {
+    if (!exporting) window.repoClock?.toggle();
+  }
+  function skip(offset) {
+    pause();
+    const active = activeAt(current),
+      ts = tour(),
+      next = Math.max(0, Math.min(ts.length - 1, active.index + offset));
+    renderAt(ts.slice(0, next).reduce((a, s) => a + s.duration_ms, 0));
+  }
+  function setScenario(id) {
+    if (id !== "tour" && !S.scenarios.some((s) => s.id === id))
+      throw Error("Unknown scenario: " + id);
+    pause();
+    scenarioId = id;
+    configureTimeline();
+    renderAt(0);
+  }
+  function exportSVG() {
+    const copy = diagram.cloneNode(true);
+    copy.removeAttribute("id");
+    copy.setAttribute("xmlns", NS);
+    copy.setAttribute(
+      "viewBox",
+      [bounds.x, bounds.y, bounds.w, bounds.h].join(" "),
+    );
+    copy.setAttribute("width", Math.ceil(bounds.w));
+    copy.setAttribute("height", Math.ceil(bounds.h));
+    copy.setAttribute("role", "img");
+    const style = svg(
+      "style",
+      {},
+      $("player-style").textContent.replace(
+        "url(assets/AtkinsonHyperlegibleNext.ttf)",
+        "url(data:font/ttf;base64," +
+          JSON.parse($("repo-font").textContent) +
+          ")",
+      ),
+    );
+    copy.insertBefore(style, copy.firstChild);
+    const background = svg("rect", {
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.w,
+      height: bounds.h,
+      fill: "#fff",
+    });
+    copy.insertBefore(background, style.nextSibling);
+    copy.prepend(svg("title", {}, S.question));
+    copy.append(
+      svg(
+        "metadata",
+        {},
+        JSON.stringify({
+          title: S.title,
+          repo: S.repo,
+          licenses: document.querySelector(".player-footer details").innerText,
+          source: "https://github.com/HonzaCuhel/repo-visualizer",
+        }),
+      ),
+    );
+    return new XMLSerializer().serializeToString(copy);
+  }
+  function download(blob, name) {
+    const url = URL.createObjectURL(blob),
+      a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  async function rasterFrame(ms, width = 960, height = 640) {
+    renderAt(ms);
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, width, height);
+    const image = new Image(),
+      url = URL.createObjectURL(
+        new Blob([exportSVG()], { type: "image/svg+xml;charset=utf-8" }),
+      );
+    try {
+      await new Promise((resolve, reject) => {
+        image.onload = resolve;
+        image.onerror = () =>
+          reject(Error("The browser could not rasterize the graph SVG"));
+        image.src = url;
+      });
+      const scale = Math.min(
+          (width - 48) / bounds.w,
+          (height - 135) / bounds.h,
+        ),
+        w = bounds.w * scale,
+        h = bounds.h * scale;
+      ctx.drawImage(image, (width - w) / 2, 70 + (height - 135 - h) / 2, w, h);
+      ctx.fillStyle = "#151720";
+      ctx.font = "600 22px Atkinson";
+      ctx.fillText(S.title, 24, 33, width - 48);
+      const active = activeAt(current);
+      ctx.font = "16px Atkinson";
+      ctx.fillStyle = "#1558b7";
+      ctx.fillText(active.step.title, 24, height - 36, width - 48);
+      ctx.font = "11px Atkinson";
+      ctx.fillStyle = "#657082";
+      ctx.fillText(
+        (scenarioId === "tour"
+          ? "Component tour · not execution order"
+          : "Source walkthrough · not a runtime trace") +
+          "   " +
+          time(ms) +
+          " / " +
+          time(duration()),
+        24,
+        height - 15,
+        width - 48,
+      );
+      return canvas;
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+  async function browserExport(format) {
+    if (exporting) return;
+    const old = { time: current, view, selected: { ...selected } };
+    pause();
+    exporting = true;
+    cancelled = false;
+    document.body.classList.add("export-busy");
+    $("export-progress").hidden = false;
+    const message = (value) => ($("export-message").textContent = value);
+    try {
+      if (format === "html") {
+        const copy = document.documentElement.cloneNode(true);
+        copy
+          .querySelector("body")
+          .classList.remove("export-busy", "export-frame");
+        copy.querySelector("#export-progress").hidden = true;
+        copy.querySelectorAll(".landing-section").forEach((el) => el.remove());
+        const documentText = copy.outerHTML
+          .replace(
+            "url(assets/AtkinsonHyperlegibleNext.ttf)",
+            "url(data:font/ttf;base64," +
+              JSON.parse($("repo-font").textContent) +
+              ")",
+          )
+          .replace("window.REPO_LANDING=true;", "window.REPO_LANDING=false;");
+        download(
+          new Blob(["<!doctype html>\n" + documentText], { type: "text/html" }),
+          slug() + ".html",
+        );
+      } else if (format === "json") {
+        const data = JSON.parse(JSON.stringify(S));
+        download(
+          new Blob([JSON.stringify(data, null, 2) + "\n"], {
+            type: "application/json",
+          }),
+          slug() + ".json",
+        );
+      } else if (format === "svg")
+        download(
+          new Blob([exportSVG()], { type: "image/svg+xml" }),
+          slug() + ".svg",
+        );
+      else if (format === "png") {
+        message("Rendering graph PNG…");
+        const canvas = await rasterFrame(current, 1440, 960);
+        const blob = await new Promise((resolve) =>
+          canvas.toBlob(resolve, "image/png"),
+        );
+        if (!blob) throw Error("PNG encoding failed");
+        download(blob, slug() + ".png");
+      } else if (format === "gif") {
+        setView("path");
+        const fps = 8,
+          count = Math.ceil((duration() / 1000) * fps);
+        if (count > 960)
+          throw Error(
+            "Use the command-line exporter for GIFs longer than two minutes.",
+          );
+        const gif = Gifenc.GIFEncoder();
+        for (let i = 0; i < count; i++) {
+          if (cancelled) throw Error("Export cancelled");
+          message("Rendering GIF · " + Math.round((i / count) * 100) + "%");
+          const canvas = await rasterFrame((i * 1000) / fps, 800, 540),
+            ctx = canvas.getContext("2d"),
+            rgba = ctx.getImageData(0, 0, 800, 540).data,
+            palette = Gifenc.quantize(rgba, 128),
+            indexed = Gifenc.applyPalette(rgba, palette);
+          gif.writeFrame(indexed, 800, 540, {
+            palette,
+            delay:
+              Math.round(((i + 1) * 100) / fps) * 10 -
+              Math.round((i * 100) / fps) * 10,
+            repeat: 0,
+          });
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+        gif.finish();
+        download(
+          new Blob([gif.bytes()], { type: "image/gif" }),
+          slug() + ".gif",
+        );
+      } else {
+        const mime =
+          format === "mp4"
+            ? "video/mp4;codecs=avc1.42001f"
+            : "video/webm;codecs=vp9";
+        if (!window.MediaRecorder || !MediaRecorder.isTypeSupported(mime))
+          throw Error(
+            format.toUpperCase() +
+              " recording is unavailable in this browser. Choose another format or use the skill’s local video exporter.",
+          );
+        setView("path");
+        const fps = 12,
+          canvas = document.createElement("canvas");
+        canvas.width = 960;
+        canvas.height = 640;
+        const ctx = canvas.getContext("2d"),
+          stream = canvas.captureStream(0),
+          track = stream.getVideoTracks()[0],
+          chunks = [],
+          recorder = new MediaRecorder(stream, {
+            mimeType: mime,
+            videoBitsPerSecond: 4000000,
+          });
+        const done = new Promise((resolve, reject) => {
+          recorder.ondataavailable = (e) => {
+            if (e.data.size) chunks.push(e.data);
+          };
+          recorder.onstop = resolve;
+          recorder.onerror = () => reject(Error("Video recording failed"));
+        });
+        recorder.start();
+        try {
+          for (let ms = 0; ms < duration(); ms += 1000 / fps) {
+            if (cancelled) throw Error("Export cancelled");
+            message(
+              "Recording " +
+                format.toUpperCase() +
+                " · " +
+                Math.round((ms / duration()) * 100) +
+                "%",
+            );
+            ctx.drawImage(await rasterFrame(ms), 0, 0);
+            track.requestFrame();
+            await new Promise((resolve) => setTimeout(resolve, 1000 / fps));
+          }
+        } finally {
+          recorder.stop();
+          await done;
+          stream.getTracks().forEach((t) => t.stop());
+        }
+        download(
+          new Blob(chunks, { type: recorder.mimeType }),
+          slug() + "." + format,
+        );
+      }
+      status(
+        "Exported " +
+          format.toUpperCase() +
+          ". The HTML retains clickable source references.",
+      );
+    } catch (error) {
+      status(error.message);
+      throw error;
+    } finally {
+      exporting = false;
+      document.body.classList.remove("export-busy");
+      $("export-progress").hidden = true;
+      setView(old.view);
+      renderAt(old.time);
+      selected = old.selected;
+      paint();
+      inspect();
+    }
+  }
+  window.repoPlayer = {
+    get durationMs() {
+      return duration();
+    },
+    get timeMs() {
+      return current;
+    },
+    _setPlaying(value) {
+      playing = value;
+      setPlayIcon();
+    },
+    get graph() {
+      return S;
+    },
+    get layout() {
+      return layout;
+    },
+    get view() {
+      return view;
+    },
+    get selection() {
+      return { ...selected };
+    },
+    get isPlaying() {
+      return playing;
+    },
+    setScenario,
+    setView,
+    selectNode: (id) => select("node", id),
+    selectEdge: (id) => select("edge", id),
+    exportSVG,
+    export: browserExport,
+    fit,
+    pause,
+  };
+  $("play").addEventListener("click", togglePlay);
+  $("previous").addEventListener("click", () => skip(-1));
+  $("next").addEventListener("click", () => skip(1));
+  $("seek").addEventListener("input", () => {
+    pause();
+    renderAt(Number($("seek").value));
+  });
+  $("scenario").addEventListener("change", (event) =>
+    setScenario(event.target.value),
+  );
+  $("component-search").addEventListener("input", fillComponents);
+  $("overview-tab").addEventListener("click", () => setCodeMode(false));
+  $("code-tab").addEventListener("click", () => setCodeMode(true));
+  for (const b of document.querySelectorAll("[data-view]"))
+    b.addEventListener("click", () => setView(b.dataset.view));
+  for (const b of document.querySelectorAll("[data-export]"))
+    b.addEventListener("click", () => {
+      document.querySelector(".export-menu").open = false;
+      browserExport(b.dataset.export).catch(() => {});
+    });
+  $("cancel-export").addEventListener("click", () => {
+    cancelled = true;
+  });
+  $("zoom-out").addEventListener("click", () => zoom(1.25));
+  $("zoom-in").addEventListener("click", () => zoom(0.8));
+  $("zoom-fit").addEventListener("click", fit);
+  let drag = null;
+  diagram.addEventListener("pointerdown", (event) => {
+    if (event.target.closest(".graph-node,.graph-edge") || !camera) return;
+    drag = { x: event.clientX, y: event.clientY, camera: { ...camera } };
+    diagram.setPointerCapture(event.pointerId);
+  });
+  diagram.addEventListener("pointermove", (event) => {
+    if (!drag) return;
+    const r = diagram.getBoundingClientRect(),
+      scale = Math.max(camera.w / r.width, camera.h / r.height);
+    camera = {
+      ...drag.camera,
+      x: drag.camera.x - (event.clientX - drag.x) * scale,
+      y: drag.camera.y - (event.clientY - drag.y) * scale,
+    };
+    applyCamera();
+  });
+  diagram.addEventListener("pointerup", () => (drag = null));
+  diagram.addEventListener("pointercancel", () => (drag = null));
+  diagram.addEventListener(
+    "wheel",
+    (event) => {
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+        zoom(event.deltaY > 0 ? 1.1 : 0.9);
+      }
+    },
+    { passive: false },
+  );
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.target.closest(
+        "input,select,textarea,button,a,summary,[role=button]",
+      ) ||
+      exporting
+    )
+      return;
+    if (event.key === " ") {
+      event.preventDefault();
+      togglePlay();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      skip(1);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      skip(-1);
+    } else if (event.key === "Escape") {
+      pause();
+      setView("map");
+      document.querySelector(".export-menu").open = false;
+    }
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) pause();
+  });
+  document.addEventListener("click", (event) => {
+    const menu = document.querySelector(".export-menu");
+    if (!menu.contains(event.target)) menu.open = false;
+  });
+  $("repo-name").textContent = S.title;
+  $("repo-revision").textContent = S.repo.commit?.slice(0, 7) || "local";
+  $("question").textContent = S.question;
+  if (!window.REPO_LANDING) {
+    $("page-title").textContent = S.title;
+    $("page-description").textContent = S.summary || S.question;
+    document.querySelector(".site-nav").hidden = true;
+    document.querySelector(".agent-names").hidden = true;
+    document.querySelector(".install-button").textContent = "Explore source";
+    document.querySelector(".install-button").href = "#workspace";
+  }
+  for (const note of S.uncertainties)
+    $("uncertainties").append(text("li", note));
+  configureTimeline();
+  fillComponents();
+  renderAt(0);
+  window.repoReady = (async () => {
+    await document.fonts.ready;
+    await layOut();
+    setView(S.default_view || "map");
+    status(
+      S.nodes.length +
+        " components and " +
+        S.edges.length +
+        " relationships. Select a component to inspect its evidence.",
+    );
+    return true;
+  })().catch((error) => {
+    $("loading").textContent =
+      "The graph could not be laid out. " + error.message;
+    status("Layout failed: " + error.message);
+    throw error;
+  });
 })();
