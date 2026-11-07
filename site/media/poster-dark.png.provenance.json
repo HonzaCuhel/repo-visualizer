@@ -5,11 +5,13 @@
     "width": 1200,
     "height": 800,
     "fps": 8,
-    "at": 3000,
+    "at": 4800,
     "theme": "dark",
     "language": "en"
   },
-  "source_html_sha256": "4c2dddcfa00288b0a785eaaef89d97c6681459b9e6eaa1afd94b1409cf48b552",
-  "artifact_sha256": "426fd3581bb75a67ccb198d07837326ce6b7069d54074aa4920b2a0479cdf48d",
+  "source_repository": "https://github.com/openai/codex",
+  "source_revision": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+  "source_html_sha256": "dad4e0d2bc840736fd171fb6058f251763dbf46fdc95747b27d58b1b4918e9d1",
+  "artifact_sha256": "48a85b28f2282f334e5999092aaa78293152879a3acb74dfa5a97e74ec0334f2",
   "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
 }

@@ -14,7 +14,7 @@ Otevřený skill pro Codex a Claude Code: z otázky nad repozitářem vytvoří 
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/media/walkthrough-cs-dark.gif">
-  <img src="site/media/walkthrough-cs.gif" alt="Skutečný graf komponent stack-diagram s průchodem vkládáním souborů, kontrolní větví a odpovídajícím zdrojovým kódem." width="100%">
+  <img src="site/media/walkthrough-cs.gif" alt="Graf spouštění příkazu v Codexu, včetně schvalování, podmíněného opakování a odpovídajícího zdrojového kódu." width="100%">
 </picture>
 
 Agent přečte implementaci a popíše odpovědnosti a vztahy. Průzkumník pak zobrazí tento graf. Větvení zůstane větvením, opakování smyčkou; volitelný průchod zvýrazní cestu stejnou topologií.
@@ -83,6 +83,8 @@ Pro testy v prohlížeči nastavte `REPO_VISUALIZER_BROWSER` na Chromium. Volite
 
 ## Atribuce a licence
 
-Inspirace: [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). Veřejná ukázka zachovává atribuci jeho MIT zdrojů na konkrétní revizi.
+Hlavní ukázka analyzuje [openai/codex](https://github.com/openai/codex) na konkrétní revizi. Vložené úryvky zachovávají licenci Apache-2.0 a soubor NOTICE. [Zdroj a záznam ověření](examples/codex/README.md).
+
+Inspirace: [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). Další ukázky zachovávají atribuci jeho MIT zdrojů na konkrétní revizi.
 
 Původní kód: **MIT**. ELK: **EPL-2.0**, gifenc: **MIT**, Atkinson Hyperlegible Next: **OFL-1.1**. Licence a původ závislostí jsou součástí skillu. [Podrobnosti](skills/repo-visualizer/NOTICE.md).

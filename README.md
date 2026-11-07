@@ -18,7 +18,7 @@ English · [Česky](README.cs.md)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="site/media/walkthrough-dark.gif">
-  <img src="site/media/walkthrough.gif" alt="A real component graph of stack-diagram, highlighting asset embedding and the validation branch, with inspectable source code." width="100%">
+  <img src="site/media/walkthrough.gif" alt="A source-derived graph of Codex's shell execution, approval decisions and conditional retries, with inspectable code." width="100%">
 </picture>
 
 The agent reads the implementation and authors a graph of responsibilities and relationships. The explorer renders that graph: branches stay branches, retries stay loops, and an optional walkthrough highlights a path through the same topology.
@@ -56,7 +56,7 @@ Prefer a file? Download the complete skill ZIP from [Releases](https://github.co
 
 Select a component or relationship to read embedded code excerpts and open revision-pinned source links. Search, zoom, pan, seek and keyboard controls work in the portable HTML, including offline.
 
-[Try the portable builder](https://honzacuhel.github.io/repo-visualizer/portable-builder.html) · [Explore the complete public example](https://honzacuhel.github.io/repo-visualizer/full-pipeline.html)
+[Explore Codex shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [See the complete agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Explore the builder example](https://honzacuhel.github.io/repo-visualizer/portable-builder.html)
 
 ## One graph, multiple outputs
 
@@ -96,6 +96,8 @@ Set `REPO_VISUALIZER_BROWSER` to an existing Chromium executable to include brow
 
 ## Credits and license
 
-Inspired by [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). The public example analyzes its MIT-licensed source at a pinned revision and retains attribution.
+The main example analyzes [openai/codex](https://github.com/openai/codex) at a pinned revision. Its Apache-2.0 license and NOTICE are retained with the embedded excerpts. [Source and test record](examples/codex/README.md).
+
+Inspired by [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). Additional builder examples analyze its MIT-licensed source at a pinned revision and retain attribution.
 
 Original code is **MIT**. Vendored ELK is **EPL-2.0**, gifenc is **MIT**, and Atkinson Hyperlegible Next is **OFL-1.1**. Full licenses and provenance ship with the skill. [Third-party notices](skills/repo-visualizer/NOTICE.md).

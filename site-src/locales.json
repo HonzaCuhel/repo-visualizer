@@ -42,7 +42,13 @@
     "heroExplore": "Explore the graph",
     "heroMeta": "Codex + Claude Code · Open source · Local exports",
     "copied": "Command copied. Open a terminal in your repository and paste it.",
-    "selected": "Command selected. Copy it with your keyboard shortcut."
+    "selected": "Command selected. Copy it with your keyboard shortcut.",
+    "codexTitle": "How Codex runs a shell command",
+    "codexDescription": "Command policy, approval decisions, sandbox execution and conditional retries.",
+    "codexMeta": "openai/codex · Rust",
+    "codexLoopTitle": "The complete agent loop",
+    "codexLoopDescription": "From user input to model responses, tool results and continuation.",
+    "codexLoopMeta": "openai/codex · 11 components"
   },
   "cs": {
     "examplesTitle": "Začněte skutečným mechanismem.",
@@ -87,6 +93,12 @@
     "heroExplore": "Prozkoumat graf",
     "heroMeta": "Codex + Claude Code · Open source · Lokální exporty",
     "copied": "Příkaz zkopírován. Otevřete terminál v repozitáři a vložte ho.",
-    "selected": "Příkaz je označený. Zkopírujte jej klávesovou zkratkou."
+    "selected": "Příkaz je označený. Zkopírujte jej klávesovou zkratkou.",
+    "codexTitle": "Jak Codex spustí příkaz v shellu",
+    "codexDescription": "Pravidla příkazu, schvalování, spuštění v sandboxu a podmíněné opakování.",
+    "codexMeta": "openai/codex · Rust",
+    "codexLoopTitle": "Úplná agentní smyčka",
+    "codexLoopDescription": "Od zadání přes odpovědi modelu a výsledky nástrojů po pokračování.",
+    "codexLoopMeta": "openai/codex · 11 komponent"
   }
 }

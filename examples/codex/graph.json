@@ -1,0 +1,793 @@
+{
+  "schema_version": 1,
+  "language": "en",
+  "title": "Codex: running a shell command",
+  "question": "How does Codex decide whether to run a shell command?",
+  "summary": "Follow a shell tool call through command policy, approval, sandbox execution and the returned result.",
+  "nodes": [
+    {
+      "id": "dispatch",
+      "label": "Shell tool call",
+      "description": "Routes an exec_command tool call to the unified execution handler.",
+      "kind": "process",
+      "source_ids": [
+        "classify",
+        "router",
+        "parallel"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "shell",
+      "label": "Command policy",
+      "description": "Resolves shell and working directory; derives command approval requirements.",
+      "kind": "process",
+      "source_ids": [
+        "shell",
+        "resolve",
+        "policy"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "gate",
+      "label": "Approval & sandbox",
+      "description": "Rejects forbidden actions, requests review, selects sandbox and conditionally retries denials.",
+      "kind": "decision",
+      "source_ids": [
+        "approval-gate",
+        "sandbox",
+        "denial",
+        "retry"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "review",
+      "label": "Approval decision",
+      "description": "Permission hooks, required human review or Guardian determine the verdict.",
+      "kind": "decision",
+      "source_ids": [
+        "review",
+        "reviewer",
+        "verdict"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "process",
+      "label": "Run command",
+      "description": "Launches via executor backend or local process; collects output, exit status or a live process handle.",
+      "kind": "process",
+      "source_ids": [
+        "launch",
+        "environment",
+        "backend",
+        "spawn",
+        "collect",
+        "exit"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "results",
+      "label": "Tool result",
+      "description": "Returns collected output, exit status or a process handle; recoverable failures are encoded as tool responses.",
+      "kind": "store",
+      "source_ids": [
+        "encode",
+        "shell-call",
+        "drain",
+        "wait"
+      ],
+      "evidence": "source"
+    }
+  ],
+  "edges": [
+    {
+      "id": "exec",
+      "from": "dispatch",
+      "to": "shell",
+      "relation": "exec_command runtime",
+      "label": "prepare exec_command",
+      "source_ids": [
+        "router",
+        "shell"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "requirements",
+      "from": "shell",
+      "to": "gate",
+      "relation": "command policy requirement",
+      "label": "derive requirements",
+      "source_ids": [
+        "policy",
+        "orchestrate"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "ask",
+      "from": "gate",
+      "to": "review",
+      "relation": "review required authority",
+      "label": "review required",
+      "source_ids": [
+        "approval-gate",
+        "retry-review"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "verdict",
+      "from": "review",
+      "to": "gate",
+      "relation": "approval, rejection or abort",
+      "label": "approve / reject / abort",
+      "source_ids": [
+        "verdict",
+        "approval-gate"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "attempt",
+      "from": "gate",
+      "to": "process",
+      "relation": "selected sandbox attempt",
+      "label": "first attempt",
+      "source_ids": [
+        "sandbox",
+        "launch"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "denied",
+      "from": "process",
+      "to": "gate",
+      "relation": "sandbox denial",
+      "label": "sandbox denial",
+      "source_ids": [
+        "environment",
+        "denial"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "retry",
+      "from": "gate",
+      "to": "process",
+      "relation": "policy-permitted retry",
+      "label": "allowed retry",
+      "source_ids": [
+        "retry-review",
+        "retry"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "rejected",
+      "from": "gate",
+      "to": "results",
+      "relation": "forbidden / rejected / denial retained",
+      "label": "rejection / retained denial",
+      "source_ids": [
+        "approval-gate",
+        "orchestrate",
+        "shell-call"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "output",
+      "from": "process",
+      "to": "results",
+      "relation": "output + exit code or process ID",
+      "label": "output + status or handle",
+      "source_ids": [
+        "collect",
+        "exit",
+        "shell-call"
+      ],
+      "evidence": "source"
+    }
+  ],
+  "sources": [
+    {
+      "id": "classify",
+      "path": "codex-rs/core/src/stream_events_utils.rs",
+      "start": 349,
+      "end": 405,
+      "sha256": "502b382b74438ee3fdcc6d9894473c3d11b5c2065737dccf1cfcc01a08678403",
+      "excerpt": "#[instrument(level = \"trace\", skip_all)]\npub(crate) async fn handle_output_item_done(\n    ctx: &mut HandleOutputCtx,\n    item: ResponseItem,\n    previously_active_item: Option<TurnItem>,\n    moderation: Option<&codex_protocol::protocol::TargetedAnswerModeration>,\n) -> Result<OutputItemResult> {\n    let mut output = OutputItemResult::default();\n    let plan_mode = ctx.step_context.turn.mode() == ModeKind::Plan;\n\n    match ctx.step_context.tool_router.build_tool_call(item.clone()) {\n        // The model emitted a tool call; log it, persist the item immediately, and queue the tool execution.\n        Ok(Some(call)) => {\n            call_trace::received(\n                ctx.sess.thread_id,\n                &call.tool_name,\n                &call.call_id,\n                call_trace::Receipt::ModelTurn(&ctx.step_context.turn.sub_id),\n            );\n            ctx.sess\n                .input_queue\n                .accept_mailbox_delivery_for_current_turn(\n                    &ctx.sess.active_turn,\n                    &ctx.step_context.turn.sub_id,\n                )\n                .await;\n\n            tracing::info!(\n                thread_id = %ctx.sess.thread_id,\n                \"ToolCall: {}\",\n                call.tool_name,\n            );\n\n            record_completed_response_item(ctx.sess.as_ref(), ctx.step_context.as_ref(), &item)\n                .await;\n\n            let cancellation_token = ctx.cancellation_token.child_token();\n            let runtime = ctx.tool_runtime.clone();\n            // handle_tool_call dispatches immediately, not when its future is polled.\n            // Defer for post-model hooks or to cancel buffered calls during mailbox drains.\n            let tool_future: InFlightFuture<'static> = if ctx.defer_tool_dispatch {\n                Box::pin(async move {\n                    if cancellation_token.is_cancelled() {\n                        // The call is already in history; resume needs its output even if we never dispatch.\n                        let output =\n                            ToolCallRuntime::aborted_response(&call, /*elapsed_secs*/ None);\n                        return Ok(output.into_response());\n                    }\n                    runtime.handle_tool_call(call, cancellation_token).await\n                })\n            } else {\n                Box::pin(runtime.handle_tool_call(call, cancellation_token))\n            };\n\n            output.needs_follow_up = true;\n            output.tool_future = Some(tool_future);\n        }",
+      "excerpt_sha256": "69b2b4c15ecc69db3844a56ac19714718aec2398afbaf7bce1a2531a9a0d3be6",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/stream_events_utils.rs#L349-L405"
+    },
+    {
+      "id": "router",
+      "path": "codex-rs/core/src/tools/router.rs",
+      "start": 397,
+      "end": 434,
+      "sha256": "c178e5687c4a3b1e9fdd5f73076118cb9e17b3c61193fc001cc12b601ffe498a",
+      "excerpt": "    async fn dispatch_tool_call_with_code_mode_result_inner(\n        &self,\n        session: Arc<Session>,\n        step_context: Arc<StepContext>,\n        cancellation_token: CancellationToken,\n        tracker: SharedTurnDiffTracker,\n        call: ToolCall,\n        source: ToolCallSource,\n        call_state: Option<Arc<ToolCallState>>,\n    ) -> Result<AnyToolResult, FunctionCallError> {\n        let ToolCall {\n            tool_name,\n            call_id,\n            payload,\n            native_call,\n            ..\n        } = call;\n\n        // Keep the legacy ToolInvocation.turn field tied to the same request state until handlers migrate.\n        let turn = Arc::clone(&step_context.turn);\n        let invocation = ToolInvocation {\n            session,\n            turn,\n            step_context,\n            cancellation_token,\n            tracker,\n            call_id,\n            tool_name,\n            source,\n            payload,\n            native_call,\n            environments: Default::default(),\n        };\n\n        self.registry\n            .dispatch_any_with_state(invocation, call_state)\n            .await\n    }",
+      "excerpt_sha256": "875d7aad72cf589bbd543ecf0d6273fdc696a2d03bd8e2e42ab195ad645fab5c",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/router.rs#L397-L434"
+    },
+    {
+      "id": "parallel",
+      "path": "codex-rs/core/src/tools/parallel.rs",
+      "start": 277,
+      "end": 343,
+      "sha256": "fd7f4c38755eb13449e2bd1116b6e4d6acd221eb760aea8c1840bcaa8728131b",
+      "excerpt": "\n        let mut dispatch_handle = AbortOnDropHandle::new(tokio::spawn(\n            async move {\n                let _message_admission = message_admission?;\n                // Readiness and admission remain cancellable even when the handler must finish.\n                let (guard, admission_started) = async {\n                    if let Some(tool_runtime) = tool_runtime\n                        && let Some(readiness) = tool_runtime.wait_until_ready(&session)\n                    {\n                        readiness\n                            .instrument(trace_span!(\"tool_dispatch.wait_until_ready\"))\n                            .await;\n                    }\n\n                    let admission_started = Instant::now();\n                    let guard = if supports_parallel {\n                        Either::Left(\n                            lock.read()\n                                .instrument(trace_span!(\"tool_dispatch.parallel_lock\"))\n                                .await,\n                        )\n                    } else {\n                        Either::Right(\n                            lock.write()\n                                .instrument(trace_span!(\"tool_dispatch.exclusive_lock\"))\n                                .await,\n                        )\n                    };\n                    (guard, admission_started)\n                }\n                .or_cancel_tool(&invocation_cancellation_token)\n                .await?;\n                // Publish the completed path before releasing the admission lock,\n                // including when cancellation drops the handler future.\n                let _admitted_timing = work_timing.map(|(gate, work)| {\n                    gate.admit(\n                        work,\n                        if supports_parallel {\n                            ToolAdmission::Parallel\n                        } else {\n                            ToolAdmission::Exclusive\n                        },\n                        admission_started,\n                    )\n                });\n                // Admission through the parallel-execution gate marks the end\n                // of dispatch waiting and the start of handler execution.\n                if let Some(execution_started_at) = execution_started_at {\n                    let _ = execution_started_at.set(Instant::now());\n                }\n\n                let result = router\n                    .dispatch_tool_call_with_state(\n                        session,\n                        step_context,\n                        invocation_cancellation_token,\n                        tracker,\n                        dispatch_call,\n                        source,\n                        Arc::clone(&dispatch_call_state),\n                    )\n                    .await;\n                drop(_admitted_timing);\n                drop(guard);\n                // The sampling loop collects results in order only after its stream ends.\n                // Record readiness here, before either caller encodes or collects the result.\n                // A fatal error still propagates to the caller instead of producing a tool",
+      "excerpt_sha256": "0fed39ac0b6aa4bd1caae72b9887c8122b11d184734ad28e8c23fb7ea01ce4f6",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/parallel.rs#L277-L343"
+    },
+    {
+      "id": "encode",
+      "path": "codex-rs/core/src/tools/parallel.rs",
+      "start": 126,
+      "end": 145,
+      "sha256": "fd7f4c38755eb13449e2bd1116b6e4d6acd221eb760aea8c1840bcaa8728131b",
+      "excerpt": "        );\n        async move {\n            let result = future.await;\n            let mut recorded_call =\n                recorded_call.filter(|(_, recording)| recording.strong_count() > 0);\n            let mut response = match result {\n                Ok(result) => {\n                    if let Some((call, _)) = recorded_call.as_mut()\n                        && let Some(metadata) = result.result.tool_result_metadata()\n                    {\n                        call.set_tool_result_metadata(ToolResultMetadata::new(metadata));\n                    }\n                    result.into_response()\n                }\n                Err(FunctionCallError::Fatal(message)) => return Err(CodexErr::Fatal(message)),\n                Err(other) => {\n                    ResponseItemEnvelope::new(Self::failure_response(error_call, other).into())\n                }\n            };\n            if let Some(text) = call_state.delivered_assistant_message.get() {",
+      "excerpt_sha256": "db25fde1673f7b105e52ab85e315b109c87fc170212f7ff6481e38ec63976aad",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/parallel.rs#L126-L145"
+    },
+    {
+      "id": "shell",
+      "path": "codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs",
+      "start": 156,
+      "end": 181,
+      "sha256": "ee32477d7707300253ae33bf09e45680ef08b24ce576a6aac8be552a48cfd323",
+      "excerpt": "        };\n\n        let manager: &UnifiedExecProcessManager = &session.services.unified_exec_manager;\n        let context = UnifiedExecContext::new(\n            session.clone(),\n            step_context.clone(),\n            cancellation_token,\n            call_id.clone(),\n        );\n        let turn_environment = selected_executor(&environments, &step_context.environments)?;\n        let parsed =\n            ParsedExecCommand::parse(&arguments, &session, &step_context, turn_environment)?;\n        maybe_emit_implicit_skill_invocation(\n            &session,\n            &step_context,\n            &parsed.args.cmd,\n            &parsed.cwd,\n            parsed.native_cwd.as_ref(),\n            &turn_environment.selection.environment_id,\n        )\n        .await;\n        let prepared = parsed.prepare(self.lifetime)?;\n        let max_output_tokens = prepared.max_output_tokens;\n        let fs = prepared.turn_environment.environment().get_filesystem();\n        let intercepted_patch = intercept_apply_patch(\n            &prepared.resolved.command,",
+      "excerpt_sha256": "4b8bb0ce05d5aef43d54c9f09b1f6bdbafbbb41aaae2553d9fd3d0aa7a82e127",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs#L156-L181"
+    },
+    {
+      "id": "shell-call",
+      "path": "codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs",
+      "start": 225,
+      "end": 277,
+      "sha256": "ee32477d7707300253ae33bf09e45680ef08b24ce576a6aac8be552a48cfd323",
+      "excerpt": "        let tool_cwd =\n            (!prepared.turn_environment.environment().is_remote()).then(|| prepared.cwd.clone());\n        let request = ExecCommandRequest {\n            prepared,\n            process_id,\n            network: context.step_context.turn.network.clone(),\n        };\n        let result = match request.prepared.completion_timeout {\n            Some(timeout) => {\n                UnifiedExecProcessManager::exec_command_to_completion(request, &context, timeout)\n                    .await\n            }\n            None => manager.exec_command(request, &context).await,\n        };\n        match result {\n            Ok(response) => Ok(boxed_tool_output(response)),\n            Err(UnifiedExecError::SandboxDenied {\n                output,\n                original_token_count,\n                output_omitted_bytes,\n                ..\n            }) => {\n                let output_text = output.aggregated_output.text;\n                let original_token_count =\n                    original_token_count.unwrap_or_else(|| approx_token_count(&output_text));\n                Ok(boxed_tool_output(ExecCommandToolOutput {\n                    event_call_id: context.call_id.clone(),\n                    chunk_id: generate_chunk_id(),\n                    wall_time: output.duration,\n                    raw_output: CapturedStream {\n                        text: output_text,\n                        omitted_bytes: output_omitted_bytes.map_or(0, std::num::NonZeroUsize::get),\n                    },\n                    truncation_policy: step_context.settings.model_info.truncation_policy.into(),\n                    max_output_tokens,\n                    // Sandbox denial is terminal, so there is no live\n                    // process for write_stdin to resume.\n                    process_id: None,\n                    exit_code: Some(output.exit_code),\n                    original_token_count: Some(original_token_count),\n                    hook_command: Some(hook_command),\n                    tool_cwd,\n                }))\n            }\n            Err(err) => {\n                let message = format!(\"exec_command failed: {err:?}\");\n                Err(FunctionCallError::RespondToModel(truncate_middle_chars(\n                    &message,\n                    EXEC_COMMAND_REJECTION_MAX_BYTES,\n                )))\n            }\n        }\n    }",
+      "excerpt_sha256": "1c74956607e9d1e9c4b07cd919955f4083d42658709643f463d08b9827906764",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs#L225-L277"
+    },
+    {
+      "id": "resolve",
+      "path": "codex-rs/core/src/tools/handlers/unified_exec/preparation.rs",
+      "start": 217,
+      "end": 253,
+      "sha256": "3b881280c656a87dc50e319b34bb3c4246e6bb108dd4e58a29ea5398b4975a47",
+      "excerpt": "        // shell; fall back to the session shell when the environment did not report one.\n        let shell = turn_environment\n            .shell\n            .clone()\n            .map(Arc::new)\n            .unwrap_or_else(|| session.user_shell());\n        // TODO(anp): Resolve requested shells in remote environments instead of restricting\n        // commands to the reported default shell.\n        if turn_environment.environment().is_remote()\n            && let Some(requested_shell) = args.shell.take()\n        {\n            let Some(remote_shell) = turn_environment.shell.as_ref() else {\n                return Err(FunctionCallError::RespondToModel(format!(\n                    \"environment `{}` does not report a shell\",\n                    turn_environment.selection.environment_id\n                )));\n            };\n            if detect_shell_type(Path::new(&requested_shell)) != Some(remote_shell.shell_type) {\n                return Err(FunctionCallError::RespondToModel(format!(\n                    \"environment `{}` only supports `{}`\",\n                    turn_environment.selection.environment_id,\n                    remote_shell.name()\n                )));\n            }\n        }\n        let resolved_command =\n            get_command(&args, shell, turn_environment.config().allow_login_shell)\n                .map_err(FunctionCallError::RespondToModel)?;\n        let completion_timeout = match lifetime {\n            ExecCommandLifetime::Interactive => None,\n            ExecCommandLifetime::OneShot => {\n                args.tty = false;\n                Some(Duration::from_millis(\n                    args.timeout_ms.unwrap_or(DEFAULT_EXEC_COMMAND_TIMEOUT_MS),\n                ))\n            }\n        };",
+      "excerpt_sha256": "981b5cf309273d8c707816dc81d611b3f466ff530ea09b4c580f76d3b3d0f5e9",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/handlers/unified_exec/preparation.rs#L217-L253"
+    },
+    {
+      "id": "policy",
+      "path": "codex-rs/core/src/tools/handlers/unified_exec/preparation.rs",
+      "start": 63,
+      "end": 104,
+      "sha256": "3b881280c656a87dc50e319b34bb3c4246e6bb108dd4e58a29ea5398b4975a47",
+      "excerpt": "    pub(crate) async fn approval_requirement(\n        &self,\n        session: &Session,\n        step: &StepContext,\n    ) -> ExecApprovalRequirement {\n        let environment = &self.turn_environment;\n        let session_shell = session.user_shell();\n        let configured_shell = environment.shell.as_ref().unwrap_or(session_shell.as_ref());\n        // Legacy executors omit the platform. Unknown reported platforms use the\n        // more conservative Windows rules rather than silently weakening checks.\n        let command_platform = match environment.executor_platform_os.as_deref() {\n            Some(\"linux\" | \"macos\") => DangerousCommandPlatform::Posix,\n            Some(\"windows\") | Some(_) => DangerousCommandPlatform::Windows,\n            None => DangerousCommandPlatform::host(),\n        };\n        session\n            .services\n            .exec_policy\n            .create_exec_approval_requirement_for_shell(\n                ExecApprovalRequest {\n                    command: &self.resolved.command,\n                    approval_policy: step.settings.approval_policy(),\n                    permission_profile: environment.permission_profile().clone(),\n                    environment_policy: environment.config().exec_policy.as_ref(),\n                    windows_sandbox_level: windows_sandbox_level_for_legacy_checks(\n                        environment.config().windows_sandbox_type,\n                        environment.config().windows_sandbox_level,\n                    ),\n                    sandbox_permissions: if self.permissions.permissions_preapproved {\n                        SandboxPermissions::UseDefault\n                    } else {\n                        self.permissions.sandbox_permissions\n                    },\n                    prefix_rule: self.prefix_rule.clone(),\n                    allow_prefix_rules: step.turn.allow_prefix_rules(),\n                },\n                configured_shell,\n                command_platform,\n            )\n            .await\n    }\n",
+      "excerpt_sha256": "79025163434c21c292f797a1f1a980a97061d22f2d150a5f9c934d3b91473c90",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/handlers/unified_exec/preparation.rs#L63-L104"
+    },
+    {
+      "id": "orchestrate",
+      "path": "codex-rs/core/src/unified_exec/process_manager.rs",
+      "start": 1517,
+      "end": 1564,
+      "sha256": "f508ea718ea664e6e124d625f5d404f231f38d9da360dc6bfcc188d3324f455a",
+      "excerpt": "        let mut orchestrator = ToolOrchestrator::new();\n        let mut runtime = UnifiedExecRuntime::new(self);\n        let exec_approval_requirement = prepared\n            .approval_requirement(&context.session, &context.step_context)\n            .await;\n        let req = UnifiedExecToolRequest {\n            prepared,\n            process_id: request.process_id,\n            env,\n            exec_server_env_config: Some(exec_server_env_config),\n            shell_snapshot,\n            explicit_env_overrides,\n            network: request.network.clone(),\n            exec_approval_requirement,\n        };\n        let tool_ctx = ToolCtx {\n            session: context.session.clone(),\n            step_context: Arc::clone(&context.step_context),\n            cancellation_token: context.cancellation_token.clone(),\n            call_id: context.call_id.clone(),\n            tool_name: ToolName::plain(\"exec_command\"),\n        };\n        let result = orchestrator\n            .run(&mut runtime, &req, &tool_ctx)\n            .await\n            .map(|result| (result.output, result.deferred_network_approval))\n            .map_err(|err| match err {\n                ToolError::Codex(err) => match err.details() {\n                    CodexErrorDetails::Sandbox(SandboxErr::Denied { output, .. }) => {\n                        let output = output.as_ref().clone();\n                        let message = if output.aggregated_output.text.is_empty() {\n                            let exit_code = output.exit_code;\n                            format!(\"Process exited with code {exit_code}\")\n                        } else {\n                            output.aggregated_output.text.clone()\n                        };\n                        UnifiedExecError::sandbox_denied(message, output)\n                    }\n                    _ => UnifiedExecError::create_process(format!(\"{err:?}\")),\n                },\n                other => UnifiedExecError::create_process(format!(\"{other:?}\")),\n            });\n        let outcome = match &result {\n            Ok(_) => \"completed\",\n            Err(_) if context.cancellation_token.is_cancelled() => \"cancelled\",\n            Err(_) => \"failed\",\n        };\n        tracing::Span::current().record(\"outcome\", outcome);",
+      "excerpt_sha256": "e3f75a23ebc474bf33f5dee64f06922724e5d08f0979261abc7a5b60115b9276",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/unified_exec/process_manager.rs#L1517-L1564"
+    },
+    {
+      "id": "approval-gate",
+      "path": "codex-rs/core/src/tools/orchestrator.rs",
+      "start": 157,
+      "end": 234,
+      "sha256": "4271c0dfa8dc98faf1106c5ecbec839d0c762e603414850509165441a5f495e2",
+      "excerpt": "        let permissions = if executor_managed_process_sandbox {\n            // Executor-native roots remain symbolic until the executor applies its own sandbox.\n            permission_profile.clone()\n        } else {\n            environment.permission_profile_with_workspace_roots()\n        };\n        let file_system_sandbox_policy = permissions.file_system_sandbox_policy();\n        let requirement = tool.exec_approval_requirement(req).unwrap_or_else(|| {\n            default_exec_approval_requirement(approval_policy, &file_system_sandbox_policy)\n        });\n        let human_once = matches!(\n            requirement,\n            ExecApprovalRequirement::NeedsHumanApproval { .. }\n        );\n        match &requirement {\n            ExecApprovalRequirement::Skip { .. } => {\n                if strict_auto_review {\n                    let action = tool\n                        .approval_action(req, &tool_ctx.call_id)\n                        .map_err(|err| {\n                            ToolError::Rejected(format!(\"could not prepare approval action: {err}\"))\n                        })?;\n                    let approval_ctx = ApprovalContext {\n                        exec_requirement: Some(requirement.clone()),\n                        review_context: GuardianReviewContext::from(&tool_ctx.step_context),\n                        cancellation_token: Some(tool_ctx.cancellation_token.clone()),\n                        call_id: tool_ctx.call_id.clone(),\n                        tool_name: tool_ctx.tool_name.clone(),\n                        strict_auto_review,\n                        approval_reason: None,\n                        retry_reason: None,\n                        network_approval_context: None,\n                    };\n                    let approval = tool_ctx\n                        .session\n                        .request_approval(action, approval_ctx)\n                        .await;\n                    approval.result?;\n                    initial_approval_source = approval.source;\n                } else {\n                    otel.tool_decision(\n                        &tool_ctx.tool_name,\n                        otel_ci,\n                        &ReviewDecision::Approved,\n                        Some(ToolDecisionSource::Config),\n                    );\n                }\n            }\n            ExecApprovalRequirement::Forbidden { reason } => {\n                return Err(ToolError::Rejected(reason.clone()));\n            }\n            ExecApprovalRequirement::NeedsApproval { reason, .. }\n            | ExecApprovalRequirement::NeedsHumanApproval { reason } => {\n                let action = tool\n                    .approval_action(req, &tool_ctx.call_id)\n                    .map_err(|err| {\n                        ToolError::Rejected(format!(\"could not prepare approval action: {err}\"))\n                    })?;\n                let approval_ctx = ApprovalContext {\n                    exec_requirement: Some(requirement.clone()),\n                    review_context: GuardianReviewContext::from(&tool_ctx.step_context),\n                    cancellation_token: Some(tool_ctx.cancellation_token.clone()),\n                    call_id: tool_ctx.call_id.clone(),\n                    tool_name: tool_ctx.tool_name.clone(),\n                    strict_auto_review,\n                    approval_reason: reason.clone(),\n                    retry_reason: None,\n                    network_approval_context: None,\n                };\n                let approval = tool_ctx\n                    .session\n                    .request_approval(action, approval_ctx)\n                    .await;\n                approval.result?;\n                initial_approval_source = approval.source;\n            }\n        }\n",
+      "excerpt_sha256": "d61f8585972573a042bc325cd2836e111bac25e613fdfdf3b8e3eb5c2ce59aeb",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/orchestrator.rs#L157-L234"
+    },
+    {
+      "id": "sandbox",
+      "path": "codex-rs/core/src/tools/orchestrator.rs",
+      "start": 359,
+      "end": 437,
+      "sha256": "4271c0dfa8dc98faf1106c5ecbec839d0c762e603414850509165441a5f495e2",
+      "excerpt": "            ensure_native_sandbox(sandbox_override, initial_sandbox)?;\n        }\n\n        let sandbox_policy_cwd = tool\n            .sandbox_cwd(req)\n            .cloned()\n            .unwrap_or_else(|| environment.cwd().clone());\n        let codex_sandbox_exe = if cfg!(windows) {\n            turn_ctx.config.codex_self_exe.as_ref()\n        } else {\n            turn_ctx.config.codex_linux_sandbox_exe.as_ref()\n        };\n        let initial_attempt = SandboxAttempt {\n            sandbox_override,\n            sandbox: initial_sandbox,\n            sandbox_requested,\n            permissions: initial_permissions,\n            exec_server_permissions: escalated_profile.as_ref().unwrap_or(permission_profile),\n            enforce_managed_network: managed_network_active,\n            manager: &sandbox_manager,\n            sandbox_cwd: &sandbox_policy_cwd,\n            workspace_roots,\n            sandbox_exe: codex_sandbox_exe,\n            use_legacy_landlock: sandbox_config.use_legacy_landlock,\n            windows_sandbox_type,\n            windows_sandbox_level: sandbox_config.windows_sandbox_level,\n            network_denial_cancellation_token: None,\n            network_proxy: None,\n        };\n\n        let initial_attempt_start = Instant::now();\n        let (first_result, first_deferred_network_approval) =\n            Self::run_attempt(tool, req, tool_ctx, &initial_attempt, network_approval_spec).await;\n        let initial_duration = initial_attempt_start.elapsed();\n        match first_result {\n            Ok(out) => {\n                // We have a successful initial result\n                Ok(OrchestratorRunResult {\n                    output: out,\n                    deferred_network_approval: first_deferred_network_approval,\n                })\n            }\n            Err(ToolError::Codex(err)) => {\n                let CodexErrorDetails::Sandbox(SandboxErr::Denied {\n                    output,\n                    network_policy_decision,\n                }) = err.details()\n                else {\n                    let err = ToolError::Codex(err);\n                    if let Some(outcome) = sandbox_outcome_from_tool_error(&err) {\n                        otel.sandbox_outcome(\n                            &otel_tn,\n                            otel_ci,\n                            outcome,\n                            initial_duration,\n                            /*escalated_duration*/ None,\n                        );\n                    }\n                    return Err(err);\n                };\n                let network_approval_context = if managed_network_active {\n                    network_policy_decision\n                        .as_ref()\n                        .and_then(network_approval_context_from_payload)\n                } else {\n                    None\n                };\n                if network_policy_decision.is_some() && network_approval_context.is_none() {\n                    otel.sandbox_outcome(\n                        &otel_tn,\n                        otel_ci,\n                        \"denied\",\n                        initial_duration,\n                        /*escalated_duration*/ None,\n                    );\n                    return Err(ToolError::Codex(err));\n                }\n                if !tool.escalate_on_failure() {\n                    otel.sandbox_outcome(",
+      "excerpt_sha256": "6b4e6ade681ca2ebba4b176dd51f083f85863653d30e9fcab2e925eb3c656f3e",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/orchestrator.rs#L359-L437"
+    },
+    {
+      "id": "denial",
+      "path": "codex-rs/core/src/tools/orchestrator.rs",
+      "start": 446,
+      "end": 520,
+      "sha256": "4271c0dfa8dc98faf1106c5ecbec839d0c762e603414850509165441a5f495e2",
+      "excerpt": "                // Under `Never` or `OnRequest`, do not retry without sandbox;\n                // surface a concise sandbox denial that preserves the\n                // original output.\n                if !tool.wants_no_sandbox_approval(approval_policy) {\n                    let allow_on_request_network_prompt =\n                        matches!(approval_policy, AskForApproval::OnRequest)\n                            && network_approval_context.is_some()\n                            && matches!(\n                                default_exec_approval_requirement(\n                                    approval_policy,\n                                    &file_system_sandbox_policy\n                                ),\n                                ExecApprovalRequirement::NeedsApproval { .. }\n                            );\n                    if !allow_on_request_network_prompt {\n                        otel.sandbox_outcome(\n                            &otel_tn,\n                            otel_ci,\n                            \"denied\",\n                            initial_duration,\n                            /*escalated_duration*/ None,\n                        );\n                        return Err(ToolError::Codex(err));\n                    }\n                }\n                if !unsandboxed_allowed && network_approval_context.is_none() {\n                    otel.sandbox_outcome(\n                        &otel_tn,\n                        otel_ci,\n                        \"denied\",\n                        initial_duration,\n                        /*escalated_duration*/ None,\n                    );\n                    return Err(ToolError::Codex(err));\n                }\n                let retry_reason =\n                    if let Some(network_approval_context) = network_approval_context.as_ref() {\n                        format!(\n                            \"Network access to \\\"{}\\\" is blocked by policy.\",\n                            network_approval_context.host\n                        )\n                    } else {\n                        build_denial_reason_from_output(output.as_ref())\n                    };\n\n                // Human and policy approvals keep their existing retry scope. A\n                // Guardian verdict only covers the authority of the reviewed action.\n                let retry_preapproved = !human_once\n                    && matches!(\n                        initial_approval_source,\n                        Some(ApprovalResolutionSource::User | ApprovalResolutionSource::Hook)\n                    );\n                let bypass_retry_approval = !human_once\n                    && !strict_auto_review\n                    && tool.should_bypass_approval(approval_policy, retry_preapproved)\n                    && network_approval_context.is_none();\n                if !bypass_retry_approval {\n                    let approval_reason = match &requirement {\n                        ExecApprovalRequirement::NeedsApproval { reason, .. }\n                        | ExecApprovalRequirement::NeedsHumanApproval { reason } => reason.clone(),\n                        ExecApprovalRequirement::Skip { .. }\n                        | ExecApprovalRequirement::Forbidden { .. } => None,\n                    };\n                    let mut action =\n                        tool.approval_action(req, &tool_ctx.call_id)\n                            .map_err(|err| {\n                                ToolError::Rejected(format!(\n                                    \"could not prepare approval action: {err}\"\n                                ))\n                            })?;\n                    if unsandboxed_allowed\n                        && let ApprovalAction::ExecCommand {\n                            sandbox_permissions,\n                            additional_permissions,\n                            ..",
+      "excerpt_sha256": "76c799cbedee2408de62f3b9c5305eced87fc51f1c1797a2b666ad5f6c99bfe2",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/orchestrator.rs#L446-L520"
+    },
+    {
+      "id": "retry-review",
+      "path": "codex-rs/core/src/tools/orchestrator.rs",
+      "start": 521,
+      "end": 555,
+      "sha256": "4271c0dfa8dc98faf1106c5ecbec839d0c762e603414850509165441a5f495e2",
+      "excerpt": "                        } = &mut action\n                    {\n                        // Review and cache the authority of the actual retry, not\n                        // the narrower permissions requested for the first attempt.\n                        *sandbox_permissions = SandboxPermissions::RequireEscalated;\n                        *additional_permissions = None;\n                    }\n                    let approval_ctx = ApprovalContext {\n                        exec_requirement: Some(requirement.clone()),\n                        review_context: GuardianReviewContext::from(&tool_ctx.step_context),\n                        cancellation_token: Some(tool_ctx.cancellation_token.clone()),\n                        call_id: tool_ctx.call_id.clone(),\n                        tool_name: tool_ctx.tool_name.clone(),\n                        strict_auto_review,\n                        approval_reason,\n                        retry_reason: Some(retry_reason),\n                        network_approval_context: network_approval_context.clone(),\n                    };\n\n                    if human_once && network_approval_context.is_some() {\n                        let mut network_ctx = approval_ctx.clone();\n                        network_ctx.exec_requirement = None;\n                        tool_ctx\n                            .session\n                            .request_approval(action.clone(), network_ctx)\n                            .await\n                            .result?;\n                    }\n                    tool_ctx\n                        .session\n                        .request_approval(action, approval_ctx)\n                        .await\n                        .result?;\n                }\n",
+      "excerpt_sha256": "eda41dc933562dce5bfa7514b9c5b978de089730ad91e7a3ac8f693a900f1388",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/orchestrator.rs#L521-L555"
+    },
+    {
+      "id": "retry",
+      "path": "codex-rs/core/src/tools/orchestrator.rs",
+      "start": 557,
+      "end": 645,
+      "sha256": "4271c0dfa8dc98faf1106c5ecbec839d0c762e603414850509165441a5f495e2",
+      "excerpt": "                    && sandbox_manager.should_sandbox(\n                        initial_permissions,\n                        sandbox_preference,\n                        managed_network_active,\n                    );\n                let retry_sandbox = if retry_sandbox_requested && !executor_managed_process_sandbox\n                {\n                    sandbox_manager.select_initial(\n                        initial_permissions,\n                        sandbox_preference,\n                        windows_sandbox_type,\n                        managed_network_active,\n                    )\n                } else {\n                    SandboxType::None\n                };\n                let retry_sandbox_exe = if unsandboxed_allowed {\n                    None\n                } else {\n                    codex_sandbox_exe\n                };\n                let retry_attempt = SandboxAttempt {\n                    sandbox_override,\n                    sandbox: retry_sandbox,\n                    sandbox_requested: retry_sandbox_requested,\n                    permissions: initial_permissions,\n                    exec_server_permissions: escalated_profile\n                        .as_ref()\n                        .unwrap_or(permission_profile),\n                    enforce_managed_network: managed_network_active,\n                    manager: &sandbox_manager,\n                    sandbox_cwd: &sandbox_policy_cwd,\n                    workspace_roots,\n                    sandbox_exe: retry_sandbox_exe,\n                    use_legacy_landlock: sandbox_config.use_legacy_landlock,\n                    windows_sandbox_type,\n                    windows_sandbox_level: sandbox_config.windows_sandbox_level,\n                    network_denial_cancellation_token: None,\n                    network_proxy: None,\n                };\n\n                // Second attempt.\n                let network_approval_spec = tool.network_approval_spec(req, tool_ctx);\n                let escalated_attempt_start = Instant::now();\n                let (retry_result, retry_deferred_network_approval) =\n                    Self::run_attempt(tool, req, tool_ctx, &retry_attempt, network_approval_spec)\n                        .await;\n                let escalated_duration = escalated_attempt_start.elapsed();\n                match retry_result {\n                    Ok(output) => {\n                        otel.sandbox_outcome(\n                            &otel_tn,\n                            otel_ci,\n                            \"escalated\",\n                            initial_duration,\n                            Some(escalated_duration),\n                        );\n                        Ok(OrchestratorRunResult {\n                            output,\n                            deferred_network_approval: retry_deferred_network_approval,\n                        })\n                    }\n                    Err(err) => {\n                        if let Some(outcome) = sandbox_outcome_from_tool_error(&err) {\n                            otel.sandbox_outcome(\n                                &otel_tn,\n                                otel_ci,\n                                outcome,\n                                initial_duration,\n                                Some(escalated_duration),\n                            );\n                        }\n                        Err(err)\n                    }\n                }\n            }\n            Err(err) => {\n                if let Some(outcome) = sandbox_outcome_from_tool_error(&err) {\n                    otel.sandbox_outcome(\n                        &otel_tn,\n                        otel_ci,\n                        outcome,\n                        initial_duration,\n                        /*escalated_duration*/ None,\n                    );\n                }\n                Err(err)\n            }\n        }",
+      "excerpt_sha256": "65c7606ff9327a71611d79a685c0b9140a1872feb9afff3febe727e252d8fdde",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/orchestrator.rs#L557-L645"
+    },
+    {
+      "id": "review",
+      "path": "codex-rs/core/src/tools/approvals.rs",
+      "start": 598,
+      "end": 625,
+      "sha256": "c1dc1fc966df0e61df3235527f26b7f1859cfe55b648a4cf94d55a8bf2c81b62",
+      "excerpt": "        // Hook denials always win. Managed checkpoints require a person even\n        // when a hook allows the action or the session uses automatic review.\n        let mut resolution = match run_permission_request_hooks(\n            self,\n            &ctx.review_context,\n            &permission_request_run_id,\n            action.permission_request_payload(),\n            action.hook_environment_id(),\n        )\n        .await\n        {\n            Some(PermissionRequestDecision::Allow) if !ctx.requires_human_approval() => {\n                ApprovalResolution {\n                    decision: ReviewDecision::Approved,\n                    source: ApprovalResolutionSource::Hook,\n                    cancellation_reason: None,\n                }\n            }\n            Some(PermissionRequestDecision::Deny { message }) => ApprovalResolution {\n                decision: ReviewDecision::denied(message),\n                source: ApprovalResolutionSource::Hook,\n                cancellation_reason: None,\n            },\n            Some(PermissionRequestDecision::Allow) | None => {\n                self.request_reviewer_approval(action, ctx, user_prompt)\n                    .await\n            }\n        };",
+      "excerpt_sha256": "daeb3fb495709a68274670f63471fe329fab987875715f31aa6888587b0d9e7c",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/approvals.rs#L598-L625"
+    },
+    {
+      "id": "reviewer",
+      "path": "codex-rs/core/src/tools/approvals.rs",
+      "start": 685,
+      "end": 704,
+      "sha256": "c1dc1fc966df0e61df3235527f26b7f1859cfe55b648a4cf94d55a8bf2c81b62",
+      "excerpt": "    async fn request_reviewer_approval(\n        self: &Arc<Self>,\n        action: &ApprovalAction,\n        ctx: &ApprovalContext,\n        user_prompt: impl Future<Output = ApprovalResolution>,\n    ) -> ApprovalResolution {\n        if ctx.requires_human_approval() {\n            user_prompt.await\n        } else if let Some(decision) = self.request_guardian_approval(action.clone(), ctx).await {\n            ApprovalResolution {\n                cancellation_reason: (decision == ReviewDecision::Abort)\n                    .then_some(McpApprovalCancellationReason::Interrupted),\n                decision,\n                source: ApprovalResolutionSource::Guardian,\n            }\n        } else {\n            user_prompt.await\n        }\n    }\n",
+      "excerpt_sha256": "248511b543b054b53af5aea3757b41251d151ee041dfa196cc33645eb048d429",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/approvals.rs#L685-L704"
+    },
+    {
+      "id": "verdict",
+      "path": "codex-rs/core/src/tools/approvals.rs",
+      "start": 489,
+      "end": 520,
+      "sha256": "c1dc1fc966df0e61df3235527f26b7f1859cfe55b648a4cf94d55a8bf2c81b62",
+      "excerpt": "    fn into_tool_result(self, model_info: &ModelInfo) -> Result<ReviewDecision, ToolError> {\n        let source = self.source;\n        match self.decision {\n            ReviewDecision::ApprovedMcpPolicyAmendment => {\n                error!(\"Tool approval received ApprovedMcpPolicyAmendment\");\n                Err(ToolError::Rejected(\n                    \"Error while requesting approval\".to_string(),\n                ))\n            }\n            ReviewDecision::NetworkPolicyAmendment {\n                network_policy_amendment,\n            } if network_policy_amendment.action == NetworkPolicyRuleAction::Deny => {\n                let rejection = match source {\n                    ApprovalResolutionSource::Hook => \"rejected by configuration\",\n                    ApprovalResolutionSource::Guardian => {\n                        \"automatic approval review denied the action\"\n                    }\n                    ApprovalResolutionSource::User => \"rejected by user\",\n                };\n                Err(ToolError::Rejected(rejection.to_string()))\n            }\n            ReviewDecision::Denied { rejection } => Err(ToolError::Rejected(rejection)),\n            ReviewDecision::TimedOut => Err(ToolError::Rejected(\n                ResolvedModelMessages::from_model(model_info)\n                    .auto_review()\n                    .timeout_instructions\n                    .to_string(),\n            )),\n            ReviewDecision::Abort => Err(ToolError::Codex(CodexErr::TurnAborted)),\n            decision => Ok(decision),\n        }\n    }",
+      "excerpt_sha256": "59f390c0758d83eacbc44afbf7bdc035f954573ee559523bc0cfa8848dc8d123",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/approvals.rs#L489-L520"
+    },
+    {
+      "id": "launch",
+      "path": "codex-rs/core/src/tools/runtimes/unified_exec.rs",
+      "start": 615,
+      "end": 648,
+      "sha256": "728e9695f814cbee56366f83f8867a5ef2a0293209e5a450510c81b84b118932",
+      "excerpt": "\n        let command = build_unified_exec_sandbox_command(\n            &command,\n            &prepared.cwd,\n            &env,\n            managed_network_context,\n            additional_permissions,\n        )\n        .map_err(|error| match error {\n            ToolError::Rejected(_) => {\n                ToolError::Rejected(\"missing command line for PTY\".to_string())\n            }\n            error @ ToolError::Codex(_) => error,\n        })?;\n        let options = unified_exec_options(attempt.network_denial_cancellation_token.clone());\n        let process = self\n            .manager\n            .open_session_with_exec_env(\n                req.process_id,\n                ctx,\n                command,\n                options,\n                attempt,\n                managed_network,\n                network_proxy_launch,\n                /*environment_id*/ Some(&prepared.turn_environment.selection.environment_id),\n                req.exec_server_env_config.clone(),\n                req.shell_snapshot.clone(),\n                windows_sandbox_proxy_settings_mode,\n                prepared.tty,\n                prepared.turn_environment.environment().as_ref(),\n            )\n            .await;\n        let mut process = with_launch_failure_events(process, prepared, ctx).await?;",
+      "excerpt_sha256": "858616d23edd7102bcf79eca1969d2f3f4de6c1327e2886577dc111e5c4ab177",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/tools/runtimes/unified_exec.rs#L615-L648"
+    },
+    {
+      "id": "environment",
+      "path": "codex-rs/core/src/unified_exec/process_manager.rs",
+      "start": 1324,
+      "end": 1363,
+      "sha256": "f508ea718ea664e6e124d625f5d404f231f38d9da360dc6bfcc188d3324f455a",
+      "excerpt": "    ) -> Result<UnifiedExecProcess, ToolError> {\n        let mut request = if environment.is_remote() || shell_snapshot.is_some() {\n            attempt.env_for_exec_server(command, options).await\n        } else {\n            attempt\n                .env_for(command, options, network, environment_id)\n                .await\n        }\n        .map_err(ToolError::Codex)?;\n        let network_policy_decider = network_proxy_launch\n            .as_ref()\n            .filter(|launch| launch.policy_decision_timeout_ms.is_some())\n            .and_then(|launch| network?.remote_policy_decider(launch.proxy.allow_local_binding));\n        if environment.is_remote() && network.is_some() && network_proxy_launch.is_none() {\n            request.exec_server_enforce_managed_network = false;\n        }\n        request.exec_server_network_proxy = network_proxy_launch;\n        request.exec_server_env_config = exec_server_env_config;\n        request.exec_server_shell_snapshot = shell_snapshot;\n        self.open_session_with_prepared_exec_env(\n            process_id,\n            &request,\n            Some(tool_ctx),\n            windows_sandbox_proxy_settings_mode,\n            network_policy_decider,\n            tty,\n            environment,\n        )\n        .await\n        .map_err(|err| match err {\n            UnifiedExecError::SandboxDenied { output, .. } => {\n                ToolError::Codex(CodexErr::Sandbox(SandboxErr::Denied {\n                    output: Box::new(output),\n                    network_policy_decision: None,\n                }))\n            }\n            other => ToolError::Rejected(other.to_string()),\n        })\n    }\n",
+      "excerpt_sha256": "68a38fccb0a03e0db6d37a407d00810b1d81e01a1837e660d4a83403738a4ed3",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/unified_exec/process_manager.rs#L1324-L1363"
+    },
+    {
+      "id": "backend",
+      "path": "codex-rs/core/src/unified_exec/process_manager.rs",
+      "start": 1370,
+      "end": 1410,
+      "sha256": "f508ea718ea664e6e124d625f5d404f231f38d9da360dc6bfcc188d3324f455a",
+      "excerpt": "        windows_sandbox_proxy_settings_mode: codex_sandboxing::WindowsSandboxProxySettingsMode,\n        network_policy_decider: Option<Arc<dyn NetworkPolicyDecider>>,\n        tty: bool,\n        environment: &codex_exec_server::Environment,\n    ) -> Result<UnifiedExecProcess, UnifiedExecError> {\n        if environment.is_remote() || request.exec_server_shell_snapshot.is_some() {\n            let backend = environment.get_exec_backend();\n            let params = exec_server_params_for_request(\n                process_id,\n                request,\n                tool_ctx,\n                windows_sandbox_proxy_settings_mode,\n                tty,\n            );\n            // Sandbox retries can reuse the public ID for a new executor process.\n            tracing::event!(\n                name: \"codex.unified_exec.process_start_requested\",\n                target: \"codex_otel.trace_safe\",\n                tracing::Level::INFO,\n                event.name = \"codex.unified_exec.process_start_requested\",\n                unified_exec_process_id = process_id,\n                process.id = params.process_id.as_str(),\n            );\n            let started = match network_policy_decider {\n                Some(decider) => {\n                    backend\n                        .start_with_network_policy_decider(params, decider)\n                        .await\n                }\n                None => backend.start(params).await,\n            }\n            .map_err(|err| UnifiedExecError::create_process(err.to_string()))?;\n            let output_drain_policy = if environment.is_remote() {\n                OutputDrainPolicy::WaitForOutputClosure\n            } else {\n                OutputDrainPolicy::BoundedAfterExit\n            };\n            return UnifiedExecProcess::from_exec_server_started(started, output_drain_policy)\n                .await;\n        }\n",
+      "excerpt_sha256": "3132860cb1361ab22bff068d0199f6912ad21367219c7b9c194d2a485b0283de",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/unified_exec/process_manager.rs#L1370-L1410"
+    },
+    {
+      "id": "spawn",
+      "path": "codex-rs/core/src/unified_exec/process_manager.rs",
+      "start": 1465,
+      "end": 1480,
+      "sha256": "f508ea718ea664e6e124d625f5d404f231f38d9da360dc6bfcc188d3324f455a",
+      "excerpt": "        let spawn_result = codex_sandboxing::spawn_process(codex_sandboxing::SpawnRequest {\n            command: &request.command,\n            cwd: native_cwd.as_path(),\n            env: &request.env,\n            arg0: &request.arg0,\n            sandbox: request.sandbox,\n            windows_sandbox,\n            tty,\n            stdin_open: tty,\n            inherited_fds: codex_utils_pty::ChildFds::Inherited(&[]),\n        })\n        .await;\n        let spawned =\n            spawn_result.map_err(|err| UnifiedExecError::create_process(err.to_string()))?;\n        UnifiedExecProcess::from_spawned(spawned, request.sandbox).await\n    }",
+      "excerpt_sha256": "b021a725d441a7e344c9d4c94d8bdea8b35e232ec7249babb2cc44f445891468",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/unified_exec/process_manager.rs#L1465-L1480"
+    },
+    {
+      "id": "collect",
+      "path": "codex-rs/core/src/unified_exec/process_manager.rs",
+      "start": 650,
+      "end": 681,
+      "sha256": "f508ea718ea664e6e124d625f5d404f231f38d9da360dc6bfcc188d3324f455a",
+      "excerpt": "        let yield_time_ms = clamp_yield_time(prepared.yield_time_ms);\n        // For the initial exec_command call, we both stream output to events\n        // (via start_streaming_output above) and collect a snapshot here for\n        // the tool response body.\n        let wait = completion.as_ref().map_or_else(\n            || Duration::from_millis(yield_time_ms),\n            |completion| completion.timeout,\n        );\n        let deadline = start\n            .checked_add(wait)\n            .ok_or_else(|| UnifiedExecError::process_failed(\"timeout_ms is too large\".into()))?;\n        let collected_output = Self::collect_output_until_deadline(\n            process.output_handles(),\n            Some(context.session.subscribe_elicitation_pause_state()),\n            deadline,\n        )\n        .await;\n        if let Some(completion) = completion.as_mut()\n            && !process.has_exited()\n        {\n            completion.timed_out = true;\n            process.mark_timed_out();\n            if let Err(err) = process.terminate_confirmed().await {\n                process.fail_and_terminate(err.to_string());\n            }\n        }\n        let wall_time = Instant::now().saturating_duration_since(start);\n\n        let original_token_count = usize::try_from(approx_tokens_from_byte_count(\n            collected_output.total_bytes(),\n        ))\n        .unwrap_or(usize::MAX);",
+      "excerpt_sha256": "70ae1868067d6c6183401f1e114406d333ce241988aa04e28901474fac99c886",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/unified_exec/process_manager.rs#L650-L681"
+    },
+    {
+      "id": "exit",
+      "path": "codex-rs/core/src/unified_exec/process_manager.rs",
+      "start": 845,
+      "end": 873,
+      "sha256": "f508ea718ea664e6e124d625f5d404f231f38d9da360dc6bfcc188d3324f455a",
+      "excerpt": "            process\n                .check_for_sandbox_denial_with_text(&text)\n                .await\n                .map_err(|err| {\n                    err.with_output_collection_metadata(original_token_count, output_omitted_bytes)\n                })?;\n            (None, exit_code)\n        };\n\n        let response = ExecCommandToolOutput {\n            event_call_id: context.call_id.clone(),\n            chunk_id,\n            wall_time,\n            raw_output: collected,\n            truncation_policy: context\n                .step_context\n                .settings\n                .model_info\n                .truncation_policy\n                .into(),\n            max_output_tokens: prepared.max_output_tokens,\n            process_id: response_process_id,\n            exit_code,\n            original_token_count: Some(original_token_count),\n            hook_command: Some(prepared.hook_command.clone()),\n            tool_cwd: (!prepared.turn_environment.environment().is_remote())\n                .then(|| prepared.cwd.clone()),\n        };\n",
+      "excerpt_sha256": "f99641dc468f39cebeff5762f8931c201a62e78fae26cfa5aee1e34f072f2540",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/unified_exec/process_manager.rs#L845-L873"
+    },
+    {
+      "id": "drain",
+      "path": "codex-rs/core/src/session/turn.rs",
+      "start": 2850,
+      "end": 2879,
+      "sha256": "88d0e5715f3360944e90c9e1b413ce73a43787dbb0a4933616f9f7791f37ca14",
+      "excerpt": "async fn drain_in_flight(\n    in_flight: &mut FuturesOrdered<InFlightFuture<'static>>,\n    sess: Arc<Session>,\n    step_context: &StepContext,\n) -> CodexResult<()> {\n    let turn_context = &step_context.turn;\n    while let Some(res) = in_flight.next().await {\n        match res {\n            Ok(envelope) => {\n                mark_thread_memory_mode_polluted_if_external_context(\n                    sess.as_ref(),\n                    turn_context.as_ref(),\n                    &envelope.item,\n                )\n                .await;\n                sess.record_annotated_conversation_items(\n                    turn_context,\n                    &step_context.settings.model_info,\n                    vec![envelope],\n                )\n                .await;\n            }\n            Err(err) => {\n                error_or_panic(format!(\"in-flight tool future failed during drain: {err}\"));\n            }\n        }\n    }\n    Ok(())\n}\n",
+      "excerpt_sha256": "011f2d7fa1bb2bf3c07550f3b5fae2ba68829570b504c79f8ec8dce348d29422",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/session/turn.rs#L2850-L2879"
+    },
+    {
+      "id": "wait",
+      "path": "codex-rs/core/src/session/turn.rs",
+      "start": 3789,
+      "end": 3800,
+      "sha256": "88d0e5715f3360944e90c9e1b413ce73a43787dbb0a4933616f9f7791f37ca14",
+      "excerpt": "    if !in_flight.is_empty() {\n        let _tool_blocking_timing_guard = turn_context\n            .turn_timing_state\n            .begin_tool_blocking(tool_runtime.batch_timing());\n        let _tool_blocking_span = trace_span!(\n            \"codex.tool_blocking\",\n            codex.turn.phase = \"tool_blocking\",\n            conversation.id = %sess.thread_id,\n            turn.id = %turn_context.sub_id,\n        );\n        drain_in_flight(&mut in_flight, sess.clone(), &step_context).await?;\n    }",
+      "excerpt_sha256": "4908539ffe2c1a73a2e9172a485c00e96d6b7f5887d97048579b83e9b1a66007",
+      "revision": "commit",
+      "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+      "url": "https://github.com/openai/codex/blob/33b3f80a0935e51a49cbbda7d6473ef757d4241b/codex-rs/core/src/session/turn.rs#L3789-L3800"
+    }
+  ],
+  "steps": [
+    {
+      "id": "prepare",
+      "title": "Prepare the command",
+      "description": "Resolve the shell and working directory, then derive command policy requirements.",
+      "node_ids": [
+        "dispatch",
+        "shell"
+      ],
+      "edge_ids": [
+        "exec"
+      ],
+      "source_ids": [
+        "classify",
+        "parallel",
+        "policy",
+        "resolve",
+        "router",
+        "shell"
+      ],
+      "duration_ms": 2400,
+      "evidence": "source"
+    },
+    {
+      "id": "policy",
+      "title": "Apply command policy",
+      "description": "The gate rejects forbidden actions and resolves any required approval.",
+      "node_ids": [
+        "shell",
+        "gate"
+      ],
+      "edge_ids": [
+        "requirements"
+      ],
+      "source_ids": [
+        "approval-gate",
+        "denial",
+        "orchestrate",
+        "policy",
+        "resolve",
+        "retry",
+        "sandbox",
+        "shell"
+      ],
+      "duration_ms": 2400,
+      "evidence": "source"
+    },
+    {
+      "id": "review",
+      "title": "Review when required",
+      "description": "Hooks, a human or Guardian can provide an approval, rejection or abort.",
+      "node_ids": [
+        "gate",
+        "review"
+      ],
+      "edge_ids": [
+        "ask",
+        "verdict"
+      ],
+      "source_ids": [
+        "approval-gate",
+        "denial",
+        "retry",
+        "retry-review",
+        "review",
+        "reviewer",
+        "sandbox",
+        "verdict"
+      ],
+      "duration_ms": 2400,
+      "evidence": "source"
+    },
+    {
+      "id": "attempt",
+      "title": "Select the sandbox",
+      "description": "An authorized attempt uses the selected permissions and execution backend.",
+      "node_ids": [
+        "gate",
+        "process"
+      ],
+      "edge_ids": [
+        "attempt"
+      ],
+      "source_ids": [
+        "approval-gate",
+        "backend",
+        "collect",
+        "denial",
+        "environment",
+        "exit",
+        "launch",
+        "retry",
+        "sandbox",
+        "spawn"
+      ],
+      "duration_ms": 2400,
+      "evidence": "source"
+    },
+    {
+      "id": "retry",
+      "title": "Handle a sandbox denial",
+      "description": "Only a policy-permitted retry can proceed; approval may be required again.",
+      "node_ids": [
+        "process",
+        "gate"
+      ],
+      "edge_ids": [
+        "denied",
+        "retry"
+      ],
+      "source_ids": [
+        "approval-gate",
+        "backend",
+        "collect",
+        "denial",
+        "environment",
+        "exit",
+        "launch",
+        "retry",
+        "retry-review",
+        "sandbox",
+        "spawn"
+      ],
+      "duration_ms": 2400,
+      "evidence": "source"
+    },
+    {
+      "id": "result",
+      "title": "Return the result",
+      "description": "Return output and status, or a rejection or retained denial, to the tool caller.",
+      "node_ids": [
+        "process",
+        "results",
+        "gate"
+      ],
+      "edge_ids": [
+        "output",
+        "rejected"
+      ],
+      "source_ids": [
+        "approval-gate",
+        "backend",
+        "collect",
+        "denial",
+        "drain",
+        "encode",
+        "environment",
+        "exit",
+        "launch",
+        "orchestrate",
+        "retry",
+        "sandbox",
+        "shell-call",
+        "spawn",
+        "wait"
+      ],
+      "duration_ms": 2400,
+      "evidence": "source"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "shell",
+      "label": "Shell execution branches",
+      "step_ids": [
+        "prepare",
+        "policy",
+        "review",
+        "attempt",
+        "retry",
+        "result"
+      ]
+    }
+  ],
+  "uncertainties": [
+    "Static source analysis at a pinned revision, not a recorded execution. The walkthrough illustrates alternative branches.",
+    "Focused on exec_command. The complete model loop, other tool types, write_stdin and platform-specific sandbox internals are outside this view.",
+    "Review and retry behavior depend on permissions, configuration and execution environment. A sandbox denial never grants authority by itself."
+  ],
+  "source_license": "LICENSE\n                                 Apache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\nTERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n1.  Definitions.\n\n    \"License\" shall mean the terms and conditions for use, reproduction,\n    and distribution as defined by Sections 1 through 9 of this document.\n\n    \"Licensor\" shall mean the copyright owner or entity authorized by\n    the copyright owner that is granting the License.\n\n    \"Legal Entity\" shall mean the union of the acting entity and all\n    other entities that control, are controlled by, or are under common\n    control with that entity. For the purposes of this definition,\n    \"control\" means (i) the power, direct or indirect, to cause the\n    direction or management of such entity, whether by contract or\n    otherwise, or (ii) ownership of fifty percent (50%) or more of the\n    outstanding shares, or (iii) beneficial ownership of such entity.\n\n    \"You\" (or \"Your\") shall mean an individual or Legal Entity\n    exercising permissions granted by this License.\n\n    \"Source\" form shall mean the preferred form for making modifications,\n    including but not limited to software source code, documentation\n    source, and configuration files.\n\n    \"Object\" form shall mean any form resulting from mechanical\n    transformation or translation of a Source form, including but\n    not limited to compiled object code, generated documentation,\n    and conversions to other media types.\n\n    \"Work\" shall mean the work of authorship, whether in Source or\n    Object form, made available under the License, as indicated by a\n    copyright notice that is included in or attached to the work\n    (an example is provided in the Appendix below).\n\n    \"Derivative Works\" shall mean any work, whether in Source or Object\n    form, that is based on (or derived from) the Work and for which the\n    editorial revisions, annotations, elaborations, or other modifications\n    represent, as a whole, an original work of authorship. For the purposes\n    of this License, Derivative Works shall not include works that remain\n    separable from, or merely link (or bind by name) to the interfaces of,\n    the Work and Derivative Works thereof.\n\n    \"Contribution\" shall mean any work of authorship, including\n    the original version of the Work and any modifications or additions\n    to that Work or Derivative Works thereof, that is intentionally\n    submitted to Licensor for inclusion in the Work by the copyright owner\n    or by an individual or Legal Entity authorized to submit on behalf of\n    the copyright owner. For the purposes of this definition, \"submitted\"\n    means any form of electronic, verbal, or written communication sent\n    to the Licensor or its representatives, including but not limited to\n    communication on electronic mailing lists, source code control systems,\n    and issue tracking systems that are managed by, or on behalf of, the\n    Licensor for the purpose of discussing and improving the Work, but\n    excluding communication that is conspicuously marked or otherwise\n    designated in writing by the copyright owner as \"Not a Contribution.\"\n\n    \"Contributor\" shall mean Licensor and any individual or Legal Entity\n    on behalf of whom a Contribution has been received by Licensor and\n    subsequently incorporated within the Work.\n\n2.  Grant of Copyright License. Subject to the terms and conditions of\n    this License, each Contributor hereby grants to You a perpetual,\n    worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n    copyright license to reproduce, prepare Derivative Works of,\n    publicly display, publicly perform, sublicense, and distribute the\n    Work and such Derivative Works in Source or Object form.\n\n3.  Grant of Patent License. Subject to the terms and conditions of\n    this License, each Contributor hereby grants to You a perpetual,\n    worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n    (except as stated in this section) patent license to make, have made,\n    use, offer to sell, sell, import, and otherwise transfer the Work,\n    where such license applies only to those patent claims licensable\n    by such Contributor that are necessarily infringed by their\n    Contribution(s) alone or by combination of their Contribution(s)\n    with the Work to which such Contribution(s) was submitted. If You\n    institute patent litigation against any entity (including a\n    cross-claim or counterclaim in a lawsuit) alleging that the Work\n    or a Contribution incorporated within the Work constitutes direct\n    or contributory patent infringement, then any patent licenses\n    granted to You under this License for that Work shall terminate\n    as of the date such litigation is filed.\n\n4.  Redistribution. You may reproduce and distribute copies of the\n    Work or Derivative Works thereof in any medium, with or without\n    modifications, and in Source or Object form, provided that You\n    meet the following conditions:\n\n    (a) You must give any other recipients of the Work or\n    Derivative Works a copy of this License; and\n\n    (b) You must cause any modified files to carry prominent notices\n    stating that You changed the files; and\n\n    (c) You must retain, in the Source form of any Derivative Works\n    that You distribute, all copyright, patent, trademark, and\n    attribution notices from the Source form of the Work,\n    excluding those notices that do not pertain to any part of\n    the Derivative Works; and\n\n    (d) If the Work includes a \"NOTICE\" text file as part of its\n    distribution, then any Derivative Works that You distribute must\n    include a readable copy of the attribution notices contained\n    within such NOTICE file, excluding those notices that do not\n    pertain to any part of the Derivative Works, in at least one\n    of the following places: within a NOTICE text file distributed\n    as part of the Derivative Works; within the Source form or\n    documentation, if provided along with the Derivative Works; or,\n    within a display generated by the Derivative Works, if and\n    wherever such third-party notices normally appear. The contents\n    of the NOTICE file are for informational purposes only and\n    do not modify the License. You may add Your own attribution\n    notices within Derivative Works that You distribute, alongside\n    or as an addendum to the NOTICE text from the Work, provided\n    that such additional attribution notices cannot be construed\n    as modifying the License.\n\n    You may add Your own copyright statement to Your modifications and\n    may provide additional or different license terms and conditions\n    for use, reproduction, or distribution of Your modifications, or\n    for any such Derivative Works as a whole, provided Your use,\n    reproduction, and distribution of the Work otherwise complies with\n    the conditions stated in this License.\n\n5.  Submission of Contributions. Unless You explicitly state otherwise,\n    any Contribution intentionally submitted for inclusion in the Work\n    by You to the Licensor shall be under the terms and conditions of\n    this License, without any additional terms or conditions.\n    Notwithstanding the above, nothing herein shall supersede or modify\n    the terms of any separate license agreement you may have executed\n    with Licensor regarding such Contributions.\n\n6.  Trademarks. This License does not grant permission to use the trade\n    names, trademarks, service marks, or product names of the Licensor,\n    except as required for reasonable and customary use in describing the\n    origin of the Work and reproducing the content of the NOTICE file.\n\n7.  Disclaimer of Warranty. Unless required by applicable law or\n    agreed to in writing, Licensor provides the Work (and each\n    Contributor provides its Contributions) on an \"AS IS\" BASIS,\n    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n    implied, including, without limitation, any warranties or conditions\n    of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n    PARTICULAR PURPOSE. You are solely responsible for determining the\n    appropriateness of using or redistributing the Work and assume any\n    risks associated with Your exercise of permissions under this License.\n\n8.  Limitation of Liability. In no event and under no legal theory,\n    whether in tort (including negligence), contract, or otherwise,\n    unless required by applicable law (such as deliberate and grossly\n    negligent acts) or agreed to in writing, shall any Contributor be\n    liable to You for damages, including any direct, indirect, special,\n    incidental, or consequential damages of any character arising as a\n    result of this License or out of the use or inability to use the\n    Work (including but not limited to damages for loss of goodwill,\n    work stoppage, computer failure or malfunction, or any and all\n    other commercial damages or losses), even if such Contributor\n    has been advised of the possibility of such damages.\n\n9.  Accepting Warranty or Additional Liability. While redistributing\n    the Work or Derivative Works thereof, You may choose to offer,\n    and charge a fee for, acceptance of support, warranty, indemnity,\n    or other liability obligations and/or rights consistent with this\n    License. However, in accepting such obligations, You may act only\n    on Your own behalf and on Your sole responsibility, not on behalf\n    of any other Contributor, and only if You agree to indemnify,\n    defend, and hold each Contributor harmless for any liability\n    incurred by, or claims asserted against, such Contributor by reason\n    of your accepting any such warranty or additional liability.\n\nEND OF TERMS AND CONDITIONS\n\nAPPENDIX: How to apply the Apache License to your work.\n\n      To apply the Apache License to your work, attach the following\n      boilerplate notice, with the fields enclosed by brackets \"[]\"\n      replaced with your own identifying information. (Don't include\n      the brackets!)  The text should be enclosed in the appropriate\n      comment syntax for the file format. We also recommend that a\n      file or class name and description of purpose be included on the\n      same \"printed page\" as the copyright notice for easier\n      identification within third-party archives.\n\nCopyright 2025 OpenAI\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n       http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\nNOTICE\nOpenAI Codex\nCopyright 2025 OpenAI\n\nThis project includes code derived from [Ratatui](https://github.com/ratatui/ratatui), licensed under the MIT license.\nCopyright (c) 2016-2022 Florian Dehau\nCopyright (c) 2023-2025 The Ratatui Developers",
+  "translations": {
+    "cs": {
+      "title": "Codex: spuštění příkazu v shellu",
+      "question": "Jak Codex rozhodne, zda spustí příkaz v shellu?",
+      "summary": "Sledujte volání shellu od pravidel příkazu přes schválení a sandbox po vrácený výsledek.",
+      "nodes": {
+        "dispatch": {
+          "label": "Volání shell nástroje",
+          "description": "Předá volání nástroje exec_command obsluze sjednoceného spouštění."
+        },
+        "shell": {
+          "label": "Pravidla příkazu",
+          "description": "Určuje shell a pracovní adresář; odvozuje požadavky na schválení příkazu."
+        },
+        "gate": {
+          "label": "Schválení a sandbox",
+          "description": "Odmítá zakázané akce, žádá posouzení, volí sandbox a za určitých podmínek opakuje odmítnutý pokus."
+        },
+        "review": {
+          "label": "Rozhodnutí o schválení",
+          "description": "Háčky pro oprávnění, povinné lidské posouzení nebo Guardian určují výsledek."
+        },
+        "process": {
+          "label": "Spuštění příkazu",
+          "description": "Spouští přes backend vykonavatele nebo místní proces; sbírá výstup, návratový kód či identifikátor běžícího procesu."
+        },
+        "results": {
+          "label": "Výsledek nástroje",
+          "description": "Vrátí výstup, stav ukončení nebo identifikátor procesu; zotavitelné chyby zakóduje jako odpovědi nástroje."
+        }
+      },
+      "edges": {
+        "exec": {
+          "label": "připravit exec_command"
+        },
+        "requirements": {
+          "label": "odvodit požadavky"
+        },
+        "ask": {
+          "label": "vyžadovaná kontrola"
+        },
+        "verdict": {
+          "label": "schválit / zamítnout / zrušit"
+        },
+        "attempt": {
+          "label": "první pokus"
+        },
+        "denied": {
+          "label": "odmítnutí sandboxem"
+        },
+        "retry": {
+          "label": "povolené opakování"
+        },
+        "rejected": {
+          "label": "zamítnutí / ponechané odmítnutí"
+        },
+        "output": {
+          "label": "výstup + stav či identifikátor"
+        }
+      },
+      "steps": {
+        "prepare": {
+          "title": "Připravit příkaz",
+          "description": "Určí shell a pracovní adresář, poté odvodí požadavky pravidel příkazu."
+        },
+        "policy": {
+          "title": "Uplatnit pravidla",
+          "description": "Brána odmítne zakázané akce a vyřeší případné požadované schválení."
+        },
+        "review": {
+          "title": "Případná kontrola",
+          "description": "Hooky, člověk nebo Guardian mohou akci schválit, zamítnout či zrušit."
+        },
+        "attempt": {
+          "title": "Vybrat sandbox",
+          "description": "Schválený pokus používá zvolená oprávnění a prostředí pro spuštění."
+        },
+        "retry": {
+          "title": "Zpracovat odmítnutí",
+          "description": "Opakovat lze jen tehdy, když to pravidla dovolují; může být nutné nové schválení."
+        },
+        "result": {
+          "title": "Vrátit výsledek",
+          "description": "Vrátí výstup a stav, případně zamítnutí či ponechané odmítnutí, volajícímu nástroje."
+        }
+      },
+      "groups": {},
+      "scenarios": {
+        "shell": {
+          "label": "Větve spuštění příkazu"
+        }
+      },
+      "uncertainties": [
+        "Statická analýza konkrétní revize zdrojů, nikoli záznam běhu. Průchod ilustruje alternativní větve.",
+        "Zaměřeno na exec_command. Úplná smyčka modelu, jiné nástroje, write_stdin a vnitřnosti sandboxů jednotlivých platforem jsou mimo tento pohled.",
+        "Schvalování a opakování závisí na oprávněních, konfiguraci a prostředí. Odmítnutí sandboxem samo o sobě nezvyšuje oprávnění."
+      ]
+    }
+  },
+  "default_view": "map",
+  "groups": [],
+  "repo": {
+    "name": "codex",
+    "commit": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+    "dirty": false,
+    "url": "https://github.com/openai/codex"
+  },
+  "ui_strings": {},
+  "grounding": {
+    "status": "files-and-ranges-checked",
+    "scope": "Source existence, line ranges and fingerprints. The author must verify the interpretation; this is not a runtime trace."
+  },
+  "overview": {}
+}

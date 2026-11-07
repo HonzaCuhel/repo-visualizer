@@ -9,7 +9,7 @@ sys.path.insert(0,str(ROOT/'skills/repo-visualizer/scripts'))
 from builder import build_html,write_html
 from story_model import read_story,write_story
 
-def build():
+def portable_builder_graph():
     graph=read_story(ROOT/'examples/stack-diagram/graph.json')
     # The landing question is the portable builder; the separate PNG renderer
     # stays available in the full example, rather than elongating this scope.
@@ -30,6 +30,11 @@ def build():
     translated['uncertainties'][1]='Samostatné vykreslení PNG, stahování ikon a sdílecí služba jsou mimo rozsah této zaměřené ukázky.'
     graph['translations']={'cs':translated}
     write_story(ROOT/'examples/stack-diagram/portable-builder.json',graph)
+    return graph
+
+def build():
+    graph=read_story(ROOT/'examples/codex/graph.json')
+    portable=portable_builder_graph()
     site=ROOT/'site';assets=site/'assets';assets.mkdir(parents=True,exist_ok=True)
     shutil.copy2(ROOT/'skills/repo-visualizer/assets/fonts/AtkinsonHyperlegibleNext.ttf',assets)
     shutil.copy2(ROOT/'skills/repo-visualizer/assets/fonts/OFL-AtkinsonHyperlegibleNext.txt',assets)
@@ -40,7 +45,9 @@ def build():
     document=document.replace('</main>', (ROOT/'site-src/sections.html').read_text()+'\n</main>',1)
     document=document.replace('</body>','<script id="site-locales" type="application/json">'+(ROOT/'site-src/locales.json').read_text().replace('<','\\u003c')+'</script><script id="site-script">'+(ROOT/'site-src/site.js').read_text()+'</script>\n</body>',1)
     write_html(site/'index.html',document)
-    write_html(site/'portable-builder.html',build_html(graph))
+    write_html(site/'codex-shell.html',build_html(graph))
+    write_html(site/'codex-agent-loop.html',build_html(read_story(ROOT/'examples/codex/agent-loop.json')))
+    write_html(site/'portable-builder.html',build_html(portable))
     full=read_story(ROOT/'examples/stack-diagram/graph.json')
     full['translations']={'cs':json.loads((ROOT/'site-src/demo-cs.json').read_text())}
     write_html(site/'full-pipeline.html',build_html(full))

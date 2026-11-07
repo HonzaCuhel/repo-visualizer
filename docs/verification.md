@@ -1,5 +1,11 @@
 # Release verification
 
+## Codex showcase
+
+A fresh Codex CLI 0.164.0 session used the globally installed public v0.2.0 skill against `openai/codex` revision `33b3f80a0935e51a49cbbda7d6473ef757d4241b`. Given a question and no prewritten graph, it produced 11 components, 19 relationships, 37 revision-pinned sources, offline HTML, complete Czech display translations and a 15-second GIF with 90 of 90 decoded frames distinct. The target working tree remained clean. [Source, licensing and test receipt](../examples/codex/README.md).
+
+The landing page uses an editorially scoped shell execution graph: 6 components and 9 relationships from that result, preserving approval, rejection and conditional retry branches. The full agent loop remains available as a deeper example. All public landing media is rendered from the focused canonical graph in English/Czech and light/dark. Both source graphs retain Codex's exact Apache-2.0 license and NOTICE. These are source interpretations, not runtime traces or a complete map of Codex.
+
 ## Version 0.2
 
 The compact player adds user-controlled light/dark/system themes and English/Czech UI. Graph content can carry display-only translations; custom interface dictionaries support other output languages independently of the agent.

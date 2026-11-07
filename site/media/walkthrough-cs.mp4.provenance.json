@@ -2,14 +2,16 @@
   "kind": "runtime-render",
   "generator": "Repo Visualizer export.py (Playwright, Pillow, FFmpeg)",
   "settings": {
-    "width": 960,
-    "height": 640,
+    "width": 1200,
+    "height": 800,
     "fps": 8,
-    "at": 3000,
+    "at": 4800,
     "theme": "light",
     "language": "cs"
   },
-  "source_html_sha256": "4c2dddcfa00288b0a785eaaef89d97c6681459b9e6eaa1afd94b1409cf48b552",
-  "artifact_sha256": "0a84131f84b03c7d1622bd22dca43b802b51f0d1ebf5a10dc2cf775c7d757d21",
+  "source_repository": "https://github.com/openai/codex",
+  "source_revision": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+  "source_html_sha256": "dad4e0d2bc840736fd171fb6058f251763dbf46fdc95747b27d58b1b4918e9d1",
+  "artifact_sha256": "7d7c5fbbca21ffdb5684182891d26e1956d3e2bd35e96cc6bfb56c8be3dc0463",
   "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
 }
