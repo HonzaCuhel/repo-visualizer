@@ -1,5 +1,13 @@
 # Release verification
 
+## Shared public navigation — 8 November 2026
+
+The public landing now uses content-sized navigation links with equal gaps rather than fixed tracks. Public examples share the landing flag/code language trigger and sun/moon/system capsule. The detail source jump is a compact neutral 13px action, and a translated back link returns to the examples while preserving language/theme. Fresh public visits default to English/light; explicit URL and saved choices win. The raw skill still follows the graph/user language.
+
+Browser checks passed 120 landing/detail viewport-language-theme combinations, including child clipping, overlap, equal link gaps and matching appearance-control dimensions/colors. Keyboard return navigation, source jump, fresh Czech-browser/dark-system visits, saved system theme, and an actually downloaded offline detail were exercised without JavaScript errors or outbound offline requests. A pre-existing exported-menu duplication bug was found and fixed by rebuilding menu options once; the download regression test now switches languages through the actual menu. All 37 automated tests pass.
+
+Ninety representative export frames across three graphs, five languages, two themes and three positions are pixel-identical before/after this navigation-only refinement. Existing media are retained; their provenance explicitly names the previous committed HTML that produced them. The skill ZIP and its checksum include the locale initialization fix. The single design detector returned 22 advisory-only findings for the inherited contextual type sizes, palette and capsule radii; those do not change the user's approved visual direction. The scoped independent finish verdict is ship. Historical comparison-ledger exceptions remain separate below.
+
 ## Public examples, width and scroll reveal — 8 November 2026
 
 The public gallery now includes source-pinned Superpowers (13 components, 20 relationships) and OpenAI Whisper (12 components, 17 relationships) instead of the two stack-diagram rows. Each has full graph translations in English, Czech, German, French and Spanish, embedded source excerpts and the exact upstream MIT notice. Both were authored in this Codex session using the skill's scan, source inspection, prepare and build workflow; target repositories remained clean. No target agent, model weights or audio inference were executed. Superpowers describes prescribed instructions; Whisper explains implemented computation and transcription control, not learned-weight interpretation.

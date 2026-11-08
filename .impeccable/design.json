@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-08T07:31:26.674520+00:00",
+  "generatedAt": "2026-11-08T12:51:20.322084+00:00",
   "title": "Design System: Repo Visualizer",
   "extensions": {
     "colorMeta": {
@@ -570,6 +570,10 @@
       "landing-command": {
         "displayName": "Landing Command",
         "purpose": "Public copyable installation command; phone override 10px."
+      },
+      "public-detail-control": {
+        "displayName": "Public Detail Control",
+        "purpose": "Compact neutral desktop source-jump action on branded public detail pages."
       }
     },
     "shadows": [
@@ -696,7 +700,8 @@
           "viewGroupAndExport": "flex-shrink:0",
           "exportAlignment": "margin-left:auto; wraps onto a second row when labels require it",
           "purpose": "Preserve full localized labels without toolbar clipping."
-        }
+        },
+        "freshLanguage": "en"
       },
       "standalone": {
         "selector": ".standalone",
@@ -710,11 +715,36 @@
         "darkAction": "{colors.dark-action}",
         "freshTheme": "system unless artifact preference supplied",
         "mobileGraphPane": "height:450px; inherited min-height:455px",
-        "offline": "Embedded player, font, UI catalogs, graph and source data; no landing landscape styles."
+        "offline": "Embedded player, font, UI catalogs, graph and source data; no landing landscape styles.",
+        "scope": "Raw installed skill player; branded public details add the publicDetails scope.",
+        "languageBehavior": "User/artifact and graph language behavior remains unchanged by public defaults."
       },
       "graphLabels": {
         "fontFamily": "Atkinson, system-ui, sans-serif",
         "scope": "both surfaces"
+      },
+      "publicDetails": {
+        "selector": ".standalone with public brand-style and detail-navigation script",
+        "sources": [
+          "site-src/brand.css",
+          "site-src/detail-navigation.js",
+          "scripts/build_site.py"
+        ],
+        "freshLanguage": "en",
+        "freshTheme": "light",
+        "preferenceOrder": [
+          "query",
+          "localStorage",
+          "public artifact preferences",
+          "fallback"
+        ],
+        "fontFamily": "Atkinson, system-ui, sans-serif",
+        "headerHeight": "64px;56px at <=600px",
+        "sourceAction": "{components.public-detail-source}",
+        "sourceActionMinHeight": "36px",
+        "sourceActionHidden": "<=600px and export-frame mode",
+        "backLink": "Translated Back to examples above h1;13px weight500;min-height36px;16px stroke SVG arrow;hidden in export-frame mode",
+        "returnDestination": "Preserve lang and theme query parameters; Back adds #examples; file: uses https://honzacuhel.github.io/repo-visualizer/."
       }
     },
     "provenance": {
@@ -722,7 +752,7 @@
       "sources": [
         {
           "path": "site-src/landscape.css",
-          "sha256": "84cea6c99d113e42903d8837c50b7ccce874fd96436f5999123c56742487ddb4"
+          "sha256": "328a5744c10a1ea88db4c2e563e9ec1f997b001f0a205bad9d79eaf49289c7eb"
         },
         {
           "path": "site-src/site.css",
@@ -734,11 +764,11 @@
         },
         {
           "path": "site-src/brand.css",
-          "sha256": "2aee340b9aca70f937abba38ffdbd0ea0225c87ff2cf5389514cc335bd50500c"
+          "sha256": "49783c798f7f02645b810f7547ceb4da8e2d31bd7b32119262f3402cc94eec06"
         },
         {
           "path": "scripts/build_site.py",
-          "sha256": "5b439352c3e52ee174159e149454ee496a3d1d1963ff3b9458fb300b8c4f401a"
+          "sha256": "641e9aca403a2e83b3c31b13fb3f095580d24760758f6da3145f24c0795b9410"
         },
         {
           "path": "skills/repo-visualizer/assets/player.css",
@@ -750,7 +780,7 @@
         },
         {
           "path": "skills/repo-visualizer/assets/appearance.js",
-          "sha256": "055d0d9f5527d0d4ef98c305914e0d3ea17acac8ef6ed473d73c8de8906c625d"
+          "sha256": "767c7fe0e67b6eff4736be27d00300ca31b591a410f134912278be826109d021"
         },
         {
           "path": "skills/repo-visualizer/assets/player.js",
@@ -783,6 +813,10 @@
         {
           "path": "examples/whisper/graph.json",
           "sha256": "1e7eef3ffc3fc465c298f2c241389d0c5a4e425b88439c4bd30908a792e65991"
+        },
+        {
+          "path": "site-src/detail-navigation.js",
+          "sha256": "5d6256b80f50985e2e3f2637e338d69bb8b5c442ac7d64ae277fc7298b1b452c"
         }
       ],
       "screenshots": [
@@ -812,14 +846,26 @@
       "snippetScope": "Self-contained ds-prefixed HTML/CSS. Actual CSS custom properties have source-value fallbacks. Host must supply bundled Rethink/Atkinson fonts for exact type rendering. Static previews carry states but no application handlers; navigation hrefs are representative.",
       "tokenScope": "Frontmatter primitives are normative. Dark and landing variants remain explicitly scoped. Spacing names label observed repeated values, not a new runtime scale.",
       "documentationLimits": [
-        "Current source extraction only for the frame, scroll-progress reveal and gallery refinement; the documenter performed no new browser interaction or viewport audit.",
+        "Current source extraction includes shared public headers, detail return navigation and public-only defaults; no new browser interaction audit was performed by the documenter. Supplied header QA and export-equivalence reports are supporting evidence, not documenter reruns.",
         "Impeccable comparison ledger remains hero/open on the tiny GitHub control despite explicit user approval. No closed build gate, browser hero approval receipt or publication is claimed; see docs/verification.md.",
         "Stale incumbent edge-line color, two-language wording and public pre-landscape composition are reconciled to current source. Tiny helper text and inherited standalone phone height constraints are contextual observations, not new design mandates.",
         "No invented field-error styling, global photographic requirement, or universal reduced-motion playback/export behavior."
       ],
       "shippingRasterRule": "Generated images retain their generation prompt; derived raster media retain runtime origin/render input provenance.",
       "documentationDisposition": "Merged DESIGN.md and sidecar refreshed within the authorized two-file boundary. Standalone player guidance retained. Documentation completion does not close the independent hero/open comparison ledger.",
-      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels."
+      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact.",
+      "supportingVerification": [
+        {
+          "path": ".work/header-qa.json",
+          "sha256": "5879d14c67d058fd8e117d6675189da9cc5484dd634805bf38001e3614a3e52f",
+          "status": "Supplied report inspected;120 geometry combinations,zero errors;not rerun by documenter."
+        },
+        {
+          "path": ".work/header-export-equivalence.json",
+          "sha256": "0faab4098198a311ced7eca8d8b6beab912be2b45d03cc599e8812abd0d6cc34",
+          "status": "Supplied comparison report inspected;90 pixel-identical frame samples;not rerun by documenter."
+        }
+      ]
     },
     "galleryEvidence": {
       "superpowers": {
@@ -850,16 +896,25 @@
         "sourceRevision": "86098128c0b4f24f0e2aa2994de830614b474227",
         "scope": "Current public gallery example; counts and topology are data, not design invariants."
       }
+    },
+    "publicHeaderAppearance": {
+      "scope": "Landing and branded public detail pages; raw player defaults remain distinct.",
+      "source": "site-src/brand.css",
+      "languageTrigger": "Inline SVG flag and locale code; name hidden;min-width92px, removed on phones;code hidden at <=360px.",
+      "themeCapsule": "20px outer radius;16px segments;40px segment width,26px at <=600px and24px at <=360px.",
+      "groupGaps": "24px;12px at <=1200px;8px at <=600px;6px at <=360px.",
+      "landingNavigation": "Content-sized flex links;28px equal gaps;20px at <=1200px;hidden at <=1000px.",
+      "darkAppearance": "Translucent dark surface and neutral rule;selected segment uses var(--hover),icon uses var(--ink)."
     }
   },
   "components": [
     {
-      "name": "Standalone installation action",
-      "kind": "button",
-      "description": "Existing compact standalone header action; hidden on small screens.",
-      "html": "<a class=\"ds-install\" href=\"#install\">Install skill</a>",
-      "css": ".ds-install{font-family:Atkinson,system-ui,sans-serif;display:inline-block;background:var(--action,#2164c7);color:#fff;border:1px solid var(--blue,#2164c7);border-radius:6px;padding:.35em .8em;font-size:clamp(16px,1.43vw,24px);font-weight:600;text-decoration:none;white-space:nowrap}.ds-install:hover{background:var(--action-hover,#184e9e)}.ds-install:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px}",
-      "refersTo": "button-primary"
+      "name": "Public detail navigation",
+      "kind": "nav",
+      "description": "Branded detail source action and translated return link; shown together as separate location-specific primitives. Raw installed skill action remains documented separately.",
+      "html": "<div class=\"ds-detail-header\"><a class=\"ds-detail-source\" href=\"#source\">Open source</a></div><a class=\"ds-detail-back\" href=\"./?lang=en&amp;theme=light#examples\"><svg class=\"ds-detail-arrow\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m10 5-7 7 7 7M3 12h18\"/></svg>Back to examples</a>",
+      "css": ".ds-detail-header{font-family:Atkinson,system-ui,sans-serif;display:flex;justify-content:flex-end}.ds-detail-source{display:inline-flex;align-items:center;justify-content:center;font-size:13px;line-height:1.3;font-weight:500;min-height:36px;padding:7px 12px;border-radius:6px;background:transparent;color:var(--ink,#151720);border:1px solid var(--control-line,#cbd3df);white-space:nowrap;text-decoration:none}.ds-detail-source:hover{background:var(--hover,#f1f4f8)}.ds-detail-back{font-family:Atkinson,system-ui,sans-serif;display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;min-height:36px;font-size:13px;font-weight:500;color:var(--muted,#5e6674);text-decoration:none}.ds-detail-arrow{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ds-detail-back:hover{color:var(--ink,#151720);text-decoration:underline;text-underline-offset:4px}.ds-detail-source:focus-visible,.ds-detail-back:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px}@media(max-width:600px){.ds-detail-source{display:none}}",
+      "refersTo": "public-detail-source"
     },
     {
       "name": "Landing primary action",
@@ -919,9 +974,9 @@
     {
       "name": "Navigation and appearance",
       "kind": "nav",
-      "description": "Quiet public links plus the explicit flag trigger and light/dark/system buttons; preview has no application handlers.",
-      "html": "<div class=\"ds-header-controls\"><nav class=\"ds-nav\" aria-label=\"Main navigation\"><a class=\"ds-nav-link\" href=\"#examples\">Examples</a><a class=\"ds-nav-link\" href=\"#guide\">How it works</a></nav><button class=\"ds-language\" aria-label=\"Interface language: English\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><svg class=\"ds-flag\" viewBox=\"0 0 28 20\" aria-hidden=\"true\"><rect width=\"28\" height=\"20\" fill=\"#21468b\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#c8102e\" stroke-width=\"1.5\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#fff\" stroke-width=\"7\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#c8102e\" stroke-width=\"4\"/></svg>EN</button><div class=\"ds-themes\" role=\"group\" aria-label=\"Color theme\"><button class=\"ds-theme\" aria-label=\"Light theme\" aria-pressed=\"true\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\"/></svg></button><button class=\"ds-theme\" aria-label=\"Dark theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z\"/></svg></button><button class=\"ds-theme\" aria-label=\"System theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M12 17v4m-4 0h8\"/></svg></button></div></div>",
-      "css": ".ds-header-controls{font-family:Rethink,Atkinson,sans-serif;display:flex;align-items:center;gap:24px}.ds-nav{display:flex;gap:20px;font-size:16px}.ds-nav-link{color:var(--ink,#151720);text-decoration:none;text-underline-offset:4px}.ds-nav-link:hover{text-decoration:underline}.ds-language{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:6px 9px;background:#ffffff30;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink,#151720);cursor:pointer}.ds-flag{width:21px;height:15px;border-radius:2px}.ds-themes{display:inline-flex;gap:2px;padding:3px;border:1px solid #c3dff8;border-radius:20px;background:#98c4f0}.ds-theme{display:grid;place-items:center;width:40.7px;height:28px;padding:5px;border:0;border-radius:16px;background:transparent;color:#172332;cursor:pointer}.ds-theme[aria-pressed=\"true\"]{background:#ffffffdc}.ds-theme:hover,.ds-language:hover{background:var(--hover,#f1f4f8)}.ds-theme-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ds-theme:focus-visible,.ds-language:focus-visible,.ds-nav-link:focus-visible{outline:2px solid #0854e5;outline-offset:3px}@media(max-width:1000px){.ds-nav{display:none}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-theme{width:26px}}"
+      "description": "Shared public flag/code and theme capsule; preview uses the landing typeface and content-sized equal-gap navigation. No application handlers.",
+      "html": "<div class=\"ds-header-controls\"><nav class=\"ds-nav\" aria-label=\"Main navigation\"><a class=\"ds-nav-link\" href=\"#examples\">Examples</a><a class=\"ds-nav-link\" href=\"#guide\">How it works</a></nav><button class=\"ds-language\" aria-label=\"Interface language: English\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><svg class=\"ds-flag\" viewBox=\"0 0 28 20\" aria-hidden=\"true\"><rect width=\"28\" height=\"20\" fill=\"#21468b\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#c8102e\" stroke-width=\"1.5\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#fff\" stroke-width=\"7\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#c8102e\" stroke-width=\"4\"/></svg><span class=\"ds-locale-code\">EN</span></button><div class=\"ds-themes\" role=\"group\" aria-label=\"Color theme\"><button class=\"ds-theme\" aria-label=\"Light theme\" aria-pressed=\"true\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\"/></svg></button><button class=\"ds-theme\" aria-label=\"Dark theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z\"/></svg></button><button class=\"ds-theme\" aria-label=\"System theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M12 17v4m-4 0h8\"/></svg></button></div></div>",
+      "css": ".ds-header-controls{font-family:Rethink,Atkinson,sans-serif;display:flex;align-items:center;gap:24px}.ds-nav{display:flex;gap:28px;font-size:16px}.ds-nav-link{color:var(--ink,#151720);text-decoration:none;text-underline-offset:4px}.ds-nav-link:hover{text-decoration:underline}.ds-language{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;gap:8px;min-width:92px;min-height:36px;padding:6px 9px;background:#ffffff30;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink,#151720);cursor:pointer}.ds-flag{width:21px;height:15px;border-radius:2px}.ds-themes{display:inline-flex;gap:2px;padding:3px;border:1px solid #c3dff8;border-radius:20px;background:#98c4f0}.ds-theme{display:grid;place-items:center;width:40px;height:28px;padding:5px;border:0;border-radius:16px;background:transparent;color:#172332;cursor:pointer}.ds-theme[aria-pressed=\"true\"]{background:#ffffffdc}.ds-theme:hover,.ds-language:hover{background:var(--hover,#f1f4f8)}.ds-theme-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ds-theme:focus-visible,.ds-language:focus-visible,.ds-nav-link:focus-visible{outline:2px solid #0854e5;outline-offset:3px}@media(max-width:1000px){.ds-nav{display:none}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-theme{width:26px}}@media(max-width:1200px){.ds-nav{gap:20px}.ds-header-controls{gap:12px}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-language{min-width:0;padding:6px}}@media(max-width:360px){.ds-header-controls{gap:6px}.ds-locale-code{display:none}.ds-theme{width:24px}}"
     },
     {
       "name": "Graph node",

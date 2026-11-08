@@ -20,3 +20,47 @@
   .site-header .wordmark { font-size: 16px; gap: 6px; }
   .wordmark .brand-mark { width: 22px; height: 22px; }
 }
+
+/* One public appearance component, shared by landing and example headers. */
+.site-header .appearance-controls { gap: 24px; }
+.site-header .language-toggle { min-width: 92px; background: #ffffff30; border-color: transparent; }
+.site-header .locale-name { display: none; }
+.site-header .locale-code { display: inline; }
+.site-header .theme-switch { background: #98c4f0; border-color: #c3dff8; border-radius: 20px; }
+.site-header .theme-switch button { width: 40px; border-radius: 16px; color: #172332; }
+.site-header .theme-switch button[aria-pressed="true"] { background: #ffffffdc; color: #172332; }
+.site-header .theme-switch svg { width: 20px; height: 20px; }
+[data-theme="dark"] .site-header .language-toggle,
+[data-theme="dark"] .site-header .theme-switch { background: #13223899; border-color: #52657a; }
+[data-theme="dark"] .site-header .theme-switch button { color: var(--ink); }
+[data-theme="dark"] .site-header .theme-switch button[aria-pressed="true"] { background: var(--hover); }
+.standalone .site-header { height: 64px; gap: 24px; }
+.standalone .site-header > .install-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; line-height: 1.3; font-weight: 500;
+  min-height: 36px; padding: 7px 12px; border-radius: 6px;
+  background: transparent; color: var(--ink); border: 1px solid var(--control-line);
+  white-space: nowrap;
+}
+.standalone .site-header > .install-button:hover { background: var(--hover); }
+.detail-back { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 12px; min-height: 36px; font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; }
+.detail-back svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.detail-back:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+.export-frame .detail-back,
+.export-frame.standalone .site-header > .install-button { display: none; }
+@media (max-width: 1200px) {
+  .site-header .appearance-controls { gap: 12px; }
+}
+@media (max-width: 600px) {
+  .site-header .appearance-controls { gap: 8px; }
+  .site-header .language-toggle { min-width: 0; padding: 6px; }
+  .site-header .theme-switch button { width: 26px; }
+  .standalone .site-header { height: 56px; padding-inline: 16px; gap: 10px; }
+  .standalone .site-header > .install-button { display: none; }
+}
+@media (max-width: 360px) {
+  .site-header .appearance-controls { gap: 6px; }
+  .site-header .locale-code { display: none; }
+  .site-header .theme-switch button { width: 24px; }
+  .standalone .site-header { padding-inline: 12px; gap: 8px; }
+}

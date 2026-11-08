@@ -85,6 +85,8 @@
     const toggle = document.getElementById("language-toggle");
     const menu = document.getElementById("language-menu");
     if (toggle && menu) {
+      // Downloaded HTML can already contain options cloned from a live page.
+      menu.replaceChildren();
       const options = [];
       function close(restoreFocus = false) {
         menu.hidden = true; toggle.setAttribute("aria-expanded", "false");

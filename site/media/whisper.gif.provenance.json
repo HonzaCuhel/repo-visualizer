@@ -19,5 +19,7 @@
     "distinct_frames": 108,
     "decoded_duration_ms": 18000
   },
-  "note": "Rendered authored highlights over the source-derived graph; not an observed execution of the target. No target scripts or model weights were run."
+  "note": "Rendered authored highlights over the source-derived graph; not an observed execution of the target. No target scripts or model weights were run.",
+  "source_html_commit": "35e158179f9f5eb0b239410dadaf875b44cca640",
+  "source_html_path": "site/whisper.html"
 }

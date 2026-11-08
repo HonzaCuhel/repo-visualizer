@@ -50,20 +50,11 @@
   background: transparent;
 }
 .landing .wordmark { font-size: 27px; font-weight: 700; letter-spacing: -.01em; gap: 6px; }
-.landing .site-nav { display:grid; grid-template-columns:70px 106px 85px; font-size:16px; gap:20px; margin-right:23px; }
+.landing .site-nav { display:flex; font-size:16px; gap:28px; margin-right:23px; }
 .landing .site-nav a { display:inline-flex; align-items:center; gap:8px; }
-.landing .site-nav a:last-child { padding-left:2px; font-size:17px; }
+.landing .site-nav a:last-child { font-size:16px; }
 .github-mark { width:18px; height:18px; }
 
-.landing .appearance-controls { gap: 24px; }
-.landing .language-toggle { min-width: 92px; background: #ffffff30; border-color: transparent; }
-.landing .locale-name { display: none; }
-.landing .locale-code { display: inline; }
-.landing .theme-switch { background: #98c4f0; border-color: #c3dff8; border-radius:20px; }
-.landing .theme-switch button { border-radius:16px; color:#172332; }
-.landing .theme-switch button[aria-pressed="true"] { background:#ffffffdc; color:#172332; }
-.landing .theme-switch svg { width:20px; height:20px; }
-.landing .theme-switch button { width: 40.7px; }
 .landing .install-button { display: none; }
 .landing .intro {
   display: flex;
@@ -167,14 +158,12 @@
 [data-theme="dark"] .landing #page-description > span { color: #e0e9f6; }
 [data-theme="dark"] .landing .hero-explore { color: #f1f5ff; background: #192637df; border-color: #768ca8; }
 [data-theme="dark"] .landing .hero-explore:hover { background: #22364e; }
-[data-theme="dark"] .landing .language-toggle, [data-theme="dark"] .landing .theme-switch { background: #13223899; border-color: #52657a; }
 @media (min-width: 1800px) {
   .landing .intro { min-height:320px; max-height:366px; }
 }
 @media (max-width: 1200px) {
   .landing .site-header { padding-inline:24px; gap:22px; }
   .landing .site-nav { gap: 20px; }
-  .landing .appearance-controls { gap: 12px; }
   .landing .workspace { grid-template-columns: 23% 49% 28%; }
   .landing .component-pane, .landing .inspector { padding: 14px 12px; }
   .landing .graph-pane { padding-inline: 12px; }
@@ -194,9 +183,6 @@
   .landing { --landing-gutter:12px; }
   .landing .site-header { padding-inline:4px; gap:10px; }
   .landing .wordmark { font-size: 18px; gap: 7px; }
-  .landing .appearance-controls { gap: 8px; }
-  .landing .language-toggle { min-width: 0; padding: 6px; }
-  .landing .theme-switch button { width: 26px; }
   .landing .intro { height: auto; min-height: 330px; padding: 32px 20px 58px; }
   .landing .intro h1 { font-size: clamp(30px, 7.8vw, 39px); line-height: 1.1; max-width: 18ch; }
   .landing #page-description { margin-top: 13px; max-width: 31ch; }
@@ -233,15 +219,10 @@
 @media (max-width: 360px) {
   .landing .site-header { padding-inline:0; gap:7px; }
   .landing .wordmark { font-size: 16px; }
-  .landing .appearance-controls { gap: 6px; }
-  .landing .locale-code { display: none; }
-  .landing .theme-switch button { width: 24px; }
   .landing .intro { padding-inline: 16px; }
 }
 
 [data-theme="dark"] .landing .landscape::after { background:linear-gradient(to bottom, transparent 68%,var(--paper)); }
-[data-theme="dark"] .landing .theme-switch button { color:var(--ink); }
-[data-theme="dark"] .landing .theme-switch button[aria-pressed="true"] { background:var(--hover); }
 
 [data-theme="dark"] .landing { --blue:#8bb9ff; --selected-ink:#bcd7ff; }
 

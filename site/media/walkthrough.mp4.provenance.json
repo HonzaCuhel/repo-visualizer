@@ -13,5 +13,7 @@
   "source_revision": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
   "source_html_sha256": "d4c6b3f604e9d28d2d38ab8fc5783bf7b0f00372978a744f0f6420fff94abc12",
   "artifact_sha256": "5091fbd08e24b33a55af6cc5a951febc0313792e982830498d6a402514788965",
-  "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
+  "note": "Source-derived graph explanation, not recorded execution. No image generation model used.",
+  "source_html_commit": "35e158179f9f5eb0b239410dadaf875b44cca640",
+  "source_html_path": "site/codex-agent-loop.html"
 }

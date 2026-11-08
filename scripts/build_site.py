@@ -13,6 +13,21 @@ from builder import build_html,write_html
 from story_model import read_story,write_story
 
 def branded(document):
+    def public_preferences(match):
+        config=json.loads(match.group(2))
+        config.setdefault('preference', {}).update(language='en',theme='light')
+        return match.group(1)+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+match.group(3)
+    document=re.sub(r'(<script id="appearance-config" type="application/json">)(.*?)(</script>)',public_preferences,document,count=1,flags=re.S)
+    def public_catalogs(match):
+        catalogs=json.loads(match.group(2))
+        labels={'en':'Back to examples','cs':'Zpět k ukázkám','de':'Zurück zu den Beispielen','fr':'Retour aux exemples','es':'Volver a los ejemplos'}
+        for language,catalog in catalogs.items(): catalog['backToExamples']=labels[language]
+        return match.group(1)+json.dumps(catalogs,ensure_ascii=False).replace('<','\\u003c')+match.group(3)
+    document=re.sub(r'(<script id="interface-locales" type="application/json">)(.*?)(</script>)',public_catalogs,document,count=1,flags=re.S)
+    if '<body class="standalone">' in document:
+        back='<a class="detail-back" href="./#examples"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 5-7 7 7 7M3 12h18"/></svg><span data-i18n="backToExamples">Back to examples</span></a>'
+        document=document.replace('<h1 id="page-title"',back+'<h1 id="page-title"',1)
+        document=document.replace('</body>','<script id="detail-navigation">'+(ROOT/'site-src/detail-navigation.js').read_text()+'</script></body>',1)
     mark=(ROOT/'site-src/brand-mark.svg').read_text().strip()
     icon=mark.replace('</svg>','<style>@media(prefers-color-scheme:dark){svg{color:#8bb9ff}}</style></svg>')
     data=base64.b64encode(icon.encode()).decode()
@@ -52,11 +67,6 @@ def build():
     shutil.copy2(ROOT/'assets/fonts/OFL-RethinkSans.txt',assets/'OFL-RethinkSans.txt')
     shutil.copy2(ROOT/'assets/icons/LICENSE-bootstrap-icons.txt',assets/'LICENSE-bootstrap-icons.txt')
     document=branded(build_html(graph,landing=True))
-    def initial_appearance(match):
-        config=json.loads(match.group(2))
-        config['preference']={'theme':'light'}
-        return match.group(1)+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+match.group(3)
-    document=re.sub(r'(<script id="appearance-config" type="application/json">)(.*?)(</script>)',initial_appearance,document,count=1,flags=re.S)
     document=document.replace('<body class="landing">','<body class="landing"><div class="landscape landing-only" aria-hidden="true"><img src="assets/landscape.png" alt="" fetchpriority="high" decoding="async"></div>',1)
     document=document.replace('</head>', '<meta name="description" content="Understand how a repository works. Explore source-grounded component graphs and export HTML, GIF and video with an open skill for Codex and Claude Code.">\n<link rel="icon" href="favicon.svg" type="image/svg+xml">\n<meta property="og:title" content="Repo Visualizer — understand how the code works">\n<meta property="og:description" content="A component graph you can explore, verify against source, and share as HTML or video.">\n<meta property="og:image" content="https://HonzaCuhel.github.io/repo-visualizer/media/poster.png">\n<meta property="og:url" content="https://HonzaCuhel.github.io/repo-visualizer/">\n<style id="site-style">'+(ROOT/'site-src/site.css').read_text()+'</style><style id="landscape-style">'+(ROOT/'site-src/landscape.css').read_text()+'</style>\n</head>',1)
     document=document.replace('id="page-title" data-i18n="headline"','id="page-title" data-site="heroHeadline"',1)

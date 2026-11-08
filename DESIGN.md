@@ -74,6 +74,11 @@ typography:
     fontFamily: Rethink, Atkinson, sans-serif
     fontSize: 13px
     fontWeight: 400
+  public-detail-control:
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 13px
+    fontWeight: 500
+    lineHeight: 1.3
   code:
     fontFamily: ui-monospace, monospace
     fontSize: 11px
@@ -115,6 +120,12 @@ components:
     textColor: '{colors.paper}'
     rounded: '{rounded.primary}'
     padding: 0.35em 0.8em
+  public-detail-source:
+    backgroundColor: transparent
+    textColor: '{colors.ink}'
+    typography: '{typography.public-detail-control}'
+    rounded: '{rounded.primary}'
+    padding: 7px 12px
   button-primary-hover:
     backgroundColor: '{colors.action-hover}'
   landing-button-primary:
@@ -233,7 +244,7 @@ Persistent working surfaces are flat: thin rules, tonal fills and selected outli
 
 ## Shapes
 
-Small practical curves define the shared tools: inset code, conventional controls, a gently rounded workspace and graph nodes, and larger group bounds. The public presentation uses broader curves for its 22px explorer frame, 17px phone frame, 9px hero command, 8px hero actions, 14px installation surface and 12px video. The landing theme switch is a 20px capsule with 16px selected segments. These are scoped component shapes, not a universal pill-button rule. Thin rectilinear rules remain the organizing device inside the workspace.
+Small practical curves define the shared tools: inset code, conventional controls, a gently rounded workspace and graph nodes, and larger group bounds. The public presentation uses broader curves for its 22px explorer frame, 17px phone frame, 9px hero command, 8px hero actions, 14px installation surface and 12px video. The shared public header theme switch is a 20px capsule with 16px selected segments, on both the landing and branded example details. These are scoped component shapes, not a universal pill-button rule. Thin rectilinear rules remain the organizing device inside the workspace.
 
 ## Components
 
@@ -261,9 +272,11 @@ Search combines an authored stroke icon with a transparent input, thin border an
 
 ### Navigation and Appearance
 
-Public links are quiet text over the sky with hover underlines. Component navigation and inspector tabs remain the working navigation; the active inspector tab has a thin blue underline. The language trigger uses an inline SVG flag plus locale identity and opens a keyboard-operable listbox with a visible selected check. English, Czech, German, French and Spanish UI catalogs are bundled; graph translation availability is separate and a notice explains mismatches. The current Superpowers and Whisper gallery graphs each include display translations in all five languages while source paths and revision-pinned references retain their literal identity.
+Public landing navigation uses content-sized flex links with equal 28px gaps, reducing to 20px at 1200px and below; translation changes link width without imposing fixed columns. Links are quiet text over the sky with hover underlines. Component navigation and inspector tabs remain the working navigation; the active inspector tab has a thin blue underline. Landing and branded public detail headers share the flag-plus-locale-code trigger and the sun/moon/system capsule. The trigger opens a keyboard-operable listbox with a visible selected check. Appearance-group spacing is 24px, reducing to 12px at 1200px, 8px on phones and 6px at 360px. Theme segments are 40px wide, becoming 26px on phones and 24px at 360px; the locale code also hides at that narrowest breakpoint. English, Czech, German, French and Spanish UI catalogs are bundled; graph translation availability is separate and a notice explains mismatches. The current Superpowers and Whisper gallery graphs each include display translations in all five languages while source paths and revision-pinned references retain their literal identity.
 
-Sun, moon and system buttons explicitly select light, dark or operating-system appearance, with accessible labels and `aria-pressed`. Query choices precede stored choices, then artifact preferences and the system fallback. The public build supplies a light preference for a fresh visit; a saved or queried choice wins. Standalone artifacts fall back to system unless they carry a preference. Choices persist locally. Exported standalone HTML embeds its player, fonts, interface catalogs and graph/source data for offline viewing and removes the public landscape styles and landing-only content.
+Sun, moon and system buttons explicitly select light, dark or operating-system appearance, with accessible labels and `aria-pressed`. Query choices precede stored choices, then artifact preferences and the fallback. The public build supplies English and light preferences to both landing and branded detail pages; a saved or queried choice wins. The raw installed skill player retains the user or graph language behavior and system theme fallback unless its artifact carries a preference. Choices persist locally. Exported standalone HTML embeds its player, fonts, interface catalogs and graph/source data for offline viewing and removes the public landscape styles and landing-only content.
+
+Branded public detail pages keep an understated source-jump action in the desktop header: neutral transparent fill, a thin control rule, 13px medium text, 7px by 12px padding, 6px corners and a 36px minimum height. Hover uses the quiet surface; the action hides at 600px and below. A translated Back to examples link sits above the detail heading, with an authored 16px arrow, 13px medium text and a 36px minimum height. Back and the wordmark preserve the selected interface language and theme in their destination query. Back targets the examples anchor; an offline file uses the canonical public URL as its fallback. Both the back link and public detail header action hide in export-frame mode. These public additions do not change raw skill language selection or the exported graph framing.
 
 ### Component Graph and Motion
 

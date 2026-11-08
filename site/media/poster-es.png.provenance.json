@@ -14,5 +14,7 @@
   "source_html_sha256": "d4c6b3f604e9d28d2d38ab8fc5783bf7b0f00372978a744f0f6420fff94abc12",
   "artifact_sha256": "33f40f4b9c5f89d033e2d9e8cbda5e1dfc379816cd25f211c20cb97556aa5a94",
   "note": "Source-derived graph explanation, not recorded execution. No image generation model used.",
-  "embedded_origin": true
+  "embedded_origin": true,
+  "source_html_commit": "35e158179f9f5eb0b239410dadaf875b44cca640",
+  "source_html_path": "site/codex-agent-loop.html"
 }
