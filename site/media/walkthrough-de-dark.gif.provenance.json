@@ -1,0 +1,17 @@
+{
+  "kind": "runtime-render",
+  "generator": "Repo Visualizer export.py (Playwright, Pillow, FFmpeg)",
+  "settings": {
+    "width": 1200,
+    "height": 800,
+    "fps": 8,
+    "at": 4800,
+    "theme": "dark",
+    "language": "de"
+  },
+  "source_repository": "https://github.com/openai/codex",
+  "source_revision": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
+  "source_html_sha256": "d4c6b3f604e9d28d2d38ab8fc5783bf7b0f00372978a744f0f6420fff94abc12",
+  "artifact_sha256": "c048c74ae07e968c1bd1b75e091bd5c1cff7ccf20bd1410d66c1f5a448d6854c",
+  "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
+}

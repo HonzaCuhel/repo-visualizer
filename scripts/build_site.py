@@ -4,6 +4,8 @@ import json
 import base64
 from pathlib import Path
 import shutil
+import re
+import html
 import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'skills/repo-visualizer/scripts'))
@@ -45,12 +47,35 @@ def build():
     site=ROOT/'site';assets=site/'assets';assets.mkdir(parents=True,exist_ok=True)
     shutil.copy2(ROOT/'skills/repo-visualizer/assets/fonts/AtkinsonHyperlegibleNext.ttf',assets)
     shutil.copy2(ROOT/'skills/repo-visualizer/assets/fonts/OFL-AtkinsonHyperlegibleNext.txt',assets)
+    shutil.copy2(ROOT/'assets/plates/landscape.png',assets/'landscape.png')
+    shutil.copy2(ROOT/'assets/fonts/RethinkSans.ttf',assets/'RethinkSans.ttf')
+    shutil.copy2(ROOT/'assets/fonts/OFL-RethinkSans.txt',assets/'OFL-RethinkSans.txt')
+    shutil.copy2(ROOT/'assets/icons/LICENSE-bootstrap-icons.txt',assets/'LICENSE-bootstrap-icons.txt')
     document=branded(build_html(graph,landing=True))
-    document=document.replace('</head>', '<meta name="description" content="Understand how a repository works. Explore source-grounded component graphs and export HTML, GIF and video with an open skill for Codex and Claude Code.">\n<link rel="icon" href="favicon.svg" type="image/svg+xml">\n<meta property="og:title" content="Repo Visualizer — understand how the code works">\n<meta property="og:description" content="A component graph you can explore, verify against source, and share as HTML or video.">\n<meta property="og:image" content="https://HonzaCuhel.github.io/repo-visualizer/media/poster.png">\n<meta property="og:url" content="https://HonzaCuhel.github.io/repo-visualizer/">\n<style id="site-style">'+(ROOT/'site-src/site.css').read_text()+'</style>\n</head>',1)
-    hero='<div class="hero-actions landing-only"><a class="hero-install" href="#install"><span data-site="heroInstall">Install skill</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg></a><a class="hero-explore" href="#workspace" data-site="heroExplore">Explore the graph</a></div><p class="hero-meta landing-only" data-site="heroMeta">Codex + Claude Code · Open source · Local exports</p>'
+    def initial_appearance(match):
+        config=json.loads(match.group(2))
+        config['preference']={'theme':'light'}
+        return match.group(1)+json.dumps(config,ensure_ascii=False).replace('<','\\u003c')+match.group(3)
+    document=re.sub(r'(<script id="appearance-config" type="application/json">)(.*?)(</script>)',initial_appearance,document,count=1,flags=re.S)
+    document=document.replace('<body class="landing">','<body class="landing"><div class="landscape landing-only" aria-hidden="true"><img src="assets/landscape.png" alt="" fetchpriority="high" decoding="async"></div>',1)
+    document=document.replace('</head>', '<meta name="description" content="Understand how a repository works. Explore source-grounded component graphs and export HTML, GIF and video with an open skill for Codex and Claude Code.">\n<link rel="icon" href="favicon.svg" type="image/svg+xml">\n<meta property="og:title" content="Repo Visualizer — understand how the code works">\n<meta property="og:description" content="A component graph you can explore, verify against source, and share as HTML or video.">\n<meta property="og:image" content="https://HonzaCuhel.github.io/repo-visualizer/media/poster.png">\n<meta property="og:url" content="https://HonzaCuhel.github.io/repo-visualizer/">\n<style id="site-style">'+(ROOT/'site-src/site.css').read_text()+'</style><style id="landscape-style">'+(ROOT/'site-src/landscape.css').read_text()+'</style>\n</head>',1)
+    document=document.replace('id="page-title" data-i18n="headline"','id="page-title" data-site="heroHeadline"',1)
+    document=document.replace('data-i18n="subtitle"','data-site="heroSubtitle"',1)
+    hero='''<div class="hero-actions landing-only"><a class="hero-install" href="#install" data-site="heroInstall">Install skill</a><a class="hero-explore" href="#workspace" data-site="heroExplore">Explore Codex</a></div><div class="hero-command landing-only"><code id="hero-command">npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer</code><button id="copy-hero" type="button" data-site-aria="copyCommand" aria-label="Copy command"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="4" width="12" height="14" rx="2"/><path d="M15 18v2H4V7h4"/></svg><span data-site="heroCopy">Copy</span></button></div><p id="hero-feedback" class="sr-only" role="status"></p>'''
     document=document.replace('</section>',hero+'\n</section>',1)
+    footer_start=document.index('<footer')
+    footer_end=document.index('</footer>',footer_start)
+    footer=document[footer_start:footer_end]
+    boundary=footer.rfind('</details>')
+    footer=footer[:boundary]+'<p>GitHub icon: Bootstrap Icons · MIT.</p><pre>'+html.escape((ROOT/'assets/icons/LICENSE-bootstrap-icons.txt').read_text())+'</pre>'+footer[boundary:]
+    document=document[:footer_start]+footer+document[footer_end:]
+    document=document.replace('</footer>','<a class="font-credit" href="assets/OFL-RethinkSans.txt">Rethink Sans · OFL-1.1</a></footer>',1)
     document=document.replace('</main>', (ROOT/'site-src/sections.html').read_text()+'\n</main>',1)
     document=document.replace('</body>','<script id="site-locales" type="application/json">'+(ROOT/'site-src/locales.json').read_text().replace('<','\\u003c')+'</script><script id="site-script">'+(ROOT/'site-src/site.js').read_text()+'</script>\n</body>',1)
+    github='<img class="github-mark" alt="" width="18" height="18" src="data:image/svg+xml;base64,'+base64.b64encode((ROOT/'assets/icons/github.svg').read_bytes()).decode()+'">'
+    document=document.replace('>GitHub</a', '>'+github+'GitHub</a',1)
+    document=document.replace('.landing-section,.landing-only,#site-script,#site-style,#site-locales', '.landing-section,.landing-only,#site-script,#site-style,#site-locales,#landscape-style')
+    document=re.sub(r'</svg\s*>','</svg>',document)
     write_html(site/'index.html',document)
     write_html(site/'codex-shell.html',branded(build_html(read_story(ROOT/'examples/codex/graph.json'))))
     write_html(site/'codex-agent-loop.html',branded(build_html(graph)))

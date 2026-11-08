@@ -4,9 +4,9 @@ Output language follows the user's explicit request, then their conversation lan
 
 Set `language` to a BCP-47 tag such as `en`, `cs`, `de` or `fr`. Write labels, title, question, descriptions, scenarios, steps and uncertainties in that language. Keep code excerpts, paths, identifiers and license notices unchanged.
 
-English and Czech interface catalogs are bundled. For another language, read `assets/locales/en.json` and translate every value into the graph's `ui_strings` object. Keep keys and placeholders such as `{nodes}`, `{edges}`, `{format}` and `{percent}` unchanged. Values are plain text, never translated HTML.
+English, Czech, German, French and Spanish interface catalogs are bundled. For another language, read `assets/locales/en.json` and translate every value into the graph's `ui_strings` object. Keep keys and placeholders such as `{nodes}`, `{edges}`, `{format}` and `{percent}` unchanged. Values are plain text, never translated HTML.
 
-The language control switches the interface. It changes graph content only when a graph translation was supplied. A standalone graph defaults to its declared language; the public site can use the browser preference. The user can override the interface language and theme. Choices persist locally when storage is available, and still work when it is blocked.
+The language menu shows native names and flag icons. It switches the interface and changes graph content only when a graph translation was supplied. A notice explains when the graph remains in its original language. A standalone graph defaults to its declared language; the public site can use the browser preference. Sun, moon and monitor buttons select light, dark and system appearance. Choices persist locally when storage is available, and still work when it is blocked.
 
 For a bilingual graph, `translations` is an optional object keyed by language tag:
 

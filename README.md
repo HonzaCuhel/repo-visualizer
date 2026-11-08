@@ -73,7 +73,7 @@ Select a component or relationship to read embedded excerpts and open revision-p
 
 One canonical graph and one seekable scene drive the player and its exports. HTML keeps the clickable evidence; images and animation carry the visual explanation. [Export guide](skills/repo-visualizer/references/exports.md), including the optional HyperFrames adapter.
 
-Choose light, dark or system appearance. Explanations follow your requested language, independently of the agent. English and Czech interface translations are bundled; other interface languages can provide an explicit dictionary. [Language and appearance](skills/repo-visualizer/references/localization.md).
+Choose light, dark or system appearance with the sun, moon and monitor buttons. The language menu includes English, Czech, German, French and Spanish. Explanations follow your requested language, independently of the agent; switching an existing graph requires its translated content. [Language and appearance](skills/repo-visualizer/references/localization.md).
 
 ## Evidence and limits
 

@@ -29,12 +29,14 @@ The user confirmed Codex and Claude Code as first-release targets. The skill wor
 - Map, Focus and Path use one shared graph model. HTML, PNG, SVG, GIF, MP4 and WebM are supported; HyperFrames is an optional adapter.
 - The requested public presentation is GitHub Pages. The user wants a release prepared for 8 November 2026.
 - Research, proposals, and joint selection precede the final implementation.
-- The user-requested compact refinement adds light/dark/system themes, English/Czech interface and site, restrained scroll reveals, clear installation CTA and compact standalone introductions. Explanation language follows the user, independent of agent vendor.
+- The user-requested compact refinement adds light/dark/system icon controls, a flag language menu with English, Czech, German, French and Spanish, restrained scroll reveals, clear installation CTA and compact standalone introductions. Explanation language follows the user, independent of agent vendor. Interface language and available graph translations are separate.
 - Repo Visualizer is the product name. Original code is MIT-licensed with separately licensed vendored assets. The public repository is HonzaCuhel/repo-visualizer; private test examples are not authorized for publication.
 
 ## Brand Commitments
 
 The user asks for an extremely simple, professional product with exceptional visual quality, using stack-diagram and stacks.caru.moe as references for craft and ease of adoption. They explicitly rejected the orange exploded-plate concept as scam-like and childish. Preserve flat diagrams, disciplined typography, quiet colors, conventional compact controls and readable code. Do not use playful 3D plates, glow, plastic surfaces, large gradient buttons or a neon instrument costume. The user selected composition B (Story and source), with the explicit refinement that its linear chain must become a potentially complex component graph. Keep its navigation/component area, central graph and source detail; topology follows the repository rather than the comp's five-step example.
+
+On 8 November 2026 the user selected the landscape landing comp: an original sunlit mountain valley, centered introduction, copyable installation command and the complete Codex agent-loop explorer beginning within the opening view. This replaces the public landing's visual world while retaining the professional flat player and full nonlinear graph. The landscape is generated atmosphere; it makes no claim to depict a particular real place. Motion must respect reduced-motion preferences and leave controls stable.
 
 ## Evidence on Hand
 

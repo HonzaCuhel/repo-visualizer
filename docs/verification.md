@@ -1,10 +1,24 @@
 # Release verification
 
+## Landscape landing and language controls — 8 November 2026
+
+The user selected the landscape composition and explicitly approved the assembled page. The public landing adds an original generated landscape, a real copyable installation command, a full interactive Codex graph, five language catalogs with flag icons, and separate light/dark/system buttons. The landscape is atmosphere, not a claim to depict a real location. Standalone HTML exports remove the landing assets and retain embedded fonts and source excerpts.
+
+Verification for this change:
+
+- 37 automated tests pass, including browser integration and localization checks.
+- Browser checks pass for 70 combinations of seven widths (320–1600px), five languages and two themes, including pane boundaries; copy, empty-search recovery, Map/Focus/Path, playback, source inspection, keyboard language selection and an actually downloaded offline HTML were exercised.
+- All 30 showcase media artifacts have matching source and artifact hashes. All ten GIFs decode to 120 frames at 1200×800 with changing content. All ten MP4 variants were actually played in Chromium and decoded at 1200×800.
+- Scroll movement and reduced motion were exercised. Reduced motion disables the landscape transform. Graph playback remains an explicit action.
+- Independent visual review identified mobile/tablet pane overlap; it was repaired and recaptured.
+
+The Impeccable comparison ledger remains `hero/open` on the small GitHub navigation control despite an aggregate visual match and the user's explicit approval of the actual assembled page. No browser approval receipt or closed phase gate has been fabricated. This tooling limitation is separate from the functional checks above. The direction seed was issued and corroborated; shipping raster sources carry their generation prompt or runtime origin.
+
 ## Codex showcase
 
 A fresh Codex CLI 0.164.0 session used the globally installed public v0.2.0 skill against `openai/codex` revision `33b3f80a0935e51a49cbbda7d6473ef757d4241b`. Given a question and no prewritten graph, it produced 11 components, 19 relationships, 37 revision-pinned sources, offline HTML, complete Czech display translations and a 15-second GIF with 90 of 90 decoded frames distinct. The target working tree remained clean. [Source, licensing and test receipt](../examples/codex/README.md).
 
-The landing page and all public showcase media use the complete, unmodified agent-loop graph from that result: 11 components and 19 relationships, in English/Czech and light/dark. A focused shell execution graph remains an additional example. Both source graphs retain Codex's exact Apache-2.0 license and NOTICE. These are source interpretations, not runtime traces or a complete map of Codex.
+The landing page and all public showcase media use the complete, unmodified agent-loop graph from that result: 11 components and 19 relationships, with English, Czech, German, French and Spanish display translations and light/dark themes. A focused shell execution graph remains an additional example. Both source graphs retain Codex's exact Apache-2.0 license and NOTICE. These are source interpretations, not runtime traces or a complete map of Codex.
 
 ## Version 0.2
 

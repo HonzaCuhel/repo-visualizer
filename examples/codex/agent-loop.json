@@ -1111,6 +1111,447 @@
         "Rozsah zahrnuje běžné tahy Core a exec_command. Přenos UI, úplné vnitřnosti code-mode, MCP, write_stdin, kompakce a vnitřnosti sandboxů jednotlivých platforem nejsou rozvedeny.",
         "Dostupné nástroje, posuzovatel, sandbox a opakování závisejí na konfiguraci, prostředí, možnostech modelu a zásadách. Závažné chyby čekajících nástrojů při sběru zaznamenává error_or_panic; běžné chyby se mění ve výsledky nástrojů."
       ]
+    },
+    "de": {
+      "title": "Codex: von der Eingabe zum Werkzeugaufruf",
+      "question": "Wie wird aus einer Nachricht ein Werkzeugaufruf und eine Antwort?",
+      "summary": "Core verarbeitet Modellantworten und Werkzeugergebnisse in einer Schleife; Shell-Befehle durchlaufen Richtlinienprüfungen.",
+      "uncertainties": [
+        "Statische Quelltextanalyse, keine Aufzeichnung eines Programmlaufs. Der Rundgang zeigt mögliche Verzweigungen, keinen beobachteten Ablauf.",
+        "Beschränkt auf reguläre Core-Turns und exec_command. UI-Transport, vollständige Code-Mode- und MCP-Interna, write_stdin, Kompaktierung und Plattformsandboxen sind nicht ausgeführt.",
+        "Verfügbare Werkzeuge, Prüfung, Sandbox und Wiederholung hängen von Konfiguration, Umgebung, Modellfähigkeiten und Richtlinien ab. Fatale Fehler beim Einsammeln von Werkzeugergebnissen werden über error_or_panic protokolliert; gewöhnliche Fehler werden Werkzeugergebnisse."
+      ],
+      "nodes": {
+        "input": {
+          "label": "Benutzereingabe annehmen",
+          "description": "Startet eine reguläre Aufgabe; die Steuerung eines laufenden Turns nutzt einen separaten Eingabepfad."
+        },
+        "turn": {
+          "label": "Turn und Gespräch",
+          "description": "Erstellt Anfragen aus dem Verlauf und setzt bei Werkzeugaufrufen oder neuen Eingaben fort."
+        },
+        "model": {
+          "label": "Modellanfrage und Stream",
+          "description": "Sendet Anweisungen, Verlauf und Werkzeugspezifikationen und empfängt Antwortobjekte."
+        },
+        "dispatch": {
+          "label": "Einordnen und ausführen",
+          "description": "Speichert Werkzeugaufrufe und startet registrierte Laufzeiten mit paralleler oder exklusiver Zulassung."
+        },
+        "shell": {
+          "label": "Shell-Befehl vorbereiten",
+          "description": "Ermittelt Shell und Arbeitsverzeichnis und leitet Freigabeanforderungen für den Befehl ab."
+        },
+        "gate": {
+          "label": "Freigabe und Sandbox",
+          "description": "Lehnt verbotene Aktionen ab, fordert eine Prüfung an, wählt die Sandbox und wiederholt Ablehnungen nur unter Bedingungen."
+        },
+        "review": {
+          "label": "Freigabe entscheiden",
+          "description": "Berechtigungshooks, erforderliche menschliche Prüfung oder Guardian bestimmen das Ergebnis."
+        },
+        "process": {
+          "label": "Ausführen und erfassen",
+          "description": "Startet über ein Ausführungsbackend oder einen lokalen Prozess und erfasst Ausgabe, Exitstatus oder eine Kennung des laufenden Prozesses."
+        },
+        "results": {
+          "label": "Werkzeugergebnisse → Verlauf",
+          "description": "Kodiert Ergebnisse und behandelbare Fehler und übernimmt ausstehende Ausgaben in den Gesprächsverlauf."
+        },
+        "answer": {
+          "label": "Antwort des Assistenten",
+          "description": "Schließt Nachrichten ab; ohne Folgearbeit kann der Turn enden, vorbehaltlich der Stop-Hooks."
+        },
+        "error": {
+          "label": "Fehlerausgang",
+          "description": "Parsefehler können dem Modell beantwortet werden; endgültige Anfragefehler melden einen Clientfehler und beenden die Schleife."
+        }
+      },
+      "edges": {
+        "start": {
+          "label": "regulären Turn starten"
+        },
+        "sample": {
+          "label": "Verlauf + Anweisungen + Werkzeuge"
+        },
+        "call": {
+          "label": "Werkzeugaufruf"
+        },
+        "text": {
+          "label": "Assistentennachricht"
+        },
+        "exec": {
+          "label": "exec_command-Laufzeit"
+        },
+        "other": {
+          "label": "anderes Ergebnis / unbekanntes Werkzeug"
+        },
+        "requirements": {
+          "label": "Freigabeanforderung des Befehls"
+        },
+        "ask": {
+          "label": "erforderliche Berechtigung prüfen"
+        },
+        "verdict": {
+          "label": "Freigabe, Ablehnung oder Abbruch"
+        },
+        "attempt": {
+          "label": "Versuch in ausgewählter Sandbox"
+        },
+        "denied": {
+          "label": "Sandbox-Ablehnung"
+        },
+        "retry": {
+          "label": "laut Richtlinie erlaubte Wiederholung"
+        },
+        "rejected": {
+          "label": "verboten / abgelehnt / Ablehnung beibehalten"
+        },
+        "output": {
+          "label": "Ausgabe + Exitcode oder Prozesskennung"
+        },
+        "loop": {
+          "label": "Ausgaben speichern; erneut anfragen"
+        },
+        "stop": {
+          "label": "ohne Folgearbeit abschließen"
+        },
+        "hook": {
+          "label": "Stop-Hook kann Fortsetzung verlangen"
+        },
+        "bad": {
+          "label": "Parsefehler oder endgültiger Anfragefehler"
+        },
+        "recover": {
+          "label": "behandelbare Parsefehler-Antwort"
+        }
+      },
+      "steps": {
+        "accept": {
+          "title": "Annehmen und zusammenstellen",
+          "description": "Implementierungsillustration: angenommene Eingaben starten eine Aufgabe; der Verlauf prägt die Anfrage."
+        },
+        "request": {
+          "title": "Anfragen und verzweigen",
+          "description": "Die gestreamte Antwort kann eine Nachricht oder einen Werkzeugaufruf enthalten."
+        },
+        "prepare": {
+          "title": "Shell-Ausführung vorbereiten",
+          "description": "exec_command ermittelt den Befehl und prüft dessen Richtlinien."
+        },
+        "authorize": {
+          "title": "Berechtigung klären",
+          "description": "Eine Prüfung ist bedingt erforderlich; verbotene oder abgelehnte Aktionen liefern Fehler zurück."
+        },
+        "execute": {
+          "title": "Versuchen und Ablehnung behandeln",
+          "description": "In der gewählten Sandbox ausführen; eine Ablehnung kann eine geprüfte Wiederholung erlauben."
+        },
+        "continue": {
+          "title": "Ergebnisse zurückführen",
+          "description": "Ausgaben fließen für eine weitere Anfrage in den Verlauf; eine Antwort kann den Turn beenden."
+        }
+      },
+      "groups": {},
+      "scenarios": {
+        "mechanism": {
+          "label": "Illustration der Implementierung"
+        }
+      }
+    },
+    "fr": {
+      "title": "Codex : de la saisie à l’exécution des outils",
+      "question": "Comment un message devient-il des appels d’outils et une réponse ?",
+      "summary": "Core boucle sur les réponses du modèle et les résultats des outils, avec des contrôles de politique autour de l’exécution shell.",
+      "uncertainties": [
+        "Analyse statique du code, pas un enregistrement d’exécution. Le parcours illustre des branches possibles, pas une exécution observée.",
+        "Périmètre limité aux tours Core normaux et à exec_command. Le transport UI, les détails complets de code-mode et MCP, write_stdin, la compaction et les bacs à sable propres aux plateformes ne sont pas développés.",
+        "Les outils exposés, le réviseur, le bac et les nouvelles tentatives dépendent de la configuration, de l’environnement, des capacités du modèle et des politiques. Les erreurs fatales pendant la collecte des résultats sont journalisées par error_or_panic ; les erreurs ordinaires deviennent des résultats d’outil."
+      ],
+      "nodes": {
+        "input": {
+          "label": "Accepter la saisie",
+          "description": "Démarre une tâche normale ; le pilotage d’un tour actif suit un chemin d’admission distinct."
+        },
+        "turn": {
+          "label": "Tour et conversation",
+          "description": "Construit les requêtes à partir de l’historique et poursuit le traitement pour les outils ou les entrées en attente."
+        },
+        "model": {
+          "label": "Requête et flux du modèle",
+          "description": "Envoie les instructions, l’historique et les spécifications des outils, puis reçoit les éléments de réponse."
+        },
+        "dispatch": {
+          "label": "Classer et répartir",
+          "description": "Enregistre les appels d’outils et lance les exécuteurs enregistrés avec admission parallèle ou exclusive."
+        },
+        "shell": {
+          "label": "Préparer la commande shell",
+          "description": "Résout le shell et le répertoire de travail, puis détermine les exigences d’approbation de la commande."
+        },
+        "gate": {
+          "label": "Approbation et bac à sable",
+          "description": "Refuse les actions interdites, demande une revue, choisit le bac à sable et réessaie certains refus sous conditions."
+        },
+        "review": {
+          "label": "Décider de l’approbation",
+          "description": "Les hooks d’autorisation, une revue humaine obligatoire ou Guardian déterminent la décision."
+        },
+        "process": {
+          "label": "Exécuter et collecter",
+          "description": "Lance via un moteur d’exécution ou un processus local et collecte la sortie, le statut ou un identifiant de processus actif."
+        },
+        "results": {
+          "label": "Résultats → historique",
+          "description": "Encode les résultats et erreurs récupérables, puis verse les sorties en attente dans l’historique de conversation."
+        },
+        "answer": {
+          "label": "Réponse de l’assistant",
+          "description": "Termine les messages ; sans suite nécessaire, le tour peut s’arrêter sous réserve des hooks Stop."
+        },
+        "error": {
+          "label": "Issue en erreur",
+          "description": "Les erreurs d’analyse peuvent recevoir une réponse au modèle ; les échecs définitifs de requête signalent une erreur au client et arrêtent la boucle."
+        }
+      },
+      "edges": {
+        "start": {
+          "label": "démarrer un tour normal"
+        },
+        "sample": {
+          "label": "historique + instructions + outils"
+        },
+        "call": {
+          "label": "élément d’appel d’outil"
+        },
+        "text": {
+          "label": "message de l’assistant"
+        },
+        "exec": {
+          "label": "exécuteur exec_command"
+        },
+        "other": {
+          "label": "autre résultat / outil inconnu"
+        },
+        "requirements": {
+          "label": "exigence de politique de commande"
+        },
+        "ask": {
+          "label": "examiner l’autorité requise"
+        },
+        "verdict": {
+          "label": "approbation, refus ou abandon"
+        },
+        "attempt": {
+          "label": "tentative dans le bac choisi"
+        },
+        "denied": {
+          "label": "refus du bac à sable"
+        },
+        "retry": {
+          "label": "nouvelle tentative autorisée"
+        },
+        "rejected": {
+          "label": "interdit / rejeté / refus conservé"
+        },
+        "output": {
+          "label": "sortie + code ou identifiant"
+        },
+        "loop": {
+          "label": "enregistrer les sorties ; redemander"
+        },
+        "stop": {
+          "label": "terminer si aucune suite"
+        },
+        "hook": {
+          "label": "le hook Stop peut demander une suite"
+        },
+        "bad": {
+          "label": "erreur d’analyse ou échec définitif"
+        },
+        "recover": {
+          "label": "réponse d’erreur d’analyse récupérable"
+        }
+      },
+      "steps": {
+        "accept": {
+          "title": "Accepter et assembler",
+          "description": "Illustration de l’implémentation : l’entrée acceptée démarre une tâche ; l’historique façonne la requête."
+        },
+        "request": {
+          "title": "Interroger et bifurquer",
+          "description": "La réponse en flux peut contenir un message ou un appel d’outil."
+        },
+        "prepare": {
+          "title": "Préparer l’exécution shell",
+          "description": "exec_command résout la commande et vérifie sa politique."
+        },
+        "authorize": {
+          "title": "Résoudre l’autorité",
+          "description": "La revue est conditionnelle ; les actions interdites ou rejetées renvoient un échec."
+        },
+        "execute": {
+          "title": "Tenter et traiter le refus",
+          "description": "Exécute dans le bac choisi ; un refus peut permettre une nouvelle tentative examinée."
+        },
+        "continue": {
+          "title": "Réinjecter les résultats",
+          "description": "Les sorties rejoignent l’historique pour une nouvelle requête ; une réponse peut clore le tour."
+        }
+      },
+      "groups": {},
+      "scenarios": {
+        "mechanism": {
+          "label": "Illustration de l’implémentation"
+        }
+      }
+    },
+    "es": {
+      "title": "Codex: de la entrada a la ejecución de herramientas",
+      "question": "¿Cómo se convierte un mensaje en llamadas a herramientas y una respuesta?",
+      "summary": "Core recorre las respuestas del modelo y los resultados de las herramientas, con controles de políticas en torno a la ejecución shell.",
+      "uncertainties": [
+        "Análisis estático del código, no una grabación de la ejecución. El recorrido ilustra posibles ramas, no una ejecución observada.",
+        "Limitado a los turnos normales de Core y exec_command. No desarrolla el transporte UI, todos los detalles de code-mode y MCP, write_stdin, la compactación ni los sandboxes específicos de cada plataforma.",
+        "Las herramientas expuestas, el revisor, el sandbox y los reintentos dependen de la configuración, el entorno, las capacidades del modelo y las políticas. Los errores fatales al recopilar resultados se registran mediante error_or_panic; los fallos ordinarios se convierten en resultados de herramientas."
+      ],
+      "nodes": {
+        "input": {
+          "label": "Aceptar la entrada",
+          "description": "Inicia una tarea normal; dirigir un turno activo utiliza una vía de admisión independiente."
+        },
+        "turn": {
+          "label": "Turno y conversación",
+          "description": "Construye solicitudes desde el historial y continúa para herramientas o entradas pendientes."
+        },
+        "model": {
+          "label": "Solicitud y flujo del modelo",
+          "description": "Envía instrucciones, historial y especificaciones de herramientas, y recibe elementos de respuesta."
+        },
+        "dispatch": {
+          "label": "Clasificar y despachar",
+          "description": "Guarda llamadas a herramientas y activa los ejecutores registrados con admisión paralela o exclusiva."
+        },
+        "shell": {
+          "label": "Preparar comando shell",
+          "description": "Resuelve el shell y el directorio de trabajo y determina los requisitos de aprobación del comando."
+        },
+        "gate": {
+          "label": "Aprobación y sandbox",
+          "description": "Rechaza acciones prohibidas, solicita revisión, elige el sandbox y reintenta ciertos rechazos bajo condiciones."
+        },
+        "review": {
+          "label": "Resolver la aprobación",
+          "description": "Los hooks de permisos, la revisión humana obligatoria o Guardian determinan la decisión."
+        },
+        "process": {
+          "label": "Ejecutar y recopilar",
+          "description": "Inicia mediante el motor de ejecución o un proceso local y recopila salida, estado o un identificador del proceso activo."
+        },
+        "results": {
+          "label": "Resultados → historial",
+          "description": "Codifica resultados y fallos recuperables, y añade las salidas pendientes al historial de conversación."
+        },
+        "answer": {
+          "label": "Respuesta del asistente",
+          "description": "Completa los mensajes; sin trabajo adicional, puede terminar el turno sujeto a los hooks Stop."
+        },
+        "error": {
+          "label": "Resultado de error",
+          "description": "Los errores de análisis pueden responder al modelo; los fallos definitivos de solicitud notifican al cliente y terminan el bucle."
+        }
+      },
+      "edges": {
+        "start": {
+          "label": "iniciar turno normal"
+        },
+        "sample": {
+          "label": "historial + instrucciones + herramientas"
+        },
+        "call": {
+          "label": "elemento de llamada a herramienta"
+        },
+        "text": {
+          "label": "mensaje del asistente"
+        },
+        "exec": {
+          "label": "ejecutor exec_command"
+        },
+        "other": {
+          "label": "otro resultado / herramienta desconocida"
+        },
+        "requirements": {
+          "label": "requisito de política del comando"
+        },
+        "ask": {
+          "label": "revisar la autoridad requerida"
+        },
+        "verdict": {
+          "label": "aprobar, rechazar o cancelar"
+        },
+        "attempt": {
+          "label": "intento en el sandbox seleccionado"
+        },
+        "denied": {
+          "label": "rechazo del sandbox"
+        },
+        "retry": {
+          "label": "reintento permitido por la política"
+        },
+        "rejected": {
+          "label": "prohibido / rechazado / rechazo conservado"
+        },
+        "output": {
+          "label": "salida + código o identificador"
+        },
+        "loop": {
+          "label": "guardar salidas; solicitar de nuevo"
+        },
+        "stop": {
+          "label": "terminar si no hay continuación"
+        },
+        "hook": {
+          "label": "el hook Stop puede pedir continuar"
+        },
+        "bad": {
+          "label": "error de análisis o fallo definitivo"
+        },
+        "recover": {
+          "label": "respuesta de error de análisis recuperable"
+        }
+      },
+      "steps": {
+        "accept": {
+          "title": "Aceptar y preparar",
+          "description": "Ilustración de la implementación: la entrada aceptada inicia una tarea; el historial da forma a la solicitud."
+        },
+        "request": {
+          "title": "Solicitar y bifurcar",
+          "description": "La respuesta en flujo puede contener un mensaje o una llamada a herramienta."
+        },
+        "prepare": {
+          "title": "Preparar la ejecución shell",
+          "description": "exec_command resuelve el comando y comprueba su política."
+        },
+        "authorize": {
+          "title": "Resolver la autoridad",
+          "description": "La revisión es condicional; las acciones prohibidas o rechazadas devuelven fallos."
+        },
+        "execute": {
+          "title": "Intentar y tratar el rechazo",
+          "description": "Ejecuta en el sandbox elegido; un rechazo puede permitir un reintento revisado."
+        },
+        "continue": {
+          "title": "Devolver los resultados",
+          "description": "Las salidas entran en el historial para otra solicitud; una respuesta puede cerrar el turno."
+        }
+      },
+      "groups": {},
+      "scenarios": {
+        "mechanism": {
+          "label": "Ilustración de la implementación"
+        }
+      }
     }
   },
   "default_view": "map",

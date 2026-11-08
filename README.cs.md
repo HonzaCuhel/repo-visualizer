@@ -69,7 +69,7 @@ U komponent i vztahů můžete číst vložené úryvky a otevřít zdroj na kon
 
 Přehrávač i exporty používají jediný graf a stejnou scénu. HTML zachová klikatelné zdroje; obrázky a animace přenesou vizuální vysvětlení. [Průvodce exportem](skills/repo-visualizer/references/exports.md), včetně volitelného adaptéru HyperFrames.
 
-Vyberte světlý, tmavý nebo systémový vzhled. Jazyk vysvětlení určuje váš požadavek, nezávisle na agentovi. Rozhraní má český a anglický překlad; další jazyky mohou dodat vlastní slovník. [Jazyk a vzhled](skills/repo-visualizer/references/localization.md).
+Slunce, měsíc a monitor přepínají světlý, tmavý a systémový vzhled. Jazyková nabídka obsahuje češtinu, angličtinu, němčinu, francouzštinu a španělštinu. Jazyk vysvětlení určuje váš požadavek, nezávisle na agentovi; přepnutí již vytvořeného grafu vyžaduje jeho přeložený obsah. [Jazyk a vzhled](skills/repo-visualizer/references/localization.md).
 
 ## Důkazy a omezení
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,os,sys,tempfile,unittest
+import json,os,re,sys,tempfile,unittest
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'skills/repo-visualizer/scripts'))
 from builder import build_html,write_html
 from story_model import prepare_story,validate_structure,StoryError,read_story
@@ -9,6 +9,12 @@ def fixture(root):
  return prepare_story(dict(schema_version=1,title='Sample',question='How?',language='cs',sources=[dict(id='s',path='source.py',start=1,end=1)],groups=[dict(id='outer',label='Outer'),dict(id='inner',label='Inner',parent='outer')],nodes=[dict(id='a',label='Alpha',group='inner',source_ids=['s']),dict(id='b',label='Beta',group='inner',source_ids=['s']),dict(id='c',label='Gamma',group='outer',source_ids=['s'])],edges=[dict(id='ab',**{'from':'a','to':'b'},label='calls',source_ids=['s']),dict(id='ba',**{'from':'b','to':'a'},label='retry',source_ids=['s']),dict(id='bc',**{'from':'b','to':'c'},label='returns',source_ids=['s'])]),root)
 
 class LocalizationModelTests(unittest.TestCase):
+ def test_bundled_catalogs_are_complete_and_keep_format_arguments(self):
+  folder=ROOT/'skills/repo-visualizer/assets/locales';base=read_story(folder/'en.json')
+  for language in ['cs','de','fr','es']:
+   catalog=read_story(folder/(language+'.json'));self.assertEqual(set(catalog),set(base))
+   for key in base:
+    self.assertTrue(catalog[key].strip());self.assertEqual(sorted(re.findall(r'\{\w+\}',catalog[key])),sorted(re.findall(r'\{\w+\}',base[key])))
  def test_translations_cannot_rewrite_topology_or_evidence(self):
   with tempfile.TemporaryDirectory() as directory:
    graph=fixture(Path(directory));graph['translations']={'en':{'nodes':{'a':{'label':'First'}}}}
@@ -31,16 +37,32 @@ class LocalizationBrowserTests(unittest.TestCase):
  def test_locale_switch_keeps_graph_evidence_selection_and_offline_download(self):
   graph=fixture(self.root);graph['summary']='Full detailed context. '+('More detail. '*35);graph['overview']={'lead':'A concise introduction.','path':[{'node_id':'a','label':'Frontend'}]};graph['repo']['commit']='abcdef0123456789abcdef0123456789abcdef01';graph['translations']={'en':{'nodes':{'a':{'label':'First component'}}}};self.open(graph)
   self.assertEqual(self.page.locator('#page-description').inner_text(),'A concise introduction.');self.assertEqual(self.page.locator('#intro-metadata code').inner_text(),'abcdef0');self.assertTrue(self.page.locator('#intro-details').is_visible());self.assertEqual(self.page.locator('#overview-path button').count(),1);self.assertEqual(self.page.locator('#code-tab').inner_text(),'Kód');self.assertEqual(self.page.locator('#page-title').inner_text(),'Sample')
-  self.page.evaluate('repoPlayer.selectNode("a")');self.page.locator('#language-select').select_option('en');self.page.evaluate('window.repoLocaleReady')
+  self.page.evaluate('repoPlayer.selectNode("a")');self.page.locator('#language-toggle').click();self.page.locator('[data-language-choice=en]').click();self.page.evaluate('window.repoLocaleReady')
   self.assertEqual(self.page.locator('#selection-title').inner_text(),'First component');self.assertEqual(self.page.evaluate('repoPlayer.graph.sources[0].excerpt'),graph['sources'][0]['excerpt'])
   self.assertEqual(self.page.evaluate('repoPlayer.graph.edges.map(e=>[e.from,e.to])'),[['a','b'],['b','a'],['b','c']])
-  self.page.locator('#theme-select').select_option('dark');self.assertEqual(self.page.evaluate('document.documentElement.dataset.theme'),'dark')
+  self.page.locator('[data-theme-choice=dark]').click();self.assertEqual(self.page.evaluate('document.documentElement.dataset.theme'),'dark')
   svg=self.page.evaluate('repoPlayer.exportSVG()');self.assertIn('data-theme="dark"',svg);self.assertIn('--paper:#10141b',svg.replace(' ',''))
   with self.page.expect_download() as download:self.page.evaluate('repoPlayer.export("html")')
   out=self.root/'copy.html';download.value.save_as(out);self.page.goto(out.as_uri());self.page.evaluate('window.repoReady');self.assertEqual(self.page.evaluate('document.documentElement.dataset.theme'),'dark');self.assertEqual(self.page.locator('#selection-title').inner_text(),'First component');self.assertEqual(self.errors,[])
  def test_custom_language_and_untrusted_translation_are_plain_text(self):
   graph=fixture(self.root);graph['language']='fr';graph['ui_strings']={'languageName':'Français','code':'Code source','openSource':'Ouvrir la source','map':'Carte <img src=x onerror="window.PWNED=1">'};self.open(graph)
-  self.assertEqual(self.page.locator('#code-tab').inner_text(),'Code source');self.assertIsNone(self.page.evaluate('window.PWNED'));self.assertEqual(self.page.locator('[data-view=map] img').count(),0);self.assertEqual(self.page.locator('#language-select').input_value(),'fr');self.assertEqual(self.errors,[])
+  self.assertEqual(self.page.locator('#code-tab').inner_text(),'Code source');self.assertIsNone(self.page.evaluate('window.PWNED'));self.assertEqual(self.page.locator('[data-view=map] img').count(),0);self.assertEqual(self.page.evaluate('repoAppearance.language'),'fr');self.assertEqual(self.errors,[])
+ def test_keyboard_language_menu_icon_themes_and_persistence(self):
+  self.open(fixture(self.root));toggle=self.page.locator('#language-toggle')
+  toggle.focus();toggle.press('Enter');self.assertEqual(toggle.get_attribute('aria-expanded'),'true')
+  self.assertEqual(self.page.evaluate('document.activeElement.dataset.languageChoice'),'cs')
+  self.page.keyboard.press('ArrowDown');self.page.keyboard.press('Enter');self.page.evaluate('window.repoLocaleReady')
+  self.assertEqual(self.page.evaluate('repoAppearance.language'),'de');self.assertEqual(toggle.get_attribute('aria-expanded'),'false')
+  self.assertEqual(self.page.evaluate('document.activeElement.id'),'language-toggle')
+  self.assertEqual(self.page.locator('#current-flag svg').count(),1)
+  self.assertTrue(self.page.locator('#graph-language-note').is_visible())
+  self.page.locator('[data-theme-choice=dark]').click();self.assertEqual(self.page.evaluate('document.documentElement.dataset.theme'),'dark')
+  self.assertEqual(self.page.locator('.theme-switch [aria-pressed=true]').count(),1)
+  self.page.reload();self.page.evaluate('window.repoReady');self.assertEqual(self.page.evaluate('repoAppearance.language'),'de');self.assertEqual(self.page.evaluate('repoAppearance.theme'),'dark')
+  toggle.click();self.page.keyboard.press('Escape');self.assertEqual(toggle.get_attribute('aria-expanded'),'false')
+  toggle.click();self.page.locator('#page-title').click();self.assertEqual(toggle.get_attribute('aria-expanded'),'false')
+  self.page.locator('[data-theme-choice=system]').click();self.page.emulate_media(color_scheme='light');self.assertEqual(self.page.evaluate('document.documentElement.dataset.theme'),'light')
+  self.page.emulate_media(color_scheme='dark');self.page.wait_for_function('document.documentElement.dataset.theme==="dark"');self.assertEqual(self.page.locator('[data-theme-choice=system]').get_attribute('aria-pressed'),'true');self.assertEqual(self.errors,[])
  def test_nested_group_edges_attach_to_their_actual_components(self):
   self.open(fixture(self.root))
   failures=self.page.evaluate('''()=>{const errors=[];for(const g of document.querySelectorAll('.graph-edge')){const edge=repoPlayer.graph.edges.find(e=>e.id===g.dataset.edge);const paths=g.querySelectorAll('.edge-line');for(const [path,which,id] of [[paths[0],0,edge.from],[paths[paths.length-1],1,edge.to]]){const p=path.getPointAtLength(which?path.getTotalLength():0),point=new DOMPoint(p.x,p.y).matrixTransform(path.getScreenCTM()),rect=document.querySelector('.graph-node[data-node="'+id+'"] rect').getBoundingClientRect();if(point.x<rect.x-3||point.x>rect.right+3||point.y<rect.y-3||point.y>rect.bottom+3)errors.push({edge:edge.id,id,x:point.x,y:point.y,rect:{x:rect.x,y:rect.y,w:rect.width,h:rect.height}})}}return errors}''')

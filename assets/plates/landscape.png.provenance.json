@@ -1,0 +1,9 @@
+{
+  "kind": "generated-background",
+  "generator": "OpenAI image generation tool",
+  "prompt": "Use the attached masked crop as the approved visual reference and recreate its landscape as a clean production photographic background at 3200 by 1344 pixels, wide 2.38:1 aspect ratio. Same subject, same framing, same lighting: an original sunlit alpine valley with a winding river in the middle distance, distant mountain ridges, snow-touched peaks on the right, soft blue open sky above, a naturally framing leafy branch entering the upper left and low rocks and grasses at the foreground edges. Preserve the perspective, open central sky, quiet sky palette, warm side light, scale and photographic depth. Reconstruct all masked areas naturally from the surrounding scenery. Remove every piece of UI, text, logo, label, button, white panel, rectangle, border, card corner and drop shadow. Especially replace the large white interface in the lower half with continuous landscape, not another white surface. This is only the background image; all text and interface will be real HTML drawn separately. No people, buildings, devices, graphic symbols, added objects or labels. The scenery fills the whole frame edge to edge, with no margins or border, no white band or letterboxing. Do not restyle the landscape; keep the approved daylight scene and its natural realism. Opaque output.",
+  "source_comp": ".impeccable/mocks/decision/landscape.png",
+  "note": "Original generated landscape used as atmosphere. Not a photograph of a claimed location. All product UI is rendered separately.",
+  "approved": true,
+  "approval": "Browser plan/asset review, 8 November 2026"
+}

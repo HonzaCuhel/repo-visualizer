@@ -101,5 +101,6 @@
   "output": "output",
   "actor": "actor",
   "artifact": "artifact",
-  "process": "process"
+  "process": "process",
+  "graphLanguageNote": "Graph labels are in {language}."
 }

@@ -15,6 +15,7 @@ FILES = (
     'scripts/builder.py', 'scripts/export.py', 'scripts/hyperframes_export.py',
     'references/graph-format.md', 'references/exports.md', 'references/localization.md',
     'assets/appearance.js', 'assets/locales/en.json', 'assets/locales/cs.json',
+    'assets/locales/de.json', 'assets/locales/fr.json', 'assets/locales/es.json',
     'assets/player.html', 'assets/player.css', 'assets/player.js', 'assets/interaction.js',
     'assets/vendor/elk.bundled.js', 'assets/vendor/ELK-LICENSE.md', 'assets/vendor/elk-provenance.json',
     'assets/vendor/gifenc.js', 'assets/vendor/GIFENC-LICENSE.txt', 'assets/vendor/gifenc-provenance.json',

@@ -37,8 +37,8 @@ def build_html(data, *, landing=False):
     replacements = {
         '@@APPEARANCE@@': (ASSETS / 'appearance.js').read_text(encoding='utf-8'),
         '@@BODY_CLASS@@': 'landing' if landing else 'standalone',
-        '@@UI_CONFIG@@': safe_json({'language': story['language'], 'ui_strings': story.get('ui_strings', {}), 'landing': landing}),
-        '@@LOCALES@@': safe_json({language: json.loads((ASSETS / 'locales' / (language+'.json')).read_text(encoding='utf-8')) for language in ('en', 'cs')}),
+        '@@UI_CONFIG@@': safe_json({'language': story['language'], 'ui_strings': story.get('ui_strings', {}), 'content_languages': [story['language'], *story.get('translations', {})], 'landing': landing}),
+        '@@LOCALES@@': safe_json({language: json.loads((ASSETS / 'locales' / (language+'.json')).read_text(encoding='utf-8')) for language in ('en', 'cs', 'de', 'fr', 'es')}),
         '@@LANG@@': html.escape(story['language'], quote=True),
         '@@TITLE@@': html.escape(story['title']),
         '@@STORY@@': safe_json(story),

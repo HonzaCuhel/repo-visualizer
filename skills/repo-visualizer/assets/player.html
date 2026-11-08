@@ -44,34 +44,20 @@
         >
       </nav>
       <div class="appearance-controls">
-        <label class="language-control"
-          ><span class="sr-only" data-i18n="languageLabel"
-            >Interface language</span
-          ><select
-            id="language-select"
-            data-i18n-aria="languageLabel"
-            aria-label="Interface language"
-          >
-            <option value="en">English</option>
-            <option value="cs">Česky</option>
-          </select></label
-        >
-        <label class="theme-control"
-          ><svg viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z"
-            /></svg
-          ><span class="sr-only" data-i18n="themeLabel">Color theme</span
-          ><select
-            id="theme-select"
-            data-i18n-aria="themeLabel"
-            aria-label="Color theme"
-          >
-            <option value="system" data-i18n="themeSystem">System theme</option>
-            <option value="light" data-i18n="themeLight">Light theme</option>
-            <option value="dark" data-i18n="themeDark">Dark theme</option>
-          </select></label
-        >
+        <div class="language-control">
+          <button id="language-toggle" class="language-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="language-menu" data-i18n-aria="languageLabel" aria-label="Interface language">
+            <span id="current-flag" class="locale-flag" aria-hidden="true"></span>
+            <span id="current-language" class="locale-name">English</span>
+            <span id="current-language-code" class="locale-code" aria-hidden="true">EN</span>
+            <svg class="locale-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+          </button>
+          <div id="language-menu" class="language-menu" role="listbox" data-i18n-aria="languageLabel" aria-label="Interface language" hidden></div>
+        </div>
+        <div class="theme-switch" role="group" data-i18n-aria="themeLabel" aria-label="Color theme">
+          <button type="button" data-theme-choice="light" data-i18n-aria="themeLight" data-i18n-title="themeLight" aria-label="Light theme" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button>
+          <button type="button" data-theme-choice="dark" data-i18n-aria="themeDark" data-i18n-title="themeDark" aria-label="Dark theme" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z"/></svg></button>
+          <button type="button" data-theme-choice="system" data-i18n-aria="themeSystem" data-i18n-title="themeSystem" aria-label="System theme" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M12 17v4m-4 0h8"/></svg></button>
+        </div>
       </div>
       <a class="install-button" href="#install" data-i18n="install"
         >Install skill</a
@@ -107,7 +93,7 @@
           <div class="repo-reference">
             <span id="repo-name"></span><span id="repo-revision"></span>
           </div>
-          <h2 id="question"></h2>
+          <h2 id="question"></h2><p id="graph-language-note" class="graph-language-note" hidden></p>
           <label class="search"
             ><span class="sr-only" data-i18n="findComponent"
               >Find a component</span

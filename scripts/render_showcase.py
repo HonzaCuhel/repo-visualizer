@@ -22,9 +22,9 @@ def main():
     source = ROOT / 'site/codex-agent-loop.html'
     graph = json.loads((ROOT / 'examples/codex/agent-loop.json').read_text())
     jobs = []
-    for language in ('en', 'cs'):
+    for language in ('en', 'cs', 'de', 'fr', 'es'):
         for theme in ('light', 'dark'):
-            suffix = ('' if language == 'en' else '-cs') + ('' if theme == 'light' else '-dark')
+            suffix = ('' if language == 'en' else '-' + language) + ('' if theme == 'light' else '-dark')
             for kind in ('png', 'gif', 'mp4'):
                 filename = ('poster' if kind == 'png' else 'walkthrough') + suffix + '.' + kind
                 jobs.append((ROOT / 'site/media' / filename, language, theme))
@@ -34,6 +34,16 @@ def main():
         settings = dict(width=1200, height=800, fps=8, at=4800,
                         browser_path=args.browser, theme=theme, language=language)
         result = export_scene(source, output, **settings)
+        if output.suffix == '.png':
+            from PIL import Image, PngImagePlugin
+            metadata = PngImagePlugin.PngInfo()
+            metadata.add_text('impeccable:prompt',
+                              'Origin: Repo Visualizer runtime render of '
+                              + graph['repo']['url'] + ' at ' + graph['repo']['commit']
+                              + '; ' + language + ', ' + theme + ', 1200x800. '
+                              + 'Source explanation, not recorded execution.')
+            with Image.open(output) as poster:
+                poster.save(output, pnginfo=metadata)
         provenance = {
             'kind': 'runtime-render',
             'generator': 'Repo Visualizer export.py (Playwright, Pillow, FFmpeg)',

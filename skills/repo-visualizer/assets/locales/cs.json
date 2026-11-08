@@ -101,5 +101,6 @@
   "output": "výstup",
   "actor": "aktér",
   "artifact": "soubor",
-  "process": "proces"
+  "process": "proces",
+  "graphLanguageNote": "Popisky grafu jsou v jazyce: {language}."
 }
