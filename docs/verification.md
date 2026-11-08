@@ -1,5 +1,13 @@
 # Release verification
 
+## Public examples, width and scroll reveal — 8 November 2026
+
+The public gallery now includes source-pinned Superpowers (13 components, 20 relationships) and OpenAI Whisper (12 components, 17 relationships) instead of the two stack-diagram rows. Each has full graph translations in English, Czech, German, French and Spanish, embedded source excerpts and the exact upstream MIT notice. Both were authored in this Codex session using the skill's scan, source inspection, prepare and build workflow; target repositories remained clean. No target agent, model weights or audio inference were executed. Superpowers describes prescribed instructions; Whisper explains implemented computation and transcription control, not learned-weight interpretation.
+
+Both six-step highlight paths render to actual 18-second GIFs at 1200×800 and 6fps, with 108 distinct decoded frames each. Per-artifact provenance records hashes and source revisions. Browsers exercised both graphs in five languages, two themes, Map/Focus/Path, all component source panes, deterministic seeking, mobile/tablet layouts and actually downloaded offline HTML. No outbound requests or JavaScript errors were observed in the standalone tests.
+
+The landing's header, explorer, status and footer share a maximum 1480px frame; measured boundaries match at 2756px. Reader-position reveals were checked at intermediate scroll positions, with focus/anchor completion, reduced-motion and no-JavaScript visibility. Responsive checks cover 390, 768, short 1440, 1920 and 2756px viewports, in addition to the 70 language/theme/width combinations. A visual-review finding in the German mobile export control was fixed with a wrapping toolbar; child-control bounds, overlap and open menus passed in 20 width/language combinations. The layout detector returned no findings. All 37 automated tests pass. The historical comparison-ledger exception below remains separate and is not claimed as closed.
+
 ## Landscape landing and language controls — 8 November 2026
 
 The user selected the landscape composition and explicitly approved the assembled page. The public landing adds an original generated landscape, a real copyable installation command, a full interactive Codex graph, five language catalogs with flag icons, and separate light/dark/system buttons. The landscape is atmosphere, not a claim to depict a real location. Standalone HTML exports remove the landing assets and retain embedded fonts and source excerpts.

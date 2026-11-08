@@ -61,7 +61,7 @@ Agent přečte implementaci a popíše její odpovědnosti a vztahy. Graf zachov
 
 U komponent i vztahů můžete číst vložené úryvky a otevřít zdroj na konkrétní revizi. Hledejte, přibližujte a přehrávejte vlastním tempem. Přenositelné HTML funguje offline.
 
-[Agentní smyčka Codexu](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html?lang=cs) · [Spuštění příkazu](https://honzacuhel.github.io/repo-visualizer/codex-shell.html?lang=cs) · [Sestavení přenositelného HTML](https://honzacuhel.github.io/repo-visualizer/portable-builder.html?lang=cs)
+[Agentní smyčka Codexu](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html?lang=cs) · [Spuštění příkazu](https://honzacuhel.github.io/repo-visualizer/codex-shell.html?lang=cs) · [Workflow Superpowers](https://honzacuhel.github.io/repo-visualizer/superpowers.html?lang=cs) · [Model Whisper](https://honzacuhel.github.io/repo-visualizer/whisper.html?lang=cs)
 
 ## Sdílejte vysvětlení
 
@@ -96,6 +96,6 @@ Pro testy v prohlížeči nastavte `REPO_VISUALIZER_BROWSER` na Chromium. Volite
 
 Hlavní ukázka analyzuje [openai/codex](https://github.com/openai/codex) na konkrétní revizi. Vložené úryvky zachovávají licenci Apache-2.0 a soubor NOTICE. [Zdroj a záznam ověření](examples/codex/README.md).
 
-Inspirace: [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). Další ukázky zachovávají atribuci jeho MIT zdrojů na konkrétní revizi.
+Inspirace: [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). Veřejné ukázky vysvětlují také Codex, Superpowers a Whisper na konkrétních revizích zdrojů s licenčními oznámeními.
 
 Původní kód: **MIT**. ELK: **EPL-2.0**, gifenc: **MIT**, Atkinson Hyperlegible Next: **OFL-1.1**. Licence a původ závislostí jsou součástí skillu. [Podrobnosti](skills/repo-visualizer/NOTICE.md).

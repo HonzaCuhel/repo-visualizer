@@ -1,103 +1,12 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-07T19:24:36.060780+00:00",
+  "generatedAt": "2026-11-08T07:31:26.674520+00:00",
   "title": "Design System: Repo Visualizer",
   "extensions": {
     "colorMeta": {
-      "ink": {
-        "role": "neutral",
-        "displayName": "Charcoal Ink",
-        "canonical": "#151720",
-        "tonalRamp": [
-          "oklch(15% 0.00636 274.94)",
-          "oklch(26% 0.01181 274.94)",
-          "oklch(38% 0.01636 274.94)",
-          "oklch(50% 0.01818 274.94)",
-          "oklch(62% 0.01818 274.94)",
-          "oklch(74% 0.01545 274.94)",
-          "oklch(86% 0.01000 274.94)",
-          "oklch(95% 0.00364 274.94)"
-        ]
-      },
-      "muted": {
-        "role": "neutral",
-        "displayName": "Slate Text",
-        "canonical": "#5e6674",
-        "tonalRamp": [
-          "oklch(15% 0.00852 261.70)",
-          "oklch(26% 0.01582 261.70)",
-          "oklch(38% 0.02191 261.70)",
-          "oklch(50% 0.02434 261.70)",
-          "oklch(62% 0.02434 261.70)",
-          "oklch(74% 0.02069 261.70)",
-          "oklch(86% 0.01339 261.70)",
-          "oklch(95% 0.00487 261.70)"
-        ]
-      },
-      "line": {
-        "role": "neutral",
-        "displayName": "Fine Rule",
-        "canonical": "#dce1e8",
-        "tonalRamp": [
-          "oklch(15% 0.00384 256.70)",
-          "oklch(26% 0.00713 256.70)",
-          "oklch(38% 0.00987 256.70)",
-          "oklch(50% 0.01096 256.70)",
-          "oklch(62% 0.01096 256.70)",
-          "oklch(74% 0.00932 256.70)",
-          "oklch(86% 0.00603 256.70)",
-          "oklch(95% 0.00219 256.70)"
-        ]
-      },
-      "surface": {
-        "role": "neutral",
-        "displayName": "Cool Surface",
-        "canonical": "#f7f8fa",
-        "tonalRamp": [
-          "oklch(15% 0.00100 264.54)",
-          "oklch(26% 0.00186 264.54)",
-          "oklch(38% 0.00258 264.54)",
-          "oklch(50% 0.00287 264.54)",
-          "oklch(62% 0.00287 264.54)",
-          "oklch(74% 0.00244 264.54)",
-          "oklch(86% 0.00158 264.54)",
-          "oklch(95% 0.00057 264.54)"
-        ]
-      },
-      "blue": {
-        "role": "primary",
-        "displayName": "Working Blue",
-        "canonical": "#2164c7",
-        "tonalRamp": [
-          "oklch(15% 0.05890 258.78)",
-          "oklch(26% 0.10939 258.78)",
-          "oklch(38% 0.15146 258.78)",
-          "oklch(50% 0.16829 258.78)",
-          "oklch(62% 0.16829 258.78)",
-          "oklch(74% 0.14304 258.78)",
-          "oklch(86% 0.09256 258.78)",
-          "oklch(95% 0.03366 258.78)"
-        ]
-      },
-      "blue-light": {
-        "role": "primary",
-        "displayName": "Pale Selection Blue",
-        "canonical": "#eaf2ff",
-        "tonalRamp": [
-          "oklch(15% 0.00681 260.17)",
-          "oklch(26% 0.01265 260.17)",
-          "oklch(38% 0.01752 260.17)",
-          "oklch(50% 0.01946 260.17)",
-          "oklch(62% 0.01946 260.17)",
-          "oklch(74% 0.01654 260.17)",
-          "oklch(86% 0.01071 260.17)",
-          "oklch(95% 0.00389 260.17)"
-        ]
-      },
       "paper": {
         "role": "neutral",
-        "displayName": "White Paper",
-        "canonical": "#fff",
+        "displayName": "Paper",
         "tonalRamp": [
           "oklch(15% 0.00000 89.88)",
           "oklch(26% 0.00000 89.88)",
@@ -107,12 +16,117 @@
           "oklch(74% 0.00000 89.88)",
           "oklch(86% 0.00000 89.88)",
           "oklch(95% 0.00000 89.88)"
-        ]
+        ],
+        "scope": "shared light / standalone"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.00636 274.94)",
+          "oklch(26% 0.01181 274.94)",
+          "oklch(38% 0.01636 274.94)",
+          "oklch(50% 0.01818 274.94)",
+          "oklch(62% 0.01818 274.94)",
+          "oklch(74% 0.01545 274.94)",
+          "oklch(86% 0.01000 274.94)",
+          "oklch(95% 0.00364 274.94)"
+        ],
+        "scope": "shared light / standalone"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.00852 261.70)",
+          "oklch(26% 0.01582 261.70)",
+          "oklch(38% 0.02191 261.70)",
+          "oklch(50% 0.02434 261.70)",
+          "oklch(62% 0.02434 261.70)",
+          "oklch(74% 0.02069 261.70)",
+          "oklch(86% 0.01339 261.70)",
+          "oklch(95% 0.00487 261.70)"
+        ],
+        "scope": "shared light / standalone"
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.00384 256.70)",
+          "oklch(26% 0.00713 256.70)",
+          "oklch(38% 0.00987 256.70)",
+          "oklch(50% 0.01096 256.70)",
+          "oklch(62% 0.01096 256.70)",
+          "oklch(74% 0.00932 256.70)",
+          "oklch(86% 0.00603 256.70)",
+          "oklch(95% 0.00219 256.70)"
+        ],
+        "scope": "shared light / standalone"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00100 264.54)",
+          "oklch(26% 0.00186 264.54)",
+          "oklch(38% 0.00258 264.54)",
+          "oklch(50% 0.00287 264.54)",
+          "oklch(62% 0.00287 264.54)",
+          "oklch(74% 0.00244 264.54)",
+          "oklch(86% 0.00158 264.54)",
+          "oklch(95% 0.00057 264.54)"
+        ],
+        "scope": "shared light / standalone"
+      },
+      "hover": {
+        "role": "neutral",
+        "displayName": "Hover",
+        "tonalRamp": [
+          "oklch(15% 0.00218 255.48)",
+          "oklch(26% 0.00406 255.48)",
+          "oklch(38% 0.00562 255.48)",
+          "oklch(50% 0.00624 255.48)",
+          "oklch(62% 0.00624 255.48)",
+          "oklch(74% 0.00530 255.48)",
+          "oklch(86% 0.00343 255.48)",
+          "oklch(95% 0.00125 255.48)"
+        ],
+        "scope": "shared light / standalone"
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Blue",
+        "tonalRamp": [
+          "oklch(15% 0.05890 258.78)",
+          "oklch(26% 0.10939 258.78)",
+          "oklch(38% 0.15146 258.78)",
+          "oklch(50% 0.16829 258.78)",
+          "oklch(62% 0.16829 258.78)",
+          "oklch(74% 0.14304 258.78)",
+          "oklch(86% 0.09256 258.78)",
+          "oklch(95% 0.03366 258.78)"
+        ],
+        "scope": "shared light / standalone"
+      },
+      "blue-light": {
+        "role": "primary",
+        "displayName": "Blue Light",
+        "tonalRamp": [
+          "oklch(15% 0.00681 260.17)",
+          "oklch(26% 0.01265 260.17)",
+          "oklch(38% 0.01752 260.17)",
+          "oklch(50% 0.01946 260.17)",
+          "oklch(62% 0.01946 260.17)",
+          "oklch(74% 0.01654 260.17)",
+          "oklch(86% 0.01071 260.17)",
+          "oklch(95% 0.00389 260.17)"
+        ],
+        "scope": "shared light / standalone"
       },
       "selected-ink": {
         "role": "primary",
-        "displayName": "Selected Blue Ink",
-        "canonical": "#1558b7",
+        "displayName": "Selected Ink",
         "tonalRamp": [
           "oklch(15% 0.05740 258.64)",
           "oklch(26% 0.10660 258.64)",
@@ -122,12 +136,12 @@
           "oklch(74% 0.13941 258.64)",
           "oklch(86% 0.09020 258.64)",
           "oklch(95% 0.03280 258.64)"
-        ]
+        ],
+        "scope": "shared light / standalone"
       },
-      "blue-hover": {
+      "action-hover": {
         "role": "primary",
-        "displayName": "Deep Action Blue",
-        "canonical": "#184e9e",
+        "displayName": "Action Hover",
         "tonalRamp": [
           "oklch(15% 0.04966 258.81)",
           "oklch(26% 0.09223 258.81)",
@@ -137,12 +151,27 @@
           "oklch(74% 0.12061 258.81)",
           "oklch(86% 0.07804 258.81)",
           "oklch(95% 0.02838 258.81)"
-        ]
+        ],
+        "scope": "shared light / standalone"
+      },
+      "group-fill": {
+        "role": "neutral",
+        "displayName": "Group Fill",
+        "tonalRamp": [
+          "oklch(15% 0.00100 264.54)",
+          "oklch(26% 0.00186 264.54)",
+          "oklch(38% 0.00257 264.54)",
+          "oklch(50% 0.00286 264.54)",
+          "oklch(62% 0.00286 264.54)",
+          "oklch(74% 0.00243 264.54)",
+          "oklch(86% 0.00157 264.54)",
+          "oklch(95% 0.00057 264.54)"
+        ],
+        "scope": "shared light / standalone"
       },
       "code-surface": {
         "role": "neutral",
-        "displayName": "Code Paper",
-        "canonical": "#f5f7fa",
+        "displayName": "Code Surface",
         "tonalRamp": [
           "oklch(15% 0.00159 258.32)",
           "oklch(26% 0.00295 258.32)",
@@ -152,27 +181,12 @@
           "oklch(74% 0.00385 258.32)",
           "oklch(86% 0.00249 258.32)",
           "oklch(95% 0.00091 258.32)"
-        ]
-      },
-      "install-surface": {
-        "role": "neutral",
-        "displayName": "Installation Paper",
-        "canonical": "#f6f8fb",
-        "tonalRamp": [
-          "oklch(15% 0.00159 258.32)",
-          "oklch(26% 0.00295 258.32)",
-          "oklch(38% 0.00408 258.32)",
-          "oklch(50% 0.00453 258.32)",
-          "oklch(62% 0.00453 258.32)",
-          "oklch(74% 0.00385 258.32)",
-          "oklch(86% 0.00249 258.32)",
-          "oklch(95% 0.00091 258.32)"
-        ]
+        ],
+        "scope": "shared light / standalone"
       },
       "control-line": {
         "role": "neutral",
-        "displayName": "Control Rule",
-        "canonical": "#cbd3df",
+        "displayName": "Control Line",
         "tonalRamp": [
           "oklch(15% 0.00656 258.36)",
           "oklch(26% 0.01219 258.36)",
@@ -182,12 +196,12 @@
           "oklch(74% 0.01594 258.36)",
           "oklch(86% 0.01031 258.36)",
           "oklch(95% 0.00375 258.36)"
-        ]
+        ],
+        "scope": "shared light / standalone"
       },
       "node-line": {
         "role": "neutral",
-        "displayName": "Node Rule",
-        "canonical": "#a9b2bf",
+        "displayName": "Node Line",
         "tonalRamp": [
           "oklch(15% 0.00741 257.49)",
           "oklch(26% 0.01376 257.49)",
@@ -197,258 +211,735 @@
           "oklch(74% 0.01800 257.49)",
           "oklch(86% 0.01165 257.49)",
           "oklch(95% 0.00423 257.49)"
-        ]
+        ],
+        "scope": "shared light / standalone"
       },
       "edge-line": {
         "role": "neutral",
-        "displayName": "Relationship Rule",
-        "canonical": "#9da7b6",
+        "displayName": "Edge Line",
         "tonalRamp": [
-          "oklch(15% 0.00859 258.37)",
-          "oklch(26% 0.01595 258.37)",
-          "oklch(38% 0.02208 258.37)",
-          "oklch(50% 0.02453 258.37)",
-          "oklch(62% 0.02453 258.37)",
-          "oklch(74% 0.02085 258.37)",
-          "oklch(86% 0.01349 258.37)",
-          "oklch(95% 0.00491 258.37)"
-        ]
+          "oklch(15% 0.01014 257.06)",
+          "oklch(26% 0.01884 257.06)",
+          "oklch(38% 0.02609 257.06)",
+          "oklch(50% 0.02898 257.06)",
+          "oklch(62% 0.02898 257.06)",
+          "oklch(74% 0.02464 257.06)",
+          "oklch(86% 0.01594 257.06)",
+          "oklch(95% 0.00580 257.06)"
+        ],
+        "scope": "shared light / standalone"
+      },
+      "landing-action": {
+        "role": "primary",
+        "displayName": "Landing Action",
+        "tonalRamp": [
+          "oklch(15% 0.08019 262.18)",
+          "oklch(26% 0.14893 262.18)",
+          "oklch(38% 0.20621 262.18)",
+          "oklch(50% 0.22912 262.18)",
+          "oklch(62% 0.22912 262.18)",
+          "oklch(74% 0.19475 262.18)",
+          "oklch(86% 0.12602 262.18)",
+          "oklch(95% 0.04582 262.18)"
+        ],
+        "scope": "public landing"
+      },
+      "landing-action-hover": {
+        "role": "primary",
+        "displayName": "Landing Action Hover",
+        "tonalRamp": [
+          "oklch(15% 0.06939 262.13)",
+          "oklch(26% 0.12887 262.13)",
+          "oklch(38% 0.17843 262.13)",
+          "oklch(50% 0.19825 262.13)",
+          "oklch(62% 0.19825 262.13)",
+          "oklch(74% 0.16852 262.13)",
+          "oklch(86% 0.10904 262.13)",
+          "oklch(95% 0.03965 262.13)"
+        ],
+        "scope": "public landing"
+      },
+      "landing-selected-ink": {
+        "role": "primary",
+        "displayName": "Landing Selected Ink",
+        "tonalRamp": [
+          "oklch(15% 0.07433 262.34)",
+          "oklch(26% 0.13805 262.34)",
+          "oklch(38% 0.19114 262.34)",
+          "oklch(50% 0.21238 262.34)",
+          "oklch(62% 0.21238 262.34)",
+          "oklch(74% 0.18052 262.34)",
+          "oklch(86% 0.11681 262.34)",
+          "oklch(95% 0.04248 262.34)"
+        ],
+        "scope": "public landing"
+      },
+      "dark-paper": {
+        "role": "neutral",
+        "displayName": "Dark Paper",
+        "tonalRamp": [
+          "oklch(15% 0.00546 261.56)",
+          "oklch(26% 0.01014 261.56)",
+          "oklch(38% 0.01405 261.56)",
+          "oklch(50% 0.01561 261.56)",
+          "oklch(62% 0.01561 261.56)",
+          "oklch(74% 0.01326 261.56)",
+          "oklch(86% 0.00858 261.56)",
+          "oklch(95% 0.00312 261.56)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Dark Ink",
+        "tonalRamp": [
+          "oklch(15% 0.00523 260.73)",
+          "oklch(26% 0.00971 260.73)",
+          "oklch(38% 0.01345 260.73)",
+          "oklch(50% 0.01494 260.73)",
+          "oklch(62% 0.01494 260.73)",
+          "oklch(74% 0.01270 260.73)",
+          "oklch(86% 0.00822 260.73)",
+          "oklch(95% 0.00299 260.73)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark Muted",
+        "tonalRamp": [
+          "oklch(15% 0.00973 257.04)",
+          "oklch(26% 0.01806 257.04)",
+          "oklch(38% 0.02501 257.04)",
+          "oklch(50% 0.02779 257.04)",
+          "oklch(62% 0.02779 257.04)",
+          "oklch(74% 0.02362 257.04)",
+          "oklch(86% 0.01529 257.04)",
+          "oklch(95% 0.00556 257.04)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-line": {
+        "role": "neutral",
+        "displayName": "Dark Line",
+        "tonalRamp": [
+          "oklch(15% 0.01165 258.98)",
+          "oklch(26% 0.02163 258.98)",
+          "oklch(38% 0.02995 258.98)",
+          "oklch(50% 0.03328 258.98)",
+          "oklch(62% 0.03328 258.98)",
+          "oklch(74% 0.02829 258.98)",
+          "oklch(86% 0.01830 258.98)",
+          "oklch(95% 0.00666 258.98)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Dark Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00828 259.31)",
+          "oklch(26% 0.01537 259.31)",
+          "oklch(38% 0.02128 259.31)",
+          "oklch(50% 0.02364 259.31)",
+          "oklch(62% 0.02364 259.31)",
+          "oklch(74% 0.02010 259.31)",
+          "oklch(86% 0.01300 259.31)",
+          "oklch(95% 0.00473 259.31)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-hover": {
+        "role": "neutral",
+        "displayName": "Dark Hover",
+        "tonalRamp": [
+          "oklch(15% 0.01032 256.85)",
+          "oklch(26% 0.01917 256.85)",
+          "oklch(38% 0.02654 256.85)",
+          "oklch(50% 0.02949 256.85)",
+          "oklch(62% 0.02949 256.85)",
+          "oklch(74% 0.02507 256.85)",
+          "oklch(86% 0.01622 256.85)",
+          "oklch(95% 0.00590 256.85)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-blue": {
+        "role": "primary",
+        "displayName": "Dark Blue",
+        "tonalRamp": [
+          "oklch(15% 0.03925 258.58)",
+          "oklch(26% 0.07289 258.58)",
+          "oklch(38% 0.10093 258.58)",
+          "oklch(50% 0.11215 258.58)",
+          "oklch(62% 0.11215 258.58)",
+          "oklch(74% 0.09532 258.58)",
+          "oklch(86% 0.06168 258.58)",
+          "oklch(95% 0.02243 258.58)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-blue-light": {
+        "role": "primary",
+        "displayName": "Dark Blue Light",
+        "tonalRamp": [
+          "oklch(15% 0.02178 258.00)",
+          "oklch(26% 0.04046 258.00)",
+          "oklch(38% 0.05602 258.00)",
+          "oklch(50% 0.06224 258.00)",
+          "oklch(62% 0.06224 258.00)",
+          "oklch(74% 0.05290 258.00)",
+          "oklch(86% 0.03423 258.00)",
+          "oklch(95% 0.01245 258.00)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-selected-ink": {
+        "role": "primary",
+        "displayName": "Dark Selected Ink",
+        "tonalRamp": [
+          "oklch(15% 0.02450 257.14)",
+          "oklch(26% 0.04551 257.14)",
+          "oklch(38% 0.06301 257.14)",
+          "oklch(50% 0.07001 257.14)",
+          "oklch(62% 0.07001 257.14)",
+          "oklch(74% 0.05951 257.14)",
+          "oklch(86% 0.03851 257.14)",
+          "oklch(95% 0.01400 257.14)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-action": {
+        "role": "primary",
+        "displayName": "Dark Action",
+        "tonalRamp": [
+          "oklch(15% 0.05175 258.38)",
+          "oklch(26% 0.09611 258.38)",
+          "oklch(38% 0.13307 258.38)",
+          "oklch(50% 0.14786 258.38)",
+          "oklch(62% 0.14786 258.38)",
+          "oklch(74% 0.12568 258.38)",
+          "oklch(86% 0.08132 258.38)",
+          "oklch(95% 0.02957 258.38)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-action-hover": {
+        "role": "primary",
+        "displayName": "Dark Action Hover",
+        "tonalRamp": [
+          "oklch(15% 0.05309 257.55)",
+          "oklch(26% 0.09859 257.55)",
+          "oklch(38% 0.13651 257.55)",
+          "oklch(50% 0.15168 257.55)",
+          "oklch(62% 0.15168 257.55)",
+          "oklch(74% 0.12893 257.55)",
+          "oklch(86% 0.08342 257.55)",
+          "oklch(95% 0.03034 257.55)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-group-fill": {
+        "role": "neutral",
+        "displayName": "Dark Group Fill",
+        "tonalRamp": [
+          "oklch(15% 0.00831 259.31)",
+          "oklch(26% 0.01544 259.31)",
+          "oklch(38% 0.02137 259.31)",
+          "oklch(50% 0.02375 259.31)",
+          "oklch(62% 0.02375 259.31)",
+          "oklch(74% 0.02019 259.31)",
+          "oklch(86% 0.01306 259.31)",
+          "oklch(95% 0.00475 259.31)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-code-surface": {
+        "role": "neutral",
+        "displayName": "Dark Code Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00981 257.53)",
+          "oklch(26% 0.01823 257.53)",
+          "oklch(38% 0.02524 257.53)",
+          "oklch(50% 0.02804 257.53)",
+          "oklch(62% 0.02804 257.53)",
+          "oklch(74% 0.02383 257.53)",
+          "oklch(86% 0.01542 257.53)",
+          "oklch(95% 0.00561 257.53)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-control-line": {
+        "role": "neutral",
+        "displayName": "Dark Control Line",
+        "tonalRamp": [
+          "oklch(15% 0.01412 256.84)",
+          "oklch(26% 0.02622 256.84)",
+          "oklch(38% 0.03630 256.84)",
+          "oklch(50% 0.04034 256.84)",
+          "oklch(62% 0.04034 256.84)",
+          "oklch(74% 0.03429 256.84)",
+          "oklch(86% 0.02218 256.84)",
+          "oklch(95% 0.00807 256.84)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-node-line": {
+        "role": "neutral",
+        "displayName": "Dark Node Line",
+        "tonalRamp": [
+          "oklch(15% 0.01530 257.92)",
+          "oklch(26% 0.02841 257.92)",
+          "oklch(38% 0.03934 257.92)",
+          "oklch(50% 0.04371 257.92)",
+          "oklch(62% 0.04371 257.92)",
+          "oklch(74% 0.03715 257.92)",
+          "oklch(86% 0.02404 257.92)",
+          "oklch(95% 0.00874 257.92)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "dark-edge-line": {
+        "role": "neutral",
+        "displayName": "Dark Edge Line",
+        "tonalRamp": [
+          "oklch(15% 0.01233 256.79)",
+          "oklch(26% 0.02290 256.79)",
+          "oklch(38% 0.03171 256.79)",
+          "oklch(50% 0.03524 256.79)",
+          "oklch(62% 0.03524 256.79)",
+          "oklch(74% 0.02995 256.79)",
+          "oklch(86% 0.01938 256.79)",
+          "oklch(95% 0.00705 256.79)"
+        ],
+        "scope": "shared dark appearance"
+      },
+      "landing-dark-selected-ink": {
+        "role": "primary",
+        "displayName": "Landing Dark Selected Ink",
+        "tonalRamp": [
+          "oklch(15% 0.02199 258.09)",
+          "oklch(26% 0.04083 258.09)",
+          "oklch(38% 0.05653 258.09)",
+          "oklch(50% 0.06282 258.09)",
+          "oklch(62% 0.06282 258.09)",
+          "oklch(74% 0.05339 258.09)",
+          "oklch(86% 0.03455 258.09)",
+          "oklch(95% 0.01256 258.09)"
+        ],
+        "scope": "public landing"
       }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Page heading",
-        "purpose": "Responsive wide-layout page heading; explicit 900px and 600px overrides."
+      "standalone-display": {
+        "displayName": "Standalone Display",
+        "purpose": "Compact standalone explanation title; phone override 23px."
       },
-      "headline": {
-        "displayName": "Section heading",
-        "purpose": "Landing-section headings; explicit 700px override."
+      "landing-display": {
+        "displayName": "Landing Display",
+        "purpose": "Centered public introduction; phone clamp and 18ch measure."
       },
-      "title": {
-        "displayName": "Row title",
-        "purpose": "Example and guide headings."
+      "landing-headline": {
+        "displayName": "Landing Headline",
+        "purpose": "Public section and installation headings."
       },
-      "body": {
-        "displayName": "Root body",
-        "purpose": "Baseline; explanatory prose has contextual larger sizes."
+      "standalone-body": {
+        "displayName": "Standalone Body",
+        "purpose": "Shared root baseline; contextual prose overrides remain."
       },
-      "label": {
-        "displayName": "Compact label",
-        "purpose": "Search and compact button text."
+      "landing-body": {
+        "displayName": "Landing Body",
+        "purpose": "Public surface inherits Rethink family."
+      },
+      "standalone-control": {
+        "displayName": "Standalone Control",
+        "purpose": "Shared compact graph controls."
+      },
+      "landing-control": {
+        "displayName": "Landing Control",
+        "purpose": "Compact public graph controls."
       },
       "code": {
-        "displayName": "Source excerpt",
-        "purpose": "Literal code in inset scrollable source blocks."
+        "displayName": "Code",
+        "purpose": "Literal source excerpts in scrollable insets."
+      },
+      "source-identity": {
+        "displayName": "Source Identity",
+        "purpose": "Paths and short revision identity."
+      },
+      "landing-command": {
+        "displayName": "Landing Command",
+        "purpose": "Public copyable installation command; phone override 10px."
       }
     },
     "shadows": [
       {
-        "name": "floating-export-menu",
+        "name": "floating-menu",
         "value": "0 8px 22px #1d2b4514",
-        "purpose": "Ambient shadow for the floating export options only."
+        "purpose": "Export and language menus only."
       },
       {
         "name": "selected-inspector-tab",
         "value": "0 1px 0 var(--blue)",
-        "purpose": "State underline, not an elevation tier."
+        "purpose": "Active tab underline, not elevation."
       }
     ],
     "motion": [
       {
         "name": "page-scroll",
         "value": "smooth",
-        "purpose": "Root scroll-behavior; becomes auto under prefers-reduced-motion: reduce. No general transition-duration scale is established."
+        "reducedMotion": "auto"
       },
       {
-        "name": "section-reveal",
-        "duration": "460ms",
-        "easing": "cubic-bezier(0.16,1,0.3,1)",
-        "translation": "12px",
-        "blur": "1px",
-        "reducedMotion": "skip decorative reveal; content remains visible"
+        "name": "scroll-progress-reveal",
+        "value": "progress=clamp((innerHeight*0.94-top)/(innerHeight*0.26),0,1); opacity=0.22+progress*0.78; shift=(1-progress)*20px",
+        "purpose": "Pending section headings, example rows, installation surface, guide articles, export showcase and privacy note track viewport position. Completion removes transient styles; focus/hash navigation completes relevant reveals immediately. Geometry reads precede style writes in requestAnimationFrame.",
+        "completion": "At progress=1 remove scroll-reveal class, custom opacity/shift properties and will-change; remove element from pending set.",
+        "reducedMotion": "Complete all pending reveals and force opacity:1; transform:none.",
+        "noJavaScript": "Content is fully visible; custom property fallbacks are opacity1 and shift0.",
+        "timing": "No duration, easing or blur; progress is position-based."
+      },
+      {
+        "name": "landscape-scroll",
+        "value": "translateY(min(scrollY,700) * 0.075px)",
+        "purpose": "Public photographic plate only; maximum 52.5px.",
+        "reducedMotion": "none; will-change:auto"
+      },
+      {
+        "name": "layout-spinner",
+        "duration": "850ms",
+        "easing": "linear",
+        "value": "1turn infinite",
+        "reducedMotion": "none"
       }
     ],
     "breakpoints": [
       {
-        "name": "wide",
+        "name": "landing-wide",
         "value": "1800px"
+      },
+      {
+        "name": "standalone-wide",
+        "value": "1600px"
       },
       {
         "name": "explorer-compact",
         "value": "1200px"
       },
       {
-        "name": "landing-compact",
+        "name": "landing-section-compact",
         "value": "1100px"
       },
       {
-        "name": "explorer-stacked-inspector",
+        "name": "landing-intrinsic-rows-and-nav-hidden",
+        "value": "1000px"
+      },
+      {
+        "name": "standalone-inspector-grid",
         "value": "900px"
       },
       {
-        "name": "landing-mobile",
+        "name": "landing-section-stack",
         "value": "700px"
       },
       {
         "name": "explorer-mobile",
         "value": "600px"
+      },
+      {
+        "name": "narrow-header",
+        "value": "360px"
       }
     ],
+    "surfaceScopes": {
+      "publicLanding": {
+        "selector": ".landing",
+        "stylesheet": "site-src/landscape.css",
+        "fontRoles": [
+          "landing-display",
+          "landing-headline",
+          "landing-body",
+          "landing-control"
+        ],
+        "lightAction": "{colors.landing-action}",
+        "lightActionHover": "{colors.landing-action-hover}",
+        "lightGraphAccent": "{colors.landing-action}",
+        "lightSelectedInk": "{colors.landing-selected-ink}",
+        "darkGraphAccent": "{colors.dark-blue}",
+        "darkSelectedInk": "{colors.landing-dark-selected-ink}",
+        "freshTheme": "light",
+        "preferenceOrder": [
+          "query",
+          "localStorage",
+          "artifact preference",
+          "system fallback"
+        ],
+        "tabletRows": "auto auto",
+        "mobileGraphPane": "height:auto;min-height:0",
+        "mobileGraphStage": "height:420px;flex:none",
+        "frame": "width:min(calc(100% - var(--landing-gutter) - var(--landing-gutter)),1480px)",
+        "frameElements": [
+          "header",
+          "workspace",
+          "selection status",
+          "footer"
+        ],
+        "gutter": "{spacing.landing-gutter}",
+        "mobileGutter": "12px",
+        "headerHeight": "4.04vw; min-height:56px; max-height:64px; min-height:64px at <=1000px",
+        "introWidth": "max-width:1280px",
+        "introHeight": "clamp(320px,23.077vw,366px); height:auto at <=600px",
+        "workspaceHeight": "clamp(510px,35.44vw,600px); height:auto at <=1000px",
+        "landscapeHeight": "min(41.93vw,800px); 560px at <=1000px; 670px at <=600px",
+        "mobileGraphToolbar": {
+          "container": "height:auto;min-height:51px;flex-wrap:wrap;gap:8px;padding-block:8px",
+          "viewGroupAndExport": "flex-shrink:0",
+          "exportAlignment": "margin-left:auto; wraps onto a second row when labels require it",
+          "purpose": "Preserve full localized labels without toolbar clipping."
+        }
+      },
+      "standalone": {
+        "selector": ".standalone",
+        "stylesheet": "skills/repo-visualizer/assets/player.css",
+        "fontRoles": [
+          "standalone-display",
+          "standalone-body",
+          "standalone-control"
+        ],
+        "lightAction": "{colors.blue}",
+        "darkAction": "{colors.dark-action}",
+        "freshTheme": "system unless artifact preference supplied",
+        "mobileGraphPane": "height:450px; inherited min-height:455px",
+        "offline": "Embedded player, font, UI catalogs, graph and source data; no landing landscape styles."
+      },
+      "graphLabels": {
+        "fontFamily": "Atkinson, system-ui, sans-serif",
+        "scope": "both surfaces"
+      }
+    },
     "provenance": {
-      "mode": "built-source extraction",
+      "mode": "authorized merged documentation refresh; current CSS/JavaScript and graph-source extraction",
       "sources": [
         {
-          "path": "skills/repo-visualizer/assets/player.css",
-          "sha256": "a9fd7f1e7c4a80eb81bfeff79d9575b9dd425a46983c3742fb4b38ead9375be4"
-        },
-        {
-          "path": "skills/repo-visualizer/assets/player.html",
-          "sha256": "9314434e9a1ef0c9fd8d03cb2fd9858f8c4568a5f736c742e9a10c10535de89f"
-        },
-        {
-          "path": "skills/repo-visualizer/assets/player.js",
-          "sha256": "ec28b2ae1e9c7955948451f03fee4da64a59172323f03f4b6ccf59721b4fe22a"
+          "path": "site-src/landscape.css",
+          "sha256": "84cea6c99d113e42903d8837c50b7ccce874fd96436f5999123c56742487ddb4"
         },
         {
           "path": "site-src/site.css",
-          "sha256": "4b8a3cc697169b92fc714f7e3e2ce1f5b5a6cbaa6d39f87c1d0baebaf5dc9bab"
+          "sha256": "933645e7c2aed4a4687f6243e61ba42970779a8e59c6092af86b1e619cab2988"
         },
         {
-          "path": "site-src/sections.html",
-          "sha256": "f40d528b77998c80f755a8c540c0601115a30177551759fd38b0e98d6fe75a9d"
+          "path": "site-src/site.js",
+          "sha256": "c0db4a137afc6305e63b9c4ab792a6e5674506b08b153ce32e23188d585ac6c5"
         },
         {
-          "path": "site/index.html",
-          "sha256": "59794e844245bfafaa4d1b2b86df3ba6fd60400b98e5341cfd73c9365960eb50"
+          "path": "site-src/brand.css",
+          "sha256": "2aee340b9aca70f937abba38ffdbd0ea0225c87ff2cf5389514cc335bd50500c"
+        },
+        {
+          "path": "scripts/build_site.py",
+          "sha256": "5b439352c3e52ee174159e149454ee496a3d1d1963ff3b9458fb300b8c4f401a"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/player.css",
+          "sha256": "0cf388633c5adec1fbd163ce5b4ae91bec781958e27632dd600c8c9fe31f4ad6"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/player.html",
+          "sha256": "b33c9c5a01567f2a835e4d1d6d31217f288c809f1a26283bbf5ee7caac23f43e"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/appearance.js",
+          "sha256": "055d0d9f5527d0d4ef98c305914e0d3ea17acac8ef6ed473d73c8de8906c625d"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/player.js",
+          "sha256": "566aa57e796a7258d5fc7e000465e4b380c941a8330e48d2be54aa718fb03de8"
         },
         {
           "path": "PRODUCT.md",
-          "sha256": "fc516d3f0ab62a9e7b138ecf7b0d33d457a3301aaeff87ee3003bb1ccb425629"
+          "sha256": "10bf73f31bd33663580fc55ca01c554bd1461766a567ba98b3cb799f61d62940"
         },
         {
           "path": ".impeccable/surfaces/site-index-html.md",
-          "sha256": "31c28e5af6e27d787bc7966b0d2fe835c85d114835f7ee54a98b9d52978700aa"
+          "sha256": "256b37f268c069040afeb07a32e37e6f38dd0e7a0b704c866d07c82e562be3e5"
         },
         {
-          "path": ".work/finish-review.md",
-          "sha256": "9c9c754ed1dfd97b0233285401c64c33fd9e03fc322688ad2d7b01f877c9dc13"
+          "path": "assets/plates/landscape.png.provenance.json",
+          "sha256": "58a9a076f322c5a1f336b53f86334812f159fcbf41f0f4af64f2e12ee4b16ccf"
         },
         {
-          "path": ".work/finish-verdict.md",
-          "sha256": "eca289612001ed55de86eacedd2ff802b5d6ebb5706ddc3c378ee6b2b74ecffb"
+          "path": "site-src/sections.html",
+          "sha256": "6650030b9c602fba2f8a70ee89c52bf7969c80e4679ef9df0f337362537674f5"
+        },
+        {
+          "path": "site-src/locales.json",
+          "sha256": "07676e0190be5b2573cb2b69f1b90e099f03636ea03ea435258690171c297892"
+        },
+        {
+          "path": "examples/superpowers/graph.json",
+          "sha256": "430f0504ab27d30e961bd98654574259b93bf8dadba31390a8df9f58b4ed9545"
+        },
+        {
+          "path": "examples/whisper/graph.json",
+          "sha256": "1e7eef3ffc3fc465c298f2c241389d0c5a4e425b88439c4bd30908a792e65991"
         }
       ],
-      "qualitativeAuthority": "User-confirmed extremely simple/professional B direction: white/cool neutral, charcoal, restrained blue, compact controls and thin rules; orange 3D rejected. No new branding interview performed.",
-      "tokenSources": {
-        "colors": "player.css :root plus repeated component states and site-src/site.css; literal CSS formats preserved.",
-        "typography": "player.css :root, .intro h1, .search input, .source-entry pre; site-src/site.css section and row headings.",
-        "rounded": "Repeated 4–7px component rules; 10px graph-group rectangle in player.js.",
-        "spacing": "Recurring literal gaps and insets in player.css and site-src/site.css; descriptive keys are documentation labels, not a newly installed CSS scale.",
-        "components": "player.html and sections.html markup with player.css/site.css rules; SVG graph node geometry from player.js. Preview copy is representative, not an additional product claim."
-      },
-      "tonalRampSource": "Preview-only OKLCH derivations from each canonical source color. These synthesized ramps are not implemented palette tokens or normative future-use instructions.",
-      "snippetScope": "Self-contained CSS with actual :root variable names and source-value fallbacks. Atkinson must be available from the host to reproduce the bundled font; no font file is embedded in the sidecar. Snippets preserve visual states but do not attach application event handlers. The component-choice SVG uses the shipped module icon geometry.",
-      "documentationLimits": [
-        "Source extraction and supplied finish-review evidence; no independent new browser audit was performed by the documenter.",
-        "Finish disposition remains fix solely for tooling/provenance: hero/open and pending sections/motion/responsive against an obsolete illustrative baseline; seed corroboration UNKNOWN. Actual-viewport approval and user-authorized publication are recorded separately. This document is not a green or closed gate claim.",
-        "Unicode action-arrow substitutions are resolved per finish-verdict.md; no unresolved UI repair or observed regression is canonized. No ledger or UI files were modified.",
-        "Small helper metadata and graph-coordinate font sizes are observed details, not a universal minimum text-size rule. No universal reduced-motion playback/export policy or unimplemented field-error styling is invented."
+      "screenshots": [
+        {
+          "path": ".impeccable/review/desktop.png",
+          "scope": "Earlier landscape merge screenshots, visually inspected then; historical context only, not viewport evidence for this frame/motion refinement."
+        },
+        {
+          "path": ".impeccable/review/mobile.png",
+          "scope": "Earlier landscape merge screenshots, visually inspected then; historical context only, not viewport evidence for this frame/motion refinement."
+        },
+        {
+          "path": ".impeccable/review/tablet.png",
+          "scope": "Earlier landscape merge screenshots, visually inspected then; historical context only, not viewport evidence for this frame/motion refinement."
+        },
+        {
+          "path": ".impeccable/review/desktop-dark.png",
+          "scope": "Earlier landscape merge screenshots, visually inspected then; historical context only, not viewport evidence for this frame/motion refinement."
+        },
+        {
+          "path": ".impeccable/review/mobile-dark.png",
+          "scope": "Earlier landscape merge screenshots, visually inspected then; historical context only, not viewport evidence for this frame/motion refinement."
+        }
       ],
-      "approvedRefinement": "User requested smaller fonts/buttons, clear installation CTA, light/dark mode, scroll reveals and multilingual pages on 2026-11-07."
+      "qualitativeAuthority": "User-selected landscape comp and explicit assembled-render confirmation in chat: ne, v pohode, potvrzuju, udelej to. Existing flat professional standalone system preserved. No new metaphor interview claimed. User explicitly chose to merge the new website with the existing player rules: Sloučit nový web se stávajícími pravidly přehrávače (doporučuji).",
+      "tonalRampSource": "Preview-only OKLCH derivations from source color primitives. These ramps are not implemented palette tokens or prescribed future colors.",
+      "snippetScope": "Self-contained ds-prefixed HTML/CSS. Actual CSS custom properties have source-value fallbacks. Host must supply bundled Rethink/Atkinson fonts for exact type rendering. Static previews carry states but no application handlers; navigation hrefs are representative.",
+      "tokenScope": "Frontmatter primitives are normative. Dark and landing variants remain explicitly scoped. Spacing names label observed repeated values, not a new runtime scale.",
+      "documentationLimits": [
+        "Current source extraction only for the frame, scroll-progress reveal and gallery refinement; the documenter performed no new browser interaction or viewport audit.",
+        "Impeccable comparison ledger remains hero/open on the tiny GitHub control despite explicit user approval. No closed build gate, browser hero approval receipt or publication is claimed; see docs/verification.md.",
+        "Stale incumbent edge-line color, two-language wording and public pre-landscape composition are reconciled to current source. Tiny helper text and inherited standalone phone height constraints are contextual observations, not new design mandates.",
+        "No invented field-error styling, global photographic requirement, or universal reduced-motion playback/export behavior."
+      ],
+      "shippingRasterRule": "Generated images retain their generation prompt; derived raster media retain runtime origin/render input provenance.",
+      "documentationDisposition": "Merged DESIGN.md and sidecar refreshed within the authorized two-file boundary. Standalone player guidance retained. Documentation completion does not close the independent hero/open comparison ledger.",
+      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels."
     },
-    "themes": {
-      "dark": {
-        "paper": "#10141b",
-        "ink": "#e7edf7",
-        "muted": "#a8b4c5",
-        "line": "#303b4c",
-        "blue": "#8bb9ff",
-        "blue-light": "#1c3150",
-        "action": "#306ac0"
+    "galleryEvidence": {
+      "superpowers": {
+        "graph": "examples/superpowers/graph.json",
+        "components": 13,
+        "relationships": 20,
+        "displayLanguages": [
+          "en",
+          "cs",
+          "de",
+          "fr",
+          "es"
+        ],
+        "sourceRevision": "22f0b463e7a5e579904dd6211a520321035526f7",
+        "scope": "Current public gallery example; counts and topology are data, not design invariants."
+      },
+      "whisper": {
+        "graph": "examples/whisper/graph.json",
+        "components": 12,
+        "relationships": 17,
+        "displayLanguages": [
+          "en",
+          "cs",
+          "de",
+          "fr",
+          "es"
+        ],
+        "sourceRevision": "86098128c0b4f24f0e2aa2994de830614b474227",
+        "scope": "Current public gallery example; counts and topology are data, not design invariants."
       }
-    },
-    "standaloneIntro": {
-      "titleSize": "clamp(23px, 2vw, 30px)",
-      "mobileTitleSize": "23px",
-      "leadSize": "14px",
-      "metadataSize": "11px",
-      "revisionSize": "10px",
-      "description": "Concise lead, source-linked orientation, counts/duration/short revision metadata, expandable full summary."
     }
   },
   "components": [
     {
-      "name": "Installation action",
+      "name": "Standalone installation action",
       "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Primary link action from the header.",
+      "description": "Existing compact standalone header action; hidden on small screens.",
       "html": "<a class=\"ds-install\" href=\"#install\">Install skill</a>",
-      "css": ".ds-install{font-family:Atkinson,system-ui,sans-serif;display:inline-block;color:#fff;background:var(--blue,#2164c7);border:1px solid var(--blue,#2164c7);border-radius:6px;padding:8px 13px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}.ds-install:hover{background:#184e9e}.ds-install:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+      "css": ".ds-install{font-family:Atkinson,system-ui,sans-serif;display:inline-block;background:var(--action,#2164c7);color:#fff;border:1px solid var(--blue,#2164c7);border-radius:6px;padding:.35em .8em;font-size:clamp(16px,1.43vw,24px);font-weight:600;text-decoration:none;white-space:nowrap}.ds-install:hover{background:var(--action-hover,#184e9e)}.ds-install:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Landing primary action",
+      "kind": "button",
+      "description": "Scoped public hero action; the standalone blue is retained separately.",
+      "html": "<a class=\"ds-hero-primary\" href=\"#install\">Install skill</a>",
+      "css": ".ds-hero-primary{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:168px;padding:10px 20px;border:1px solid #0854e5;border-radius:8px;font-size:16px;line-height:1.25;font-weight:550;text-decoration:none;color:#fff;background:#0854e5}.ds-hero-primary:hover{background:#0645be;border-color:#0645be}.ds-hero-primary:focus-visible{outline:2px solid #0854e5;outline-offset:3px}@media(max-width:600px){.ds-hero-primary{min-width:0;padding-inline:18px;font-size:14px}}",
+      "refersTo": "landing-button-primary"
+    },
+    {
+      "name": "Landing explore action",
+      "kind": "button",
+      "description": "Secondary action over the photographic public introduction.",
+      "html": "<a class=\"ds-hero-secondary\" href=\"#workspace\">Explore Codex</a>",
+      "css": ".ds-hero-secondary{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:168px;padding:10px 20px;border:1px solid #394655;border-radius:8px;font-size:16px;line-height:1.25;font-weight:550;text-decoration:none;color:#151720;background:#ffffffc9}.ds-hero-secondary:hover{background:#fff}.ds-hero-secondary:focus-visible{outline:2px solid #0854e5;outline-offset:3px}@media(max-width:600px){.ds-hero-secondary{min-width:0;padding-inline:18px;font-size:14px}}"
     },
     {
       "name": "Graph view controls",
       "kind": "button",
-      "refersTo": "button-view",
-      "description": "Neutral view choices with a stronger selected state.",
-      "html": "<div class=\"ds-view\" role=\"group\" aria-label=\"Graph view\"><button aria-pressed=\"true\">Map</button><button aria-pressed=\"false\">Focus</button><button aria-pressed=\"false\">Path</button></div>",
-      "css": ".ds-view{display:flex;gap:3px}.ds-view button{font-family:Atkinson,system-ui,sans-serif;padding:6px 13px;border:0;border-radius:5px;background:none;font-size:16px;color:var(--muted,#5e6674);cursor:pointer}.ds-view button[aria-pressed=\"true\"]{background:#eff3f9;color:var(--ink,#151720);font-weight:600}.ds-view button:hover{background:#f2f4f8}.ds-view button:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+      "description": "Shared compact controls, shown in the standalone typeface.",
+      "html": "<div class=\"ds-views\" role=\"group\" aria-label=\"Graph view\"><button class=\"ds-view\" aria-pressed=\"true\">Map</button><button class=\"ds-view\" aria-pressed=\"false\">Focus</button><button class=\"ds-view\" aria-pressed=\"false\">Path</button></div>",
+      "css": ".ds-views{display:flex;gap:3px}.ds-view{font-family:Atkinson,system-ui,sans-serif;padding:6px 13px;border:0;border-radius:5px;background:none;font-size:13px;color:var(--muted,#5e6674);cursor:pointer}.ds-view[aria-pressed=\"true\"]{background:var(--hover,#f1f4f8);color:var(--ink,#151720);font-weight:600}.ds-view:hover{background:var(--hover,#f1f4f8)}.ds-view:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px}",
+      "refersTo": "button-view"
     },
     {
       "name": "Component choice",
       "kind": "chip",
-      "refersTo": "component-selected",
-      "description": "Selected working navigation row; compact bordered choice on mobile.",
-      "html": "<button class=\"ds-component\" aria-pressed=\"true\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 4h16v16H4zM4 9h16M9 9v11\"/></svg>HTML draft</button>",
-      "css": ".ds-component{font-family:Atkinson,system-ui,sans-serif;display:flex;gap:12px;align-items:center;text-align:left;width:100%;border:0;border-radius:5px;padding:11px 10px;background:var(--blue-light,#eaf2ff);color:#1558b7;min-height:45px;font-size:clamp(15px,1.25vw,21px);line-height:1.15;font-weight:600;cursor:pointer}.ds-component svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;flex:none}.ds-component:hover{background:#f4f6f9}.ds-component[aria-pressed=\"true\"]{background:var(--blue-light,#eaf2ff)}.ds-component:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+      "description": "Current compact standalone row; public rows are smaller scoped variants.",
+      "html": "<button class=\"ds-component\" aria-pressed=\"true\"><svg class=\"ds-component-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 4h16v16H4zM4 9h16M9 9v11\"/></svg>Model request &amp; stream</button>",
+      "css": ".ds-component{font-family:Atkinson,system-ui,sans-serif;display:flex;gap:12px;align-items:center;text-align:left;width:100%;border:0;border-radius:5px;padding:9px 8px;background:transparent;min-height:38px;font-size:14px;line-height:1.15;color:var(--ink,#151720);cursor:pointer}.ds-component-icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;flex:none}.ds-component:hover{background:var(--hover,#f1f4f8)}.ds-component[aria-pressed=\"true\"]{background:var(--blue-light,#eaf2ff);color:var(--selected-ink,#1558b7);font-weight:600}.ds-component:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px}",
+      "refersTo": "component-selected"
     },
     {
       "name": "Component search",
       "kind": "input",
-      "refersTo": "search",
-      "description": "Thin-bordered search with a blue focus-within outline.",
-      "html": "<label class=\"ds-search\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"10\" cy=\"10\" r=\"6.5\"/><path d=\"m15 15 5 5\"/></svg><input aria-label=\"Find a component\" type=\"search\" placeholder=\"Find a component\"/></label>",
-      "css": ".ds-search{font-family:Atkinson,system-ui,sans-serif;display:flex;align-items:center;gap:8px;color:var(--muted,#5e6674);border:1px solid var(--line,#dce1e8);border-radius:5px;padding:7px 9px}.ds-search svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;flex:none}.ds-search input{font-family:Atkinson,system-ui,sans-serif;color:var(--ink,#151720);width:100%;min-width:0;border:0;background:transparent;font-size:14px;outline:none;caret-color:var(--blue,#2164c7)}.ds-search input::placeholder{color:#68717e}.ds-search:focus-within{outline:2px solid var(--blue,#2164c7);outline-offset:1px}"
+      "description": "Shared thin-bordered search with focus-within; font sizes vary by surface and viewport.",
+      "html": "<label class=\"ds-search\"><svg class=\"ds-search-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"10\" cy=\"10\" r=\"6.5\"/><path d=\"m15 15 5 5\"/></svg><input class=\"ds-search-input\" type=\"search\" aria-label=\"Find a component\" placeholder=\"Find a component\"/></label>",
+      "css": ".ds-search{font-family:Atkinson,system-ui,sans-serif;display:flex;align-items:center;gap:8px;color:var(--muted,#5e6674);border:1px solid var(--line,#dce1e8);border-radius:5px;padding:7px 9px}.ds-search-icon{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;flex:none}.ds-search-input{font-family:Atkinson,system-ui,sans-serif;color:var(--ink,#151720);width:100%;min-width:0;border:0;background:transparent;font-size:14px;outline:none;caret-color:var(--blue,#2164c7)}.ds-search:focus-within{outline:2px solid var(--blue,#2164c7);outline-offset:1px}",
+      "refersTo": "search"
     },
     {
       "name": "Source excerpt",
       "kind": "card",
-      "refersTo": "code",
-      "description": "Inset source block with literal whitespace and overflow.",
-      "html": "<pre class=\"ds-code\"><code>def build_html(story):\n    validate(story)\n    return embed_assets(story)</code></pre>",
-      "css": ".ds-code{background:#f5f7fa;color:var(--ink,#151720);margin:12px 0 0;padding:12px;overflow:auto;font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;tab-size:4;max-height:250px;border-radius:4px}.ds-code code{font-family:inherit;white-space:pre}"
+      "description": "Literal code remains distinct from prose and scrolls within its surface.",
+      "html": "<pre class=\"ds-code\"><code class=\"ds-code-text\">def build_html(story):\n    validate(story)\n    return embed_assets(story)</code></pre>",
+      "css": ".ds-code{background:var(--code-surface,#f5f7fa);color:var(--ink,#151720);margin:12px 0 0;padding:12px;overflow:auto;font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;tab-size:4;max-height:250px;border-radius:4px}.ds-code-text{font-family:inherit;white-space:pre}",
+      "refersTo": "code"
     },
     {
-      "name": "Installation command",
+      "name": "Landing copy command",
       "kind": "card",
-      "refersTo": "command",
-      "description": "Command and copy control inside one ruled white container.",
-      "html": "<div class=\"ds-command\"><pre><code>npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer</code></pre><button>Copy command</button></div>",
-      "css": ".ds-command{display:flex;gap:16px;align-items:center;background:#fff;color:var(--ink,#151720);border:1px solid #cbd3df;border-radius:7px;padding:14px 16px}.ds-command pre{overflow:auto;margin:0;flex:1;min-width:0;padding:7px 0;font-size:15px;line-height:1.6}.ds-command code{font-family:ui-monospace,SFMono-Regular,monospace}.ds-command button{font-family:Atkinson,system-ui,sans-serif;flex:none;border:1px solid #cbd3df;background:#fff;color:var(--ink,#151720);border-radius:5px;padding:10px 15px;font-size:14px;min-height:42px;cursor:pointer}.ds-command button:hover{background:#edf3fc}.ds-command button:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+      "description": "Scoped hero command with responsive text wrapping and an authored copy icon.",
+      "html": "<div class=\"ds-command\"><code class=\"ds-command-code\">npx skills add HonzaCuhel/repo-visualizer --skill repo-visualizer</code><button class=\"ds-copy\" aria-label=\"Copy command\"><svg class=\"ds-copy-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"8\" y=\"4\" width=\"12\" height=\"14\" rx=\"2\"/><path d=\"M15 18v2H4V7h4\"/></svg><span class=\"ds-copy-label\">Copy</span></button></div>",
+      "css": ".ds-command{font-family:Rethink,Atkinson,sans-serif;display:flex;align-items:center;gap:16px;max-width:calc(100% - 24px);padding:0 16px 0 20px;height:45px;border-radius:9px;background:#fffffff0;color:#151720}.ds-command-code{font:14px/1.5 Menlo,ui-monospace,monospace;white-space:nowrap;overflow:auto;min-width:0}.ds-copy{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;border:0;border-left:1px solid #d7dce5;border-radius:0;background:transparent;color:#0649cd;font-size:14px;padding:0 0 0 16px;min-height:28px;cursor:pointer}.ds-copy:hover{color:#002b82}.ds-copy:focus-visible{outline:2px solid #0854e5;outline-offset:3px}.ds-copy-icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}@media(max-width:600px){.ds-command{width:100%;max-width:100%;height:auto;min-height:46px;gap:10px;padding:9px 10px}.ds-command-code{font-size:10px;white-space:normal;overflow-wrap:anywhere;text-align:left}.ds-copy{padding-left:9px}.ds-copy-label{display:none}}",
+      "refersTo": "landing-command"
     },
     {
-      "name": "Main navigation",
+      "name": "Navigation and appearance",
       "kind": "nav",
-      "description": "Quiet charcoal links with hover underlines.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Main navigation\"><a href=\"#examples\">Examples</a><a href=\"#guide\">Guide</a><a href=\"https://github.com/HonzaCuhel/repo-visualizer\">GitHub</a></nav>",
-      "css": ".ds-nav{font-family:Atkinson,system-ui,sans-serif;display:flex;gap:3.8vw;font-size:clamp(16px,1.43vw,24px)}.ds-nav a{color:var(--ink,#151720);text-decoration:none;text-underline-offset:4px}.ds-nav a:hover{text-decoration:underline}.ds-nav a:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px;}"
+      "description": "Quiet public links plus the explicit flag trigger and light/dark/system buttons; preview has no application handlers.",
+      "html": "<div class=\"ds-header-controls\"><nav class=\"ds-nav\" aria-label=\"Main navigation\"><a class=\"ds-nav-link\" href=\"#examples\">Examples</a><a class=\"ds-nav-link\" href=\"#guide\">How it works</a></nav><button class=\"ds-language\" aria-label=\"Interface language: English\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><svg class=\"ds-flag\" viewBox=\"0 0 28 20\" aria-hidden=\"true\"><rect width=\"28\" height=\"20\" fill=\"#21468b\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#c8102e\" stroke-width=\"1.5\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#fff\" stroke-width=\"7\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#c8102e\" stroke-width=\"4\"/></svg>EN</button><div class=\"ds-themes\" role=\"group\" aria-label=\"Color theme\"><button class=\"ds-theme\" aria-label=\"Light theme\" aria-pressed=\"true\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\"/></svg></button><button class=\"ds-theme\" aria-label=\"Dark theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z\"/></svg></button><button class=\"ds-theme\" aria-label=\"System theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M12 17v4m-4 0h8\"/></svg></button></div></div>",
+      "css": ".ds-header-controls{font-family:Rethink,Atkinson,sans-serif;display:flex;align-items:center;gap:24px}.ds-nav{display:flex;gap:20px;font-size:16px}.ds-nav-link{color:var(--ink,#151720);text-decoration:none;text-underline-offset:4px}.ds-nav-link:hover{text-decoration:underline}.ds-language{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:6px 9px;background:#ffffff30;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink,#151720);cursor:pointer}.ds-flag{width:21px;height:15px;border-radius:2px}.ds-themes{display:inline-flex;gap:2px;padding:3px;border:1px solid #c3dff8;border-radius:20px;background:#98c4f0}.ds-theme{display:grid;place-items:center;width:40.7px;height:28px;padding:5px;border:0;border-radius:16px;background:transparent;color:#172332;cursor:pointer}.ds-theme[aria-pressed=\"true\"]{background:#ffffffdc}.ds-theme:hover,.ds-language:hover{background:var(--hover,#f1f4f8)}.ds-theme-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ds-theme:focus-visible,.ds-language:focus-visible,.ds-nav-link:focus-visible{outline:2px solid #0854e5;outline-offset:3px}@media(max-width:1000px){.ds-nav{display:none}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-theme{width:26px}}"
     },
     {
       "name": "Graph node",
       "kind": "custom",
-      "description": "Selected SVG component; coordinate typography is scaled by the graph camera.",
-      "html": "<svg class=\"ds-graph\" viewBox=\"0 0 220 84\" xmlns=\"http://www.w3.org/2000/svg\"><g class=\"ds-node\" role=\"button\" tabindex=\"0\" aria-label=\"HTML draft · module\"><rect x=\"5\" y=\"5\" width=\"210\" height=\"74\" rx=\"7\"/><text class=\"ds-node-title\" x=\"110\" y=\"35\" text-anchor=\"middle\">HTML draft</text><text class=\"ds-node-kind\" x=\"110\" y=\"63\" text-anchor=\"middle\">module</text></g></svg>",
-      "css": ".ds-graph{width:220px;max-width:100%;height:auto}.ds-node{cursor:pointer}.ds-node rect{fill:#eaf2ff;stroke:#2164c7;stroke-width:2}.ds-node-title{fill:#154f9e;font-family:Atkinson,system-ui,sans-serif;font-size:17px;font-weight:600}.ds-node-kind{fill:#6b7484;font-family:Atkinson,system-ui,sans-serif;font-size:11px;font-weight:400}.ds-node:hover rect{stroke:#2164c7;stroke-width:2}.ds-node:focus-visible{outline:none}.ds-node:focus-visible rect{stroke:#2164c7;stroke-width:3}"
+      "description": "Shared selected SVG node retains Atkinson, including on the public Rethink surface.",
+      "html": "<svg class=\"ds-graph\" viewBox=\"0 0 220 84\" xmlns=\"http://www.w3.org/2000/svg\"><g class=\"ds-node\" role=\"button\" tabindex=\"0\" aria-label=\"Model request · module\"><rect class=\"ds-node-box\" x=\"5\" y=\"5\" width=\"210\" height=\"74\" rx=\"7\"/><text class=\"ds-node-title\" x=\"110\" y=\"35\" text-anchor=\"middle\">Model request</text><text class=\"ds-node-kind\" x=\"110\" y=\"63\" text-anchor=\"middle\">module</text></g></svg>",
+      "css": ".ds-graph{width:220px;max-width:100%;height:auto}.ds-node{cursor:pointer}.ds-node-box{fill:var(--blue-light,#eaf2ff);stroke:var(--blue,#2164c7);stroke-width:2}.ds-node-title{fill:var(--selected-ink,#1558b7);font-family:Atkinson,system-ui,sans-serif;font-size:17px;font-weight:600}.ds-node-kind{fill:var(--muted,#5e6674);font-family:Atkinson,system-ui,sans-serif;font-size:11px;font-weight:400}.ds-node:hover .ds-node-box{stroke:var(--blue,#2164c7);stroke-width:2}.ds-node:focus-visible{outline:none}.ds-node:focus-visible .ds-node-box{stroke:var(--blue,#2164c7);stroke-width:3}"
     }
   ],
   "narrative": {
-    "northStar": "The Professional Source Workspace",
-    "overview": "A bright, extremely simple working environment puts the repository and its evidence first. White and cool near-white surfaces, charcoal text, a restrained blue and thin neutral rules carry the interface. The user-confirmed rejection is explicit: no childish orange 3D plates, glow, plastic surfaces, oversized gradient actions or neon instrument styling.\n\nThe interface is compact and conventional. Clear sans typography explains the work; monospaced text carries source paths, revisions and code. The graph is a flat, selectable representation of relationships. Its geometry belongs to the data rather than to decoration.",
+    "northStar": "The Professional Source Workspace, Open to the Landscape",
+    "overview": "The shared visual system is a compact, professional source workspace: flat component graphs, quiet neutral panes, restrained blue actions and inspectable evidence. Clear prose and literal code have distinct typographic roles. The graph's geometry follows repository relationships, including branches and cycles.\n\nThe public landing adds the user-selected landscape world: an original sunlit mountain valley supplies atmosphere and spatial depth while a complete working explorer supplies proof. Rethink Sans carries the landing interface; the standalone skill player retains Atkinson. This is a scoped public presentation, not a new photographic requirement for every generated explanation. The user rejected childish orange 3D plates, glow, plastic surfaces, oversized gradient actions and neon instrument styling.",
     "keyCharacteristics": [
-      "White and cool-neutral surfaces with charcoal text.",
-      "Restrained blue for selection, links, focus and the primary action.",
-      "Thin rules and compact, gently rounded controls.",
-      "Clear prose paired with readable source code.",
-      "Flat diagrams with explicit selection and inferred relationships."
+      "Flat, source-grounded diagrams with explicit selection and inferred relationships.",
+      "Cool neutral surfaces, charcoal text and purposeful blue actions.",
+      "A photographic landscape on the public landing, with the tooling kept flat.",
+      "Rethink for the public interface, Atkinson for standalone explanations and graph labels, monospace for source identity.",
+      "Compact controls, five bundled interface languages and explicit appearance choices."
     ],
     "rules": [
       {
@@ -457,28 +948,37 @@
         "section": "colors"
       },
       {
+        "name": "The Scoped Landscape Rule",
+        "body": "Nature supplies depth on the public landing; source evidence and graph geometry remain live interface elements rather than rasterized decoration.",
+        "section": "colors"
+      },
+      {
         "name": "The Source Identity Rule",
-        "body": "Keep source paths, revisions and literal code visually distinct through monospace; keep explanation in Atkinson.",
+        "body": "Keep source paths, revisions and literal code visually distinct through monospace; use the surface's sans family for explanations and Atkinson for graph labels.",
         "section": "typography"
       },
       {
         "name": "The Flat Workspace Rule",
-        "body": "Use borders and tone for persistent structure; reserve ambient shadow for the floating export menu.",
+        "body": "Use borders and tone for persistent tooling structure; reserve ambient shadow for floating menus.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do use restrained blue to identify actions, keyboard focus and graph selection.",
-      "Do preserve thin neutral rules, cool white surfaces and compact conventional controls.",
-      "Do use Atkinson for explanation and monospace for literal code and source identity.",
-      "Do reflow the working panes and allow code and component navigation to scroll where the source does.",
-      "Do preserve selection, inferred-relationship styling and source meaning across projections."
+      "Do use purposeful blue for actions, focus and graph selection within the surface's documented palette.",
+      "Do preserve flat thin-ruled tooling over the public landscape and keep photographic styling scoped to that public surface.",
+      "Do retain Rethink on the landing, Atkinson in standalone explanations and graph labels, and monospace for literal code and source identity.",
+      "Do preserve intrinsic landing tablet rows and the automatic mobile graph-pane height so controls and evidence remain in flow.",
+      "Do retain five bundled interface languages, explicit appearance choices, keyboard states and distinct graph-language availability.",
+      "Do preserve source meaning and offline assets across interactive and exported projections.",
+      "Do retain prompt or origin provenance for every shipping raster."
     ],
     "donts": [
-      "Don't introduce orange 3D plates, glow, plastic surfaces, oversized gradient actions or neon instrument styling.",
-      "Don't replace authored action SVG with Unicode arrow icon substitutes.",
+      "Don't introduce childish orange 3D plates, glow, plastic surfaces, oversized gradient actions or neon instrument styling.",
+      "Don't bake the graph, controls or source evidence into a photographic asset.",
       "Don't impose a linear chain on graph data that contains branches, parallel relationships or cycles.",
-      "Don't turn tiny helper metadata, SVG-coordinate label sizes or isolated colors into a universal body-text or palette scale."
+      "Don't replace authored action SVG with Unicode arrow icon substitutes.",
+      "Don't turn tiny helper metadata, SVG-coordinate labels, the hero composition or isolated colors into universal design rules.",
+      "Don't describe static source explanations as runtime recordings or treat design documentation as a closed build gate or publication receipt."
     ]
   }
 }

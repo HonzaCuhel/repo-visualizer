@@ -1,0 +1,13 @@
+# Whisper: from audio to text
+
+Audio preprocessing, the encoder–decoder Transformer, autoregressive token generation and transcription fallback. This is a static source explanation, not a model run or an interpretation of learned weights.
+
+Source: [openai/whisper](https://github.com/openai/whisper/tree/86098128c0b4f24f0e2aa2994de830614b474227) at `86098128c0b4f24f0e2aa2994de830614b474227`.
+
+12 components; 17 relationships; six optional animated highlights. Graph text and interface in English, Czech, German, French and Spanish. Source excerpts are embedded with byte fingerprints and pinned links. Upstream MIT notice: [LICENSE.upstream](LICENSE.upstream).
+
+[Open the explorer](https://honzacuhel.github.io/repo-visualizer/whisper.html).
+
+Generated with the repo-visualizer scan → inspect → graph → prepare → build workflow. No target scripts, model weights or paid agents were run.
+
+[Animated GIF, 18 seconds](https://honzacuhel.github.io/repo-visualizer/media/whisper.gif) · [Render provenance](../../site/media/whisper.gif.provenance.json). The HTML companion preserves clickable source evidence.

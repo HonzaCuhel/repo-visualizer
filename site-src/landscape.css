@@ -8,6 +8,8 @@
   position: relative;
   isolation: isolate;
   font-family: Rethink, Atkinson, sans-serif;
+  --landing-max: 1480px;
+  --landing-gutter: clamp(24px, 3.53vw, 56px);
   --action: #0854e5;
   --action-hover: #0645be;
   --blue: #0854e5;
@@ -16,7 +18,7 @@
 .landscape {
   position: absolute;
   inset: 0 0 auto;
-  height: 41.93vw;
+  height: min(41.93vw, 800px);
   overflow: hidden;
   pointer-events: none;
   z-index: -1;
@@ -26,6 +28,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
 }
 .landscape::after {
   content: "";
@@ -37,8 +40,11 @@
   position: relative;
   height: 4.04vw;
   min-height: 56px;
-  max-height: 76px;
-  padding: 0 7.8% 0 13.2%;
+  max-height: 64px;
+  width: min(calc(100% - var(--landing-gutter) - var(--landing-gutter)), var(--landing-max));
+  max-width: var(--landing-max);
+  margin-inline: auto;
+  padding: 0 24px;
   gap: 28px;
   border: 0;
   background: transparent;
@@ -63,10 +69,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: none;
-  height: 23.077vw;
+  max-width: 1280px;
+  margin-inline: auto;
+  height: clamp(320px, 23.077vw, 366px);
   min-height: 320px;
-  padding: 1.9vw 24px 0;
+  padding: clamp(24px, 1.9vw, 32px) 24px 0;
   text-align: center;
 }
 .landing .intro h1 {
@@ -113,11 +120,11 @@
 .hero-command button:hover { color: #002b82; }
 .hero-command svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
 .landing .workspace {
-  width: 92.94%;
-  max-width: 1740px;
-  height: 35.44vw;
+  width: min(calc(100% - var(--landing-gutter) - var(--landing-gutter)), var(--landing-max));
+  max-width: var(--landing-max);
+  height: clamp(510px, 35.44vw, 600px);
   min-height: 510px;
-  max-height: 660px;
+  max-height: 600px;
   grid-template-columns: 21.6% 51.8% 26.6%;
   border: 9px solid var(--paper);
   border-radius: 22px;
@@ -154,7 +161,7 @@
 .landing .inspector-tabs { margin-bottom: 15px; }
 .landing .inspector-tabs button { font-size:14px; }
 .landing .graph-count { bottom:8px; font-size:11px; }
-.landing .player-status { font-size: 11px; margin: 12px auto 0; max-width: 92.94%; }
+.landing .player-status { font-size: 11px; margin: 12px auto 0; padding-inline:18px; width:min(calc(100% - var(--landing-gutter) - var(--landing-gutter)),var(--landing-max)); max-width:var(--landing-max); }
 [data-theme="dark"] .landing .landscape img { filter: brightness(.38) saturate(.62); }
 [data-theme="dark"] .landing .intro h1 { color: #f4f7ff; }
 [data-theme="dark"] .landing #page-description > span { color: #e0e9f6; }
@@ -162,10 +169,10 @@
 [data-theme="dark"] .landing .hero-explore:hover { background: #22364e; }
 [data-theme="dark"] .landing .language-toggle, [data-theme="dark"] .landing .theme-switch { background: #13223899; border-color: #52657a; }
 @media (min-width: 1800px) {
-  .landing .intro { min-height: 385px; max-height: 430px; }
+  .landing .intro { min-height:320px; max-height:366px; }
 }
 @media (max-width: 1200px) {
-  .landing .site-header { padding-inline: 5%; gap: 22px; }
+  .landing .site-header { padding-inline:24px; gap:22px; }
   .landing .site-nav { gap: 20px; }
   .landing .appearance-controls { gap: 12px; }
   .landing .workspace { grid-template-columns: 23% 49% 28%; }
@@ -184,7 +191,8 @@
   .landing .inspector { border-top: 1px solid var(--line); grid-column: 1 / -1; padding: 22px; }
 }
 @media (max-width: 600px) {
-  .landing .site-header { padding-inline: 16px; gap: 10px; }
+  .landing { --landing-gutter:12px; }
+  .landing .site-header { padding-inline:4px; gap:10px; }
   .landing .wordmark { font-size: 18px; gap: 7px; }
   .landing .appearance-controls { gap: 8px; }
   .landing .language-toggle { min-width: 0; padding: 6px; }
@@ -212,7 +220,9 @@
   .landing .analysis-notes { padding-top: 10px; }
   .landing .graph-pane { height:auto; min-height: 0; padding: 0 9px 8px; }
   .landing .graph-stage { height: 420px; flex: none; }
-  .landing .graph-heading { height: 51px; }
+  .landing .graph-heading { height: auto; min-height: 51px; flex-wrap: wrap; gap: 8px; padding-block: 8px; }
+  .landing .view-switch, .landing .export-menu { flex-shrink: 0; }
+  .landing .export-menu { margin-left: auto; }
   .landing .inspector { display: block; padding: 20px 13px; }
   .landing .inspector h2 { font-size: 24px; margin-top: 15px; }
   .landing .connections button { font-size: 13px; padding-block: 5px; }
@@ -221,7 +231,7 @@
   .landing .player-status { padding-inline: 0; }
 }
 @media (max-width: 360px) {
-  .landing .site-header { padding-inline: 12px; gap: 7px; }
+  .landing .site-header { padding-inline:0; gap:7px; }
   .landing .wordmark { font-size: 16px; }
   .landing .appearance-controls { gap: 6px; }
   .landing .locale-code { display: none; }
@@ -245,7 +255,7 @@
 .landing .install-section { max-width:1184px; padding:40px; border-radius:14px; }
 .landing .export-showcase video { border-radius:12px; }
 .landing .font-credit { font-size:11px; color:var(--muted); white-space:nowrap; }
-.landing .player-footer { gap:20px; flex-wrap:wrap; padding-block:24px; }
+.landing .player-footer { width:min(calc(100% - var(--landing-gutter) - var(--landing-gutter)),var(--landing-max)); max-width:var(--landing-max); margin-inline:auto; gap:20px; flex-wrap:wrap; padding:24px 18px; }
 .landing .landscape img { will-change:transform; }
 @media (prefers-reduced-motion:reduce) {
   .landing .landscape img { will-change:auto; transform:none !important; }
@@ -258,3 +268,6 @@
 
 [data-theme="dark"] .landing .github-mark { filter:invert(1); }
 @media(max-width:1000px) { .landing .site-nav { display:none; } }
+
+.scroll-reveal { opacity:var(--reveal-opacity,1); transform:translate3d(0,var(--reveal-shift,0px),0); }
+@media (prefers-reduced-motion:reduce) { .scroll-reveal { opacity:1 !important; transform:none !important; } }

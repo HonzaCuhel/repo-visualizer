@@ -97,54 +97,76 @@
         feedback.textContent = t("selected");
       }
     });
-  // Content stays visible without JavaScript or when reduced motion is requested.
-  // A section enters once; scrolling never starts the repository animation.
-  if (
-    !matchMedia("(prefers-reduced-motion: reduce)").matches &&
-    "IntersectionObserver" in window
-  ) {
-    const landscape = document.querySelector(".landscape img");
-    let scheduled = false;
-    const moveLandscape = () => {
-      scheduled = false;
-      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      landscape.style.transform = `translateY(${Math.min(scrollY, 700) * 0.075}px)`;
-    };
-    addEventListener("scroll", () => {
-      if (scheduled) return;
-      scheduled = true;
-      requestAnimationFrame(moveLandscape);
-    }, { passive: true });
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) moveLandscape();
-    });
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    reduced.addEventListener("change", () => {
-      if (reduced.matches) landscape.style.transform = "none";
-    });
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const { target, isIntersecting } of entries) {
-          if (!isIntersecting) continue;
-          observer.unobserve(target);
-          if (reduced.matches) continue;
-          target.animate(
-            [
-              {
-                opacity: 0.45,
-                transform: "translateY(12px)",
-                filter: "blur(1px)",
-              },
-              { opacity: 1, transform: "translateY(0)", filter: "blur(0)" },
-            ],
-            { duration: 460, easing: "cubic-bezier(0.16,1,0.3,1)" },
-          );
-        }
-      },
-      { threshold: 0.12 },
-    );
-    document
-      .querySelectorAll(".landing-section")
-      .forEach((section) => observer.observe(section));
+  // Content is visible without scripts; motion follows the reader's position.
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const landscape = document.querySelector(".landscape img");
+  const pending = new Set(document.querySelectorAll(
+    ".landing-section .section-heading, .example-row, .install-section, .guide-steps article, .export-showcase, .privacy-note"
+  ));
+  const shifts = new WeakMap();
+  let scheduled = false;
+  function complete(element) {
+    pending.delete(element);
+    element.classList.remove("scroll-reveal");
+    element.style.removeProperty("--reveal-opacity");
+    element.style.removeProperty("--reveal-shift");
+    element.style.removeProperty("will-change");
+    shifts.delete(element);
   }
+  function finishWithin(anchor) {
+    if (!anchor) return;
+    for (const element of [...pending]) {
+      if (element === anchor || anchor.contains(element) || element.contains(anchor)) complete(element);
+    }
+  }
+  function updateScroll() {
+    scheduled = false;
+    if (reduced.matches) {
+      landscape.style.transform = "none";
+      for (const element of [...pending]) complete(element);
+      return;
+    }
+    landscape.style.transform = `translateY(${Math.min(scrollY, 700) * 0.075}px)`;
+    // Batch geometry reads before style writes, including the previous translation.
+    const readings = [...pending].map(element => ({
+      element,
+      top: element.getBoundingClientRect().top - (shifts.get(element) || 0),
+    }));
+    for (const { element, top } of readings) {
+      const progress = Math.max(0, Math.min(1, (innerHeight * 0.94 - top) / (innerHeight * 0.26)));
+      if (progress === 1) { complete(element); continue; }
+      const shift = (1 - progress) * 20;
+      shifts.set(element, shift);
+      element.classList.add("scroll-reveal");
+      element.style.setProperty("--reveal-opacity", String(0.22 + progress * 0.78));
+      element.style.setProperty("--reveal-shift", shift + "px");
+      element.style.willChange = progress > 0 ? "transform, opacity" : "auto";
+    }
+  }
+  function scheduleScroll() {
+    if (scheduled || document.hidden) return;
+    scheduled = true;
+    requestAnimationFrame(updateScroll);
+  }
+  function revealHash() {
+    try { finishWithin(document.getElementById(decodeURIComponent(location.hash.slice(1)))); } catch {}
+    scheduleScroll();
+  }
+  addEventListener("scroll", scheduleScroll, { passive: true });
+  addEventListener("resize", scheduleScroll, { passive: true });
+  addEventListener("hashchange", revealHash);
+  document.addEventListener("focusin", event => finishWithin(event.target.closest?.(".scroll-reveal")));
+  document.addEventListener("click", event => {
+    const link = event.target.closest?.('a[href^="#"]');
+    if (link) finishWithin(document.getElementById(link.getAttribute("href").slice(1)));
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) scheduleScroll();
+    else scheduled = false;
+  });
+  document.addEventListener("repo-language-change", scheduleScroll);
+  reduced.addEventListener("change", scheduleScroll);
+  if ("ResizeObserver" in window) new ResizeObserver(scheduleScroll).observe(document.body);
+  revealHash();
+  scheduleScroll();
 })();

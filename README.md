@@ -65,7 +65,7 @@ The agent reads the implementation and authors a graph of responsibilities and r
 
 Select a component or relationship to read embedded excerpts and open revision-pinned source links. Search, pan, zoom and seek at your own pace. The portable HTML works offline.
 
-[Codex agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [Portable HTML builder](https://honzacuhel.github.io/repo-visualizer/portable-builder.html)
+[Codex agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [Superpowers workflow](https://honzacuhel.github.io/repo-visualizer/superpowers.html) · [Whisper model](https://honzacuhel.github.io/repo-visualizer/whisper.html)
 
 ## Share the explanation
 
@@ -100,6 +100,6 @@ Set `REPO_VISUALIZER_BROWSER` to an existing Chromium executable to include brow
 
 The main example analyzes [openai/codex](https://github.com/openai/codex) at a pinned revision. Its Apache-2.0 license and NOTICE are retained with the embedded excerpts. [Source and test record](examples/codex/README.md).
 
-Inspired by [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). Additional builder examples analyze its MIT-licensed source at a pinned revision and retain attribution.
+Inspired by [caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram). Public examples also explain Codex, Superpowers and Whisper at pinned source revisions, with upstream license notices.
 
 Original code is **MIT**. Vendored ELK is **EPL-2.0**, gifenc is **MIT**, and Atkinson Hyperlegible Next is **OFL-1.1**. Full licenses and provenance ship with the skill. [Third-party notices](skills/repo-visualizer/NOTICE.md).

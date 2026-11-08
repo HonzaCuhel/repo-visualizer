@@ -1,0 +1,23 @@
+{
+  "kind": "runtime-render",
+  "generator": "Repo Visualizer export.py (Playwright and Pillow)",
+  "settings": {
+    "width": 1200,
+    "height": 800,
+    "fps": 6,
+    "theme": "system",
+    "language": "en",
+    "scenario": "mechanism"
+  },
+  "source_repository": "https://github.com/obra/superpowers",
+  "source_revision": "22f0b463e7a5e579904dd6211a520321035526f7",
+  "source_html_sha256": "a5bc452143630cc6a7b72359f6f29fc443c524ed576708c1407387cda317999b",
+  "source_graph_sha256": "430f0504ab27d30e961bd98654574259b93bf8dadba31390a8df9f58b4ed9545",
+  "artifact_sha256": "aa5d8e3ec682b97809a905ad4b779de769379d9ac4103d5d29421c21e20b79a4",
+  "verification": {
+    "frames": 108,
+    "distinct_frames": 108,
+    "decoded_duration_ms": 18000
+  },
+  "note": "Rendered authored highlights over the source-derived graph; not an observed execution of the target. No target scripts or model weights were run."
+}

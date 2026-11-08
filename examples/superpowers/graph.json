@@ -1,0 +1,1289 @@
+{
+  "schema_version": 1,
+  "language": "en",
+  "title": "Superpowers: a feature development workflow",
+  "question": "How does Superpowers guide a feature from design to branch completion?",
+  "summary": "A prescribed workflow with execution choices, per-task review, bounded fix loops and final integration decisions.",
+  "nodes": [
+    {
+      "id": "router",
+      "label": "Choose relevant skills",
+      "description": "The entry instructions select skills for the task. This graph follows the feature-design route; debugging and other workflows have other entry points.",
+      "kind": "input",
+      "source_ids": [
+        "router"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "design",
+      "label": "Explore & document the design",
+      "description": "Clarify intent, goals, constraints and approaches, then write the design. The instructions allow small changes or explicitly agreed exceptions to take a shorter route.",
+      "kind": "process",
+      "source_ids": [
+        "design"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "approval",
+      "label": "Design approval",
+      "description": "The normal feature route requires user-approved design before building, then hands off to writing-plans. This is an instruction gate, not a technical enforcement mechanism.",
+      "kind": "decision",
+      "source_ids": [
+        "design"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "plan",
+      "label": "Write & review the plan",
+      "description": "Create a plan with task-sized checkboxes and verification steps. Self-review checks specification coverage, consistency and testing before execution.",
+      "kind": "process",
+      "source_ids": [
+        "plan",
+        "choice"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "choice",
+      "label": "Choose execution method",
+      "description": "Keep a previously selected method; otherwise the user chooses subagent-driven development or native inline execution. Both are described as same-session workflows.",
+      "kind": "decision",
+      "source_ids": [
+        "choice"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "controller",
+      "label": "Subagent-driven controller",
+      "description": "Prepare the workspace and ledger, dispatch a fresh implementer per task, answer questions, coordinate task reviews and select subsequent tasks.",
+      "kind": "process",
+      "source_ids": [
+        "sdd",
+        "ledger"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "implementer",
+      "label": "Implement, test & self-review",
+      "description": "The implementer works on the task, tests, commits and self-reviews. Questions return to the controller for context before work continues.",
+      "kind": "process",
+      "source_ids": [
+        "sdd"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "review",
+      "label": "Per-task review",
+      "description": "Review the completed task for specification compliance and code quality. Approval completes the task; findings enter a bounded fix loop.",
+      "kind": "decision",
+      "source_ids": [
+        "sdd"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "fix",
+      "label": "Bounded fix loop",
+      "description": "Up to five fix rounds: resume the original implementer in rounds 1–3 and use fresh, more capable help in rounds 4–5. Re-review the affected scope; at the cap adjudicate, defer or park according to the rules.",
+      "kind": "process",
+      "source_ids": [
+        "fix"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "inline",
+      "label": "Native inline execution",
+      "description": "The current agent executes plan steps, uses TDD and verification, handles mismatches, and checks the completion contract before recording each task.",
+      "kind": "process",
+      "source_ids": [
+        "inline"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "ledger",
+      "label": "Task ledger & next task",
+      "description": "Track plan identity, progress, tests and commits. Finish or park the task under the applicable rules, then continue remaining tasks or move to whole-branch review.",
+      "kind": "artifact",
+      "source_ids": [
+        "ledger",
+        "sdd",
+        "inline",
+        "fix"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "final",
+      "label": "Whole-branch review",
+      "description": "Review the complete branch, including deferred and parked issues. Allow one fix wave and one scoped re-review, adjudicate remaining issues and clean the plan workspace when review is clean.",
+      "kind": "process",
+      "source_ids": [
+        "final",
+        "inline"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "finish",
+      "label": "Tests & integration choice",
+      "description": "Run the full test suite; failures stop the integration menu. When green, offer the environment-appropriate choices such as merge, push/PR or keeping the branch. The user decides.",
+      "kind": "output",
+      "source_ids": [
+        "finish"
+      ],
+      "evidence": "source"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "router",
+      "to": "design",
+      "relation": "feature-design route",
+      "label": "feature-design route",
+      "source_ids": [
+        "router"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e2",
+      "from": "design",
+      "to": "approval",
+      "relation": "design ready",
+      "label": "design ready",
+      "source_ids": [
+        "design"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e3",
+      "from": "approval",
+      "to": "plan",
+      "relation": "user approved",
+      "label": "user approved",
+      "source_ids": [
+        "design"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e4",
+      "from": "plan",
+      "to": "choice",
+      "relation": "reviewed plan",
+      "label": "reviewed plan",
+      "source_ids": [
+        "choice"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e5",
+      "from": "choice",
+      "to": "controller",
+      "relation": "subagent-driven",
+      "label": "subagent-driven",
+      "source_ids": [
+        "choice"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e6",
+      "from": "choice",
+      "to": "inline",
+      "relation": "native inline",
+      "label": "native inline",
+      "source_ids": [
+        "choice"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e7",
+      "from": "controller",
+      "to": "implementer",
+      "relation": "dispatch task & context",
+      "label": "dispatch task & context",
+      "source_ids": [
+        "sdd"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e8",
+      "from": "implementer",
+      "to": "controller",
+      "relation": "clarification needed",
+      "label": "clarification needed",
+      "source_ids": [
+        "sdd"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e9",
+      "from": "implementer",
+      "to": "review",
+      "relation": "task implementation ready",
+      "label": "task implementation ready",
+      "source_ids": [
+        "sdd"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e10",
+      "from": "review",
+      "to": "fix",
+      "relation": "actionable findings",
+      "label": "actionable findings",
+      "source_ids": [
+        "sdd",
+        "fix"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e11",
+      "from": "fix",
+      "to": "implementer",
+      "relation": "resume or fresh implementer",
+      "label": "resume or fresh implementer",
+      "source_ids": [
+        "fix"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e12",
+      "from": "fix",
+      "to": "review",
+      "relation": "scoped re-review",
+      "label": "scoped re-review",
+      "source_ids": [
+        "fix"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e13",
+      "from": "review",
+      "to": "ledger",
+      "relation": "approved",
+      "label": "approved",
+      "source_ids": [
+        "sdd"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e14",
+      "from": "fix",
+      "to": "ledger",
+      "relation": "adjudicated / parked at cap",
+      "label": "adjudicated / parked at cap",
+      "source_ids": [
+        "fix"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e15",
+      "from": "ledger",
+      "to": "controller",
+      "relation": "more subagent tasks",
+      "label": "more subagent tasks",
+      "source_ids": [
+        "sdd"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e16",
+      "from": "inline",
+      "to": "ledger",
+      "relation": "completion contract met",
+      "label": "completion contract met",
+      "source_ids": [
+        "inline"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e17",
+      "from": "ledger",
+      "to": "inline",
+      "relation": "more inline tasks",
+      "label": "more inline tasks",
+      "source_ids": [
+        "inline"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e18",
+      "from": "ledger",
+      "to": "final",
+      "relation": "all tasks processed",
+      "label": "all tasks processed",
+      "source_ids": [
+        "sdd",
+        "inline"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e19",
+      "from": "final",
+      "to": "final",
+      "relation": "one fix wave & re-review",
+      "label": "one fix wave & re-review",
+      "source_ids": [
+        "final"
+      ],
+      "evidence": "source"
+    },
+    {
+      "id": "e20",
+      "from": "final",
+      "to": "finish",
+      "relation": "review clean & workspace cleaned",
+      "label": "review clean & workspace cleaned",
+      "source_ids": [
+        "final",
+        "inline"
+      ],
+      "evidence": "source"
+    }
+  ],
+  "sources": [
+    {
+      "id": "router",
+      "path": "skills/using-superpowers/SKILL.md",
+      "start": 18,
+      "end": 38,
+      "sha256": "82c5c8866ad7f5dd4440ce66bd7806ba48a2f13771beae5cf112e53f08fe36ba",
+      "excerpt": "## The Rule\n\n**Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.\n\n**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.\n\nThen announce \"Using [skill] to [purpose]\" and follow the skill exactly. If it has a checklist, create a todo per item.\n\n## Skill Priority\n\nWhen multiple skills apply, process skills come first — they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Superpowers' most common process skills, but the rule holds for any of them.\n\n- \"Let's build X\" → superpowers:brainstorming first, then implementation skills.\n- \"Fix this bug\" → superpowers:systematic-debugging first, then domain skills.\n\n## Red Flags\n\nThese thoughts mean STOP—you're rationalizing:\n\n| Thought | Reality |\n|---------|---------|",
+      "excerpt_sha256": "859317a491d8192624dc08c7212a0145c03b0138802a0d0b0844ef943d2b2ada",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/using-superpowers/SKILL.md#L18-L38"
+    },
+    {
+      "id": "design",
+      "path": "skills/brainstorming/SKILL.md",
+      "start": 229,
+      "end": 282,
+      "sha256": "2c9ca71f94886f9ca9f4aef055f7cafb3e1a9bdf3aeebf8f4cb547c69405d207",
+      "excerpt": "## The Written Design\n\nWrite a plain document a talented builder in the domain could plan\nfrom without going back to your human partner. Cover:\n\n- intent and the why\n- goals, non-goals, anti-goals\n- constraints\n- approaches (above)\n- the parts of the how they decided, as they decided them\n- what's left to the builder\n\nFor a small change, the short design covers the same points in a line\nor two each and goes straight to your human partner, without the\nbuilder check.\n\n**Where it goes:** in a software repo,\n`docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, committed.\nOtherwise, pick a sensible place and say where. Your human partner's\npreferences override both.\n\n**Builder check** (for a project): dispatch a fresh subagent with\n`builder-check-prompt.md` in this directory. When you tell your human\npartner you're writing it up, say a reviewer will read it first and you\nmay come back once with a few questions. Don't hand over the document\nuntil the check is back. Sort what the builder asks into three piles:\n\n- **Answered already** by the conversation or the project: put the answer\n  in the document.\n- **Minor:** a sensible builder could settle it without changing what gets\n  built. Settle it yourself and mark it in the document as your call.\n- **Theirs:** only your human partner can answer it, and the answer changes\n  what gets built.\n\nBring the \"theirs\" pile in one message, most important first. Update the\ndocument with their answers, then hand it over with a short list of the\ncalls you made so they can check those while reading. That's the only\nround of questions the check produces. Without a subagent tool, read the\ndocument as that builder yourself.\n\n<HARD-GATE>\nNothing gets built until your human partner approves the design doc:\nthe short one for a small change, the full one for a project.\nBuilding includes writing product code, scaffolding, installing\ndependencies, creating projects, and invoking an implementation skill.\nReading and exploring are fine.\n\nTwo exceptions. If they opted out of the questions, the skill is done\nand the gate goes with it. A spike they said yes to may be built; it\nstays labeled throwaway, and keeping what it produced is a new request\nthat comes back through this gate.\n\nAfter the design doc is approved, the next step is the plan: invoke\nsuperpowers:writing-plans and no other skill.",
+      "excerpt_sha256": "7f58084fb21e6cf030d9af9f862ab906a78c1790a942266f15178873019f13d0",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/brainstorming/SKILL.md#L229-L282"
+    },
+    {
+      "id": "plan",
+      "path": "skills/writing-plans/SKILL.md",
+      "start": 52,
+      "end": 68,
+      "sha256": "a6c67c1900064347c2a329990dd3c555657c51c3ec53b259a08aa01a2c26139a",
+      "excerpt": "## Plan Document Header\n\n**Every plan MUST start with this header:**\n\n```markdown\n# [Feature Name] Implementation Plan\n\n> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.\n\n**Goal:** [One sentence describing what this builds]\n\n**Architecture:** [2-3 sentences about approach]\n\n**Tech Stack:** [Key technologies/libraries]\n\n**Spec:** [path to the spec/design doc this plan implements — the plan\nargues from the spec, so the spec travels with it; executors read both]",
+      "excerpt_sha256": "8d9dab595dc497cfe89698ddf4490addb0bbd5bbf1e1a9942d6c8f8636581035",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/writing-plans/SKILL.md#L52-L68"
+    },
+    {
+      "id": "choice",
+      "path": "skills/writing-plans/SKILL.md",
+      "start": 163,
+      "end": 204,
+      "sha256": "a6c67c1900064347c2a329990dd3c555657c51c3ec53b259a08aa01a2c26139a",
+      "excerpt": "## Self-Review\n\nAfter writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.\n\n**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.\n\n**2. Step scan:** Every step must let the implementer write exactly one reasonable thing, and no step may carry more than that: a line that decides nothing is a gap, a function body the signature and tests already determine is a transcript. Fix both.\n\n**3. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.\n\n**4. Review Focus:** For each input class or failure mode the spec implies, is there a task whose tests exercise it? The five uncovered ones most likely to bite a person go in the Review Focus section, and each line there gets its test added to the owning task. An empty section means you checked and found none, not that you skipped the check.\n\n**5. Proportion:** Compare the plan's length to the spec's. A plan several times longer than the spec it implements is a transcript of the program, not a plan. If code blocks are most of the document, replace bodies with signatures, test names and assertions, and check that each step is still unambiguous.\n\nIf you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.\n\n## Execution Handoff\n\nAfter saving and self-reviewing the plan, link it for your human partner\nto read. If they have already explicitly supplied an execution method, ask\nthem to review the plan and confirm it captures what they want; wait for that\nreview before implementation, then use the preserved method. Otherwise, ask\nthem to review the plan and choose an execution method before implementation.\n\n**When no execution method has already been supplied:**\n\n**\"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Please review the plan. Which execution approach would you prefer?**\n\n- **Subagent-driven** - A fresh subagent implements each task and a fresh reviewer checks it before the next one starts, then a whole-branch review at the end. Most thorough; costs a fresh context per task and per review.\n- **Native** - I implement every task myself in this session, the way this harness runs work, then one fresh reviewer on the most capable model checks the whole branch. Cheapest and fastest; no independent review until the end. Runs well with a mid-tier session model, since the plan carries the design.\n\n**For this plan I recommend <one of the two>, because <one sentence from the plan: how much the tasks depend on each other's interfaces, how many there are, what a shipped mistake would cost>. Does the plan capture what you want, and which approach should we use?\"**\n\n**When an execution method has already been supplied:**\n\n**\"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Please review the plan. Does it capture what you want?\"**\n\n**If Subagent-driven chosen:**\n- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development\n\n**If Native chosen:**\n- **REQUIRED SUB-SKILL:** Use superpowers:executing-plans",
+      "excerpt_sha256": "af3b34ec5e607298519ac025c30ada2d210c55389bacee160e1d12b169b000d0",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/writing-plans/SKILL.md#L163-L204"
+    },
+    {
+      "id": "sdd",
+      "path": "skills/subagent-driven-development/SKILL.md",
+      "start": 59,
+      "end": 98,
+      "sha256": "1baf70e307bde682c462513c86116333f1f066168c6710f45145bf5f0b00828d",
+      "excerpt": "## The Process\n\n```dot\ndigraph process {\n    rankdir=TB;\n\n    subgraph cluster_per_task {\n        label=\"Per Task\";\n        \"Dispatch implementer subagent (./implementer-prompt.md)\" [shape=box];\n        \"Implementer asks questions?\" [shape=diamond];\n        \"Answer questions, provide context\" [shape=box];\n        \"Implementer implements, tests, commits, self-reviews\" [shape=box];\n        \"Generate review package, dispatch task reviewer (./task-reviewer-prompt.md)\" [shape=box];\n        \"Spec ✅ and quality approved?\" [shape=diamond];\n        \"Fix loop: read references/fix-loop.md before every round\" [shape=box];\n        \"Append completion to ledger, mark todo complete\" [shape=box];\n    }\n\n    \"Setup: worktree, ledger check, read plan, pre-flight review\" [shape=box];\n    \"More tasks remain?\" [shape=diamond];\n    \"Final review and finish: read references/final-review.md\" [shape=box];\n    \"Final review clean: delete this plan's workspace\" [shape=box];\n    \"Use superpowers:finishing-a-development-branch\" [shape=box style=filled fillcolor=lightgreen];\n\n    \"Setup: worktree, ledger check, read plan, pre-flight review\" -> \"Dispatch implementer subagent (./implementer-prompt.md)\";\n    \"Dispatch implementer subagent (./implementer-prompt.md)\" -> \"Implementer asks questions?\";\n    \"Implementer asks questions?\" -> \"Answer questions, provide context\" [label=\"yes\"];\n    \"Answer questions, provide context\" -> \"Implementer implements, tests, commits, self-reviews\";\n    \"Implementer asks questions?\" -> \"Implementer implements, tests, commits, self-reviews\" [label=\"no\"];\n    \"Implementer implements, tests, commits, self-reviews\" -> \"Generate review package, dispatch task reviewer (./task-reviewer-prompt.md)\";\n    \"Generate review package, dispatch task reviewer (./task-reviewer-prompt.md)\" -> \"Spec ✅ and quality approved?\";\n    \"Spec ✅ and quality approved?\" -> \"Append completion to ledger, mark todo complete\" [label=\"yes\"];\n    \"Spec ✅ and quality approved?\" -> \"Fix loop: read references/fix-loop.md before every round\" [label=\"no\"];\n    \"Fix loop: read references/fix-loop.md before every round\" -> \"Append completion to ledger, mark todo complete\" [label=\"addressed, or parked at the cap\"];\n    \"Append completion to ledger, mark todo complete\" -> \"More tasks remain?\";\n    \"More tasks remain?\" -> \"Dispatch implementer subagent (./implementer-prompt.md)\" [label=\"yes\"];\n    \"More tasks remain?\" -> \"Final review and finish: read references/final-review.md\" [label=\"no\"];\n    \"Final review and finish: read references/final-review.md\" -> \"Final review clean: delete this plan's workspace\";\n    \"Final review clean: delete this plan's workspace\" -> \"Use superpowers:finishing-a-development-branch\";\n}",
+      "excerpt_sha256": "7a0220099c62e660edc56e88b65b5ef18c85a6aa81fab41f9dc9959e93b8812f",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/subagent-driven-development/SKILL.md#L59-L98"
+    },
+    {
+      "id": "ledger",
+      "path": "skills/subagent-driven-development/SKILL.md",
+      "start": 103,
+      "end": 138,
+      "sha256": "1baf70e307bde682c462513c86116333f1f066168c6710f45145bf5f0b00828d",
+      "excerpt": "Ensure the work happens in an isolated workspace: use\nsuperpowers:using-git-worktrees to create one or verify the existing one.\nNever start implementation on a main/master branch without your human\npartner's explicit consent.\n\nConversation memory does not survive compaction. In real sessions,\ncontrollers that lost their place have re-dispatched entire completed task\nsequences — the single most expensive failure observed. Track progress in\na ledger file, not only in todos.\n\n- Each plan owns a workspace: at skill start, run this skill's\n  `bash scripts/sdd-workspace PLAN_FILE` by its absolute path, from the\n  working tree you're executing in — it prints the plan's git-ignored\n  directory (under `<repo-root>/.superpowers/sdd/`), home to\n  every artifact for THIS plan: ledger, briefs, reports, review packages.\n  Another plan's directory is never yours to read or write.\n- Check for this plan's ledger at `<workspace>/progress.md`. If one exists,\n  read [references/resuming.md](references/resuming.md) before anything\n  else: it says whose ledger it is and where to resume.\n- Create the ledger with its identity as the first line:\n  `# SDD ledger — plan: <plan file path>`.\n- The ledger is your recovery map: the commits it names exist in git even\n  when your context no longer remembers creating them. After compaction,\n  trust the ledger and `git log` over your own recollection.\n- `git clean -fdx` will destroy the workspace (it's git-ignored scratch); if\n  that happens, recover from `git log`.\n\nRead the plan once, note its context and Global Constraints, and create a\ntodo per task. If the plan names a Spec, read that too: the spec is the\nauthority the plan argues from, and conflicts inside the plan resolve\nagainst it. A plan with no reachable spec gets a ledger note saying so —\nrulings made without one are provisional.\n\nBefore dispatching Task 1, read [references/preflight.md](references/preflight.md)\nand run the conflict scan it describes. Its table and rulings go in the\nledger.",
+      "excerpt_sha256": "aa8cac0b024f9cb383aebca0f0fdc76a738d5b80dc4fbe84942cd468c8de0b43",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/subagent-driven-development/SKILL.md#L103-L138"
+    },
+    {
+      "id": "fix",
+      "path": "skills/subagent-driven-development/references/fix-loop.md",
+      "start": 7,
+      "end": 73,
+      "sha256": "1938ce707915efc44021e563ebc29666329e20ad861b6c50b89f305b8f4e8d8b",
+      "excerpt": "Before the loop starts, two routes leave it immediately:\n\n- Record Minor findings in the progress ledger as you go\n  (`Task <N>: minor (deferred): <one-liner>`), and point the final\n  whole-branch review at that list so it can triage which must be fixed\n  before merge. A roll-up nobody reads is a silent discard. Minor findings\n  never enter the loop.\n- A finding labeled plan-mandated — or any finding that conflicts with\n  what the plan's text requires — is yours to rule on: weigh the finding\n  against the plan text, decide with the spec as the binding authority, and\n  ledger the ruling before you act on it. Do not dismiss the finding because\n  the plan mandates it, and do not dispatch a fix that contradicts the plan\n  without a recorded ruling.\nEverything else enters the loop. A fix round is one fix dispatch plus one\nscoped re-review. Five rounds maximum per task:\n\n**Rounds 1-3 — resume the original implementer.** Send it the open findings\nverbatim. Its context is intact: it knows the task, the code, and its own\nchoices. If your harness cannot send another message to a live subagent,\ndispatch a fresh implementer carrying the brief path, the report-file path,\nand the findings — the report file is the persistent memory either way.\n\n**Rounds 4-5 — dispatch a fresh implementer on a more capable model** (per\nSKILL.md's Model Selection), with the brief path, the report-file path, the open\nfindings, and this framing: \"A prior implementer attempted this task\n[N] times; you own it now. Read the report file for what was tried.\" A loop\nthat survives three resumes usually means the implementer cannot see its\nown problem — fresh eyes and a capability bump in one move.\n\n**Every round, either way:** the implementer fixes, re-runs the tests\ncovering the amended code, appends its fix report to the same report file,\nand returns the short contract. Before re-dispatching the reviewer, confirm\nthe fix report contains the covering tests, the command run, and the\noutput; dispatch the re-review once all three are present. Name the\ncovering test files in the fix message — a one-line fix does not need the\nwhole suite.\n\n**The re-review is scoped.** Run `bash scripts/review-package PLAN_FILE FIX_BASE HEAD`\nby its absolute path, from the working tree you're executing in, where FIX_BASE is the head the previous review saw, and dispatch\n[re-review-prompt.md](../re-review-prompt.md) with the findings list, the\nbrief, the report file, and the printed diff path. The re-reviewer verdicts\neach finding ADDRESSED or NOT ADDRESSED and flags new breakage in the fix\ndiff only. New Critical/Important breakage in the fix diff joins the open\nfindings list. Out-of-scope observations go to the ledger as deferred\nminors — they never extend the loop.\n\n**After each round,** append to the ledger:\n`Task <N>: fix round <R>/5 (<X> addressed, <Y> open — <finding one-liners>; commits <a7>..<b7>)`\n\nNever fix findings yourself in the controller session — your context stays\nclean for coordination, and controller fixes skip review.\n\n**The breaker.** When round 5's re-review still leaves findings open, stop\ndispatching. Adjudicate each open finding yourself — you hold the plan and\nthe cross-task context the reviewer lacks:\n\n- **The reviewer is wrong, or the point is contestable:** park it —\n  `Task <N>: parked — <finding> — Ruling: <why the code stands>`. The final\n  review sees both sides.\n- **Real, but nothing downstream builds on it:** park it the same way, with\n  a ruling that says it's real and deferred.\n- **Real and load-bearing** — a later task builds on it, or it reveals a\n  plan defect: rule on the smallest change that unblocks the dependent work,\n  ledger it as `Task <N>: Ruling: <finding> — <what you decided and why>`,\n  and carry it into the next task's dispatch. Parking a structural failure\n  silently lets every dependent task build on it. Stop only when the defect\n  leaves every path forward a guess.",
+      "excerpt_sha256": "c636e9399c616ce75ccaeb0318f4bbc508fc758a3669c3efd68d6109a9fac1fa",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/subagent-driven-development/references/fix-loop.md#L7-L73"
+    },
+    {
+      "id": "final",
+      "path": "skills/subagent-driven-development/references/final-review.md",
+      "start": 6,
+      "end": 49,
+      "sha256": "6c9e12093e46c4ad0a203bc07709c17e3470f855f1b78e55c5e7b722a012a32c",
+      "excerpt": "The final whole-branch review gets a package too: run\n`bash scripts/review-package PLAN_FILE MERGE_BASE HEAD` by its absolute path,\nfrom the working tree you're executing in (MERGE_BASE = the commit the\nbranch started from, e.g. `git merge-base main HEAD`) and include the\nprinted path in the final review dispatch, so the final reviewer reads\none file instead of re-deriving the branch diff with git commands. Dispatch\non the most capable available model (see SKILL.md's Model Selection), using\nsuperpowers:requesting-code-review's\n[code-reviewer.md](../../requesting-code-review/code-reviewer.md). Point it at\nthe ledger's deferred-minor and parked lines so it can triage which must be\nfixed before merge.\n\nIf the final whole-branch review returns findings, dispatch ONE fix subagent\nwith the complete findings list — not one fixer per finding.\nPer-finding fixers each rebuild context and re-run suites; a real\nsession's final-review fix wave cost more than all its tasks combined.\nThen run exactly one scoped re-review of the fix wave\n(`bash scripts/review-package PLAN_FILE FIX_BASE HEAD` by its absolute path,\nfrom the working tree you're executing in, over the fix range,\n[re-review-prompt.md](../re-review-prompt.md)).\nAdjudicate any residual findings as in the fix loop's breaker\n(references/fix-loop.md): park with rulings, or rule on the load-bearing\nones and ledger what you decided. Only the four things that stop a running\nplan (top of SKILL.md) stop you here. There is no second fix wave —\nresidual load-bearing findings surface to your human partner when\nfinishing-a-development-branch presents the options.\n\n### Finish\n\nBefore you delete anything, collect every ledger line containing `Ruling:` —\npreflight rulings, parked findings, breaker adjudications, all of them — into\nyour final message under \"Rulings I made\", in the order you made them, each\nwith what it costs if wrong. The list is exhaustive: if the ledger holds a\nruling, the list holds it. That list is the only place the decisions you\ntook on your human partner's behalf reach them — they read it and rework\nwhatever you got wrong. A ruling that dies with the workspace was a decision\nmade in secret.\n\nWhen the final whole-branch review is clean and its fixes are merged,\ndelete this plan's workspace (`rm -rf <workspace>`) — the git history is\nthe record now. Sibling directories belong to other plans; leave them\nalone.\n\nUse superpowers:finishing-a-development-branch.",
+      "excerpt_sha256": "325f50bae7ea303f814ee1550ae1fbffe7cb620095530d7d59bef36d220b54cc",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/subagent-driven-development/references/final-review.md#L6-L49"
+    },
+    {
+      "id": "inline",
+      "path": "skills/executing-plans/SKILL.md",
+      "start": 66,
+      "end": 108,
+      "sha256": "deaf176fa179827e80f2ea3101db3ea90fdf562ebef340eba761e4687940f5f5",
+      "excerpt": "## The Process\n\n```dot\ndigraph process {\n    rankdir=TB;\n\n    subgraph cluster_per_task {\n        label=\"Per Task\";\n        \"task-start: brief + BASE; read the brief\" [shape=box];\n        \"Work the steps in order: TDD, run every verification, read every output\" [shape=box];\n        \"Step output matches plan's Expected?\" [shape=diamond];\n        \"Plan wrong? Rule and ledger. Code wrong? systematic-debugging\" [shape=box];\n        \"Commit as the plan's commit steps say\" [shape=box];\n        \"Completion contract met?\" [shape=diamond];\n        \"task-done: run tests, ledger the result; mark todo complete\" [shape=box];\n    }\n\n    \"Setup: worktree, workspace + ledger, read plan + spec, pre-flight scan\" [shape=box];\n    \"More tasks remain?\" [shape=diamond];\n    \"Final whole-branch review (fresh reviewer if you have one)\" [shape=box];\n    \"Re-grade, then: Critical/Important → ONE fix pass, each fix RED→GREEN + green suite; Minor → ledger\" [shape=box];\n    \"Final review clean: delete this plan's workspace\" [shape=box];\n    \"Use superpowers:finishing-a-development-branch\" [shape=box style=filled fillcolor=lightgreen];\n\n    \"Setup: worktree, workspace + ledger, read plan + spec, pre-flight scan\" -> \"task-start: brief + BASE; read the brief\";\n    \"task-start: brief + BASE; read the brief\" -> \"Work the steps in order: TDD, run every verification, read every output\";\n    \"Work the steps in order: TDD, run every verification, read every output\" -> \"Step output matches plan's Expected?\";\n    \"Step output matches plan's Expected?\" -> \"Plan wrong? Rule and ledger. Code wrong? systematic-debugging\" [label=\"no\"];\n    \"Plan wrong? Rule and ledger. Code wrong? systematic-debugging\" -> \"Work the steps in order: TDD, run every verification, read every output\";\n    \"Step output matches plan's Expected?\" -> \"Commit as the plan's commit steps say\" [label=\"yes, last step\"];\n    \"Commit as the plan's commit steps say\" -> \"Completion contract met?\";\n    \"Completion contract met?\" -> \"Work the steps in order: TDD, run every verification, read every output\" [label=\"no - finish the task\"];\n    \"Completion contract met?\" -> \"task-done: run tests, ledger the result; mark todo complete\" [label=\"yes\"];\n    \"task-done: run tests, ledger the result; mark todo complete\" -> \"More tasks remain?\";\n    \"More tasks remain?\" -> \"task-start: brief + BASE; read the brief\" [label=\"yes\"];\n    \"More tasks remain?\" -> \"Final whole-branch review (fresh reviewer if you have one)\" [label=\"no\"];\n    \"Final whole-branch review (fresh reviewer if you have one)\" -> \"Re-grade, then: Critical/Important → ONE fix pass, each fix RED→GREEN + green suite; Minor → ledger\";\n    \"Re-grade, then: Critical/Important → ONE fix pass, each fix RED→GREEN + green suite; Minor → ledger\" -> \"Final review clean: delete this plan's workspace\";\n    \"Final review clean: delete this plan's workspace\" -> \"Use superpowers:finishing-a-development-branch\";\n}\n```\n\n## Setup",
+      "excerpt_sha256": "44a5d87d4d7808187aa03febfbc53d4a1fa133c995bee344bdd4ab3d6f99c2e4",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/executing-plans/SKILL.md#L66-L108"
+    },
+    {
+      "id": "finish",
+      "path": "skills/finishing-a-development-branch/SKILL.md",
+      "start": 14,
+      "end": 82,
+      "sha256": "8db5a922b242dd4e1bf824cb91c13b3e8d8e8a86d6ceaf7f0774eb9cce909d65",
+      "excerpt": "## Step 1: Verify Tests\n\nRun the project's full test suite (`npm test` / `cargo test` / `pytest` / `go test ./...`).\n\n**If tests fail**, report the failures and stop — the menu comes after a green suite:\n\n```\nTests failing (<N> failures). Must fix before completing:\n\n[Show failures]\n```\n\n**If tests pass:** continue to Step 2.\n\n## Step 2: Detect Environment\n\n```bash\nGIT_DIR=$(cd \"$(git rev-parse --git-dir)\" 2>/dev/null && pwd -P)\nGIT_COMMON=$(cd \"$(git rev-parse --git-common-dir)\" 2>/dev/null && pwd -P)\n# Capture now, while still inside the workspace — Step 5 changes directory\n# before cleanup (Step 6) needs this value\nWORKTREE_PATH=$(git rev-parse --show-toplevel)\n```\n\nThis determines which menu to show and how cleanup works:\n\n| State | Menu | Cleanup |\n|-------|------|---------|\n| `GIT_DIR == GIT_COMMON` (normal repo) | Standard 3 options | No worktree to clean up |\n| `GIT_DIR != GIT_COMMON`, named branch | Standard 3 options | Provenance-based (see Step 6) |\n| `GIT_DIR != GIT_COMMON`, detached HEAD | Reduced 2 options (no merge) | Externally managed — leave in place |\n\n## Step 3: Determine Base Branch\n\nThe base branch is whatever this work forked from — usually named in the\nplan, the conversation, or the branch's upstream. If it is not already\nknown, ask: \"This branch split from <your best guess> - is that correct?\"\nConfirm before merging: merging into the wrong base is expensive to undo.\n\n## Step 4: Present Options\n\n**Normal repo and named-branch worktree — present exactly these 3 options:**\n\n```\nImplementation complete. What would you like to do?\n\n1. Merge back to <base-branch> locally\n2. Push and create a Pull Request\n3. Keep the branch as-is (I'll handle it later)\n\nWhich option?\n```\n\n**Detached HEAD — present exactly these 2 options:**\n\n```\nImplementation complete. You're on a detached HEAD (externally managed workspace).\n\n1. Push as new branch and create a Pull Request\n2. Keep as-is (I'll handle it later)\n\nWhich option?\n```\n\nPresent the menu exactly as written — concise, with every option coming\nfrom the list above. Discarding the work happens only in response to your\nhuman partner explicitly asking for it (see \"If your human partner asks to\ndiscard the work\" below). Wait for their answer; the integration decision\nis theirs.",
+      "excerpt_sha256": "8d798e4824f885b28eab7f4ca26ead36e4780d9ca23df5f23d9294d6458ef823",
+      "revision": "commit",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/finishing-a-development-branch/SKILL.md#L14-L82"
+    }
+  ],
+  "steps": [
+    {
+      "id": "design-path",
+      "title": "Design before implementation",
+      "description": "Choose the feature route, explore the design and obtain approval.",
+      "node_ids": [
+        "router",
+        "design",
+        "approval"
+      ],
+      "edge_ids": [
+        "e1",
+        "e2"
+      ],
+      "source_ids": [
+        "router",
+        "design"
+      ],
+      "duration_ms": 3000,
+      "evidence": "source"
+    },
+    {
+      "id": "planning",
+      "title": "Plan and choose execution",
+      "description": "Review the task plan, then select subagents or native execution.",
+      "node_ids": [
+        "approval",
+        "plan",
+        "choice",
+        "controller",
+        "inline"
+      ],
+      "edge_ids": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "source_ids": [
+        "design",
+        "choice"
+      ],
+      "duration_ms": 3000,
+      "evidence": "source"
+    },
+    {
+      "id": "task",
+      "title": "Implement and review a task",
+      "description": "The subagent route separates implementation and task review.",
+      "node_ids": [
+        "controller",
+        "implementer",
+        "review"
+      ],
+      "edge_ids": [
+        "e7",
+        "e8",
+        "e9"
+      ],
+      "source_ids": [
+        "sdd"
+      ],
+      "duration_ms": 3000,
+      "evidence": "source"
+    },
+    {
+      "id": "fixing",
+      "title": "Bound the review loop",
+      "description": "Revisit findings within the round limit; record adjudicated or parked results.",
+      "node_ids": [
+        "review",
+        "fix",
+        "implementer",
+        "ledger"
+      ],
+      "edge_ids": [
+        "e10",
+        "e11",
+        "e12",
+        "e13",
+        "e14"
+      ],
+      "source_ids": [
+        "fix",
+        "sdd"
+      ],
+      "duration_ms": 3000,
+      "evidence": "source"
+    },
+    {
+      "id": "iterate",
+      "title": "Record progress and continue",
+      "description": "Both execution methods record task completion and continue until branch review.",
+      "node_ids": [
+        "ledger",
+        "controller",
+        "inline",
+        "final"
+      ],
+      "edge_ids": [
+        "e15",
+        "e16",
+        "e17",
+        "e18"
+      ],
+      "source_ids": [
+        "sdd",
+        "inline",
+        "ledger"
+      ],
+      "duration_ms": 3000,
+      "evidence": "source"
+    },
+    {
+      "id": "integrate",
+      "title": "Review the branch and decide",
+      "description": "Complete whole-branch review, then run the full suite before offering integration choices.",
+      "node_ids": [
+        "final",
+        "finish"
+      ],
+      "edge_ids": [
+        "e19",
+        "e20"
+      ],
+      "source_ids": [
+        "final",
+        "finish"
+      ],
+      "duration_ms": 3000,
+      "evidence": "source"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "mechanism",
+      "label": "Prescribed feature workflow",
+      "step_ids": [
+        "design-path",
+        "planning",
+        "task",
+        "fixing",
+        "iterate",
+        "integrate"
+      ]
+    }
+  ],
+  "source_license": "MIT License\n\nCopyright (c) 2025 Jesse Vincent\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+  "uncertainties": [
+    "This is a static map of instructions, not an observed agent run or a guarantee that agents follow them.",
+    "Scope: feature development. Debugging and other entry routes are not expanded. Small changes and explicitly approved exceptions may bypass design planning.",
+    "Review outcomes can include deferred or parked issues; task completion does not mean that every issue was fixed. Branch integration remains a user choice."
+  ],
+  "translations": {
+    "cs": {
+      "title": "Superpowers: vývoj nové funkce",
+      "question": "Jak Superpowers vede novou funkci od návrhu k dokončení větve?",
+      "summary": "Předepsané workflow s volbou způsobu práce, kontrolou úloh, omezenými opravnými smyčkami a rozhodnutím o integraci.",
+      "nodes": {
+        "router": {
+          "label": "Výběr relevantních skillů",
+          "description": "Vstupní instrukce volí skilly podle úkolu. Graf sleduje návrh nové funkce; ladění a další postupy mají jiné vstupní body."
+        },
+        "design": {
+          "label": "Prozkoumání a zápis návrhu",
+          "description": "Vyjasní se záměr, cíle, omezení a přístupy a zapíše se návrh. Malé změny nebo výslovně domluvené výjimky mohou mít kratší cestu."
+        },
+        "approval": {
+          "label": "Schválení návrhu",
+          "description": "Běžná cesta nové funkce vyžaduje schválení návrhu uživatelem před implementací a pokračuje do writing-plans. Jde o pravidlo v instrukcích, nikoli technicky vynucenou bránu."
+        },
+        "plan": {
+          "label": "Zápis a kontrola plánu",
+          "description": "Vznikne plán s úlohami, zaškrtávacími kroky a ověřením. Vlastní kontrola posoudí pokrytí specifikace, konzistenci a testy."
+        },
+        "choice": {
+          "label": "Volba způsobu provedení",
+          "description": "Zachová se dříve zvolený způsob; jinak uživatel vybere vývoj se subagenty nebo přímou práci v aktuálním agentovi. Obě cesty probíhají v témže sezení."
+        },
+        "controller": {
+          "label": "Řízení subagentů",
+          "description": "Připraví pracovní prostor a záznam, pro každou úlohu vyšle nového implementera, zodpovídá otázky, koordinuje kontroly a vybírá další úlohy."
+        },
+        "implementer": {
+          "label": "Implementace, testy a vlastní kontrola",
+          "description": "Implementer řeší úlohu, testuje, commituje a sám ji kontroluje. Otázky se vracejí řídícímu agentovi k doplnění kontextu."
+        },
+        "review": {
+          "label": "Kontrola jednotlivé úlohy",
+          "description": "Dokončená úloha se kontroluje vůči specifikaci a kvalitě kódu. Schválení ji uzavře; nálezy přecházejí do omezené opravné smyčky."
+        },
+        "fix": {
+          "label": "Omezená opravná smyčka",
+          "description": "Nejvýše pět kol oprav: v kolech 1–3 pokračuje původní implementer, v kolech 4–5 nastupuje nový a schopnější. Znovu se kontroluje dotčený rozsah; na limitu se nálezy rozhodnou, odloží nebo zaparkují podle pravidel."
+        },
+        "inline": {
+          "label": "Přímé provedení plánu",
+          "description": "Aktuální agent provádí kroky plánu, používá TDD a ověřování, řeší neshody a před zápisem úlohy zkontroluje podmínky dokončení."
+        },
+        "ledger": {
+          "label": "Záznam úloh a další úloha",
+          "description": "Eviduje se plán, postup, testy a commity. Úloha se podle pravidel dokončí nebo zaparkuje; pak se pokračuje zbývajícími úlohami či kontrolou celé větve."
+        },
+        "final": {
+          "label": "Kontrola celé větve",
+          "description": "Zkontroluje se celá větev včetně odložených a zaparkovaných nálezů. Následuje nejvýše jedna vlna oprav a jedna cílená kontrola, rozhodnutí o zbytku a při čistém výsledku úklid pracovního prostoru."
+        },
+        "finish": {
+          "label": "Testy a volba integrace",
+          "description": "Spustí se celá testovací sada; chyby zastaví nabídku integrace. Při úspěchu se nabídnou možnosti podle prostředí: sloučení, push/PR nebo ponechání větve. Rozhoduje uživatel."
+        }
+      },
+      "edges": {
+        "e1": {
+          "label": "cesta návrhu funkce"
+        },
+        "e2": {
+          "label": "návrh připraven"
+        },
+        "e3": {
+          "label": "uživatel schválil"
+        },
+        "e4": {
+          "label": "zkontrolovaný plán"
+        },
+        "e5": {
+          "label": "práce se subagenty"
+        },
+        "e6": {
+          "label": "přímé provedení"
+        },
+        "e7": {
+          "label": "předat úlohu a kontext"
+        },
+        "e8": {
+          "label": "potřeba vyjasnění"
+        },
+        "e9": {
+          "label": "implementace úlohy hotová"
+        },
+        "e10": {
+          "label": "nálezy k řešení"
+        },
+        "e11": {
+          "label": "původní nebo nový implementer"
+        },
+        "e12": {
+          "label": "cílená kontrola"
+        },
+        "e13": {
+          "label": "schváleno"
+        },
+        "e14": {
+          "label": "rozhodnuto / zaparkováno na limitu"
+        },
+        "e15": {
+          "label": "další úlohy pro subagenty"
+        },
+        "e16": {
+          "label": "splněny podmínky dokončení"
+        },
+        "e17": {
+          "label": "další přímé úlohy"
+        },
+        "e18": {
+          "label": "všechny úlohy zpracovány"
+        },
+        "e19": {
+          "label": "jedna vlna oprav a kontrola"
+        },
+        "e20": {
+          "label": "kontrola čistá a prostor uklizen"
+        }
+      },
+      "steps": {
+        "design-path": {
+          "title": "Návrh před implementací",
+          "description": "Vybere se cesta funkce, připraví návrh a získá schválení."
+        },
+        "planning": {
+          "title": "Plán a volba provedení",
+          "description": "Zkontroluje se plán úloh a vyberou subagenti nebo přímé provedení."
+        },
+        "task": {
+          "title": "Implementace a kontrola úlohy",
+          "description": "Cesta subagentů odděluje implementaci a kontrolu úlohy."
+        },
+        "fixing": {
+          "title": "Omezení opravné smyčky",
+          "description": "Nálezy se řeší v omezeném počtu kol; rozhodnuté či zaparkované výsledky se zapíší."
+        },
+        "iterate": {
+          "title": "Zápis postupu a pokračování",
+          "description": "Oba způsoby zapisují dokončení úloh a pokračují ke kontrole větve."
+        },
+        "integrate": {
+          "title": "Kontrola větve a rozhodnutí",
+          "description": "Dokončí se kontrola celé větve a poté testy před nabídkou integrace."
+        }
+      },
+      "scenarios": {
+        "mechanism": {
+          "label": "Předepsaný vývoj funkce"
+        }
+      },
+      "uncertainties": [
+        "Statická mapa instrukcí, nikoli pozorovaný běh agenta ani záruka jejich dodržení.",
+        "Rozsah: vývoj nové funkce. Ladění a další vstupní cesty nejsou rozvedené. Malé změny a výslovně schválené výjimky mohou návrh a plánování přeskočit.",
+        "Kontroly mohou skončit odloženými nebo zaparkovanými nálezy; dokončení úlohy neznamená opravu všech problémů. Integraci větve volí uživatel."
+      ]
+    },
+    "de": {
+      "title": "Superpowers: ein Feature entwickeln",
+      "question": "Wie führt Superpowers vom Design zum Abschluss eines Branches?",
+      "summary": "Vorgeschriebener Ablauf mit Ausführungswahl, Aufgabenprüfungen, begrenzten Korrekturen und Integrationsentscheidung.",
+      "nodes": {
+        "router": {
+          "label": "Passende Skills wählen",
+          "description": "Die Einstiegsanweisungen wählen Skills für die Aufgabe. Dieser Graph folgt dem Feature-Design; Debugging und andere Abläufe sind nicht ausgeführt."
+        },
+        "design": {
+          "label": "Design erkunden und dokumentieren",
+          "description": "Absicht, Ziele, Grenzen und Ansätze klären und dokumentieren. Kleine Änderungen oder ausdrücklich vereinbarte Ausnahmen können einen kürzeren Weg nehmen."
+        },
+        "approval": {
+          "label": "Designfreigabe",
+          "description": "Der normale Feature-Ablauf verlangt vor der Umsetzung die Freigabe des Nutzers, danach writing-plans. Dies ist eine Anweisung, keine technisch erzwungene Sperre."
+        },
+        "plan": {
+          "label": "Plan schreiben und prüfen",
+          "description": "Aufgaben, Checkbox-Schritte und Prüfungen festlegen. Die Selbstprüfung kontrolliert Spezifikationsabdeckung, Konsistenz und Tests."
+        },
+        "choice": {
+          "label": "Ausführungsmethode wählen",
+          "description": "Eine bestehende Wahl bleibt erhalten; sonst wählt der Nutzer zwischen Subagenten und direkter Ausführung. Beide laufen in derselben Sitzung."
+        },
+        "controller": {
+          "label": "Subagenten koordinieren",
+          "description": "Arbeitsbereich und Protokoll vorbereiten, je Aufgabe einen neuen Implementierer beauftragen, Fragen beantworten, Reviews koordinieren und weitere Aufgaben wählen."
+        },
+        "implementer": {
+          "label": "Implementieren, testen und selbst prüfen",
+          "description": "Der Implementierer bearbeitet, testet, committet und prüft die Aufgabe. Rückfragen gehen für zusätzlichen Kontext an den Controller."
+        },
+        "review": {
+          "label": "Aufgabe prüfen",
+          "description": "Spezifikationskonformität und Codequalität prüfen. Freigabe schließt die Aufgabe ab; Befunde gehen in die begrenzte Korrekturschleife."
+        },
+        "fix": {
+          "label": "Begrenzte Korrekturschleife",
+          "description": "Höchstens fünf Runden: 1–3 mit dem ursprünglichen Implementierer, 4–5 mit neuer, leistungsfähigerer Hilfe. Betroffenen Umfang erneut prüfen; am Limit entscheiden, verschieben oder parken."
+        },
+        "inline": {
+          "label": "Direkte Ausführung",
+          "description": "Der aktuelle Agent arbeitet den Plan mit TDD und Prüfungen ab, behandelt Abweichungen und kontrolliert die Abschlussbedingungen vor dem Protokollieren."
+        },
+        "ledger": {
+          "label": "Aufgabenprotokoll und Fortsetzung",
+          "description": "Plan, Fortschritt, Tests und Commits erfassen. Aufgaben regelgemäß abschließen oder parken, dann weitere Aufgaben oder den ganzen Branch prüfen."
+        },
+        "final": {
+          "label": "Gesamten Branch prüfen",
+          "description": "Auch verschobene und geparkte Befunde prüfen. Eine Korrekturwelle und eine gezielte Nachprüfung zulassen, verbleibende Befunde entscheiden und bei sauberem Review den Arbeitsbereich aufräumen."
+        },
+        "finish": {
+          "label": "Tests und Integration wählen",
+          "description": "Die gesamte Testsuite ausführen. Fehler stoppen das Integrationsmenü. Bei Erfolg umgebungsabhängig Merge, Push/PR oder Beibehalten anbieten. Der Nutzer entscheidet."
+        }
+      },
+      "edges": {
+        "e1": {
+          "label": "Feature-Design"
+        },
+        "e2": {
+          "label": "Design bereit"
+        },
+        "e3": {
+          "label": "Nutzer hat freigegeben"
+        },
+        "e4": {
+          "label": "geprüfter Plan"
+        },
+        "e5": {
+          "label": "mit Subagenten"
+        },
+        "e6": {
+          "label": "direkt ausführen"
+        },
+        "e7": {
+          "label": "Aufgabe und Kontext senden"
+        },
+        "e8": {
+          "label": "Klärung nötig"
+        },
+        "e9": {
+          "label": "Implementierung bereit"
+        },
+        "e10": {
+          "label": "zu bearbeitende Befunde"
+        },
+        "e11": {
+          "label": "ursprünglicher oder neuer Implementierer"
+        },
+        "e12": {
+          "label": "gezielte Nachprüfung"
+        },
+        "e13": {
+          "label": "freigegeben"
+        },
+        "e14": {
+          "label": "am Limit entschieden / geparkt"
+        },
+        "e15": {
+          "label": "weitere Subagenten-Aufgaben"
+        },
+        "e16": {
+          "label": "Abschlussbedingungen erfüllt"
+        },
+        "e17": {
+          "label": "weitere direkte Aufgaben"
+        },
+        "e18": {
+          "label": "alle Aufgaben bearbeitet"
+        },
+        "e19": {
+          "label": "eine Korrekturwelle und Nachprüfung"
+        },
+        "e20": {
+          "label": "Review sauber, Arbeitsbereich aufgeräumt"
+        }
+      },
+      "steps": {
+        "design-path": {
+          "title": "Design vor Umsetzung",
+          "description": "Feature-Route wählen, Design erkunden und Freigabe einholen."
+        },
+        "planning": {
+          "title": "Planen und Methode wählen",
+          "description": "Aufgabenplan prüfen, dann Subagenten oder direkte Ausführung wählen."
+        },
+        "task": {
+          "title": "Aufgabe implementieren und prüfen",
+          "description": "Die Subagenten-Route trennt Implementierung und Aufgabenprüfung."
+        },
+        "fixing": {
+          "title": "Review-Schleife begrenzen",
+          "description": "Befunde innerhalb des Rundenlimits bearbeiten und Entscheidungen oder geparkte Ergebnisse erfassen."
+        },
+        "iterate": {
+          "title": "Fortschritt erfassen",
+          "description": "Beide Methoden protokollieren Aufgaben und gehen bis zum Branch-Review weiter."
+        },
+        "integrate": {
+          "title": "Branch prüfen und entscheiden",
+          "description": "Branch-Review abschließen und die gesamte Suite vor Integrationsoptionen ausführen."
+        }
+      },
+      "uncertainties": [
+        "Statische Karte von Anweisungen, kein beobachteter Agentenlauf und keine Garantie ihrer Befolgung.",
+        "Umfang: Feature-Entwicklung. Debugging und andere Einstiege sind nicht ausgeführt. Kleine Änderungen und genehmigte Ausnahmen können Design und Planung überspringen.",
+        "Reviews können verschobene oder geparkte Befunde hinterlassen. Aufgabenabschluss bedeutet nicht, dass jedes Problem behoben wurde. Integration bleibt eine Nutzerentscheidung."
+      ],
+      "scenarios": {
+        "mechanism": {
+          "label": "Vorgeschriebener Feature-Ablauf"
+        }
+      }
+    },
+    "fr": {
+      "title": "Superpowers : développer une fonctionnalité",
+      "question": "Comment Superpowers guide-t-il de la conception à la fin d’une branche ?",
+      "summary": "Un processus prescrit avec choix d’exécution, revues des tâches, corrections limitées et décision d’intégration.",
+      "nodes": {
+        "router": {
+          "label": "Choisir les skills adaptés",
+          "description": "Les instructions d’entrée sélectionnent les skills. Ce graphe suit la conception d’une fonctionnalité ; les autres parcours ne sont pas développés."
+        },
+        "design": {
+          "label": "Explorer et documenter la conception",
+          "description": "Clarifier intention, objectifs, contraintes et approches, puis les écrire. Les petits changements et exceptions explicites peuvent suivre un chemin plus court."
+        },
+        "approval": {
+          "label": "Approbation de la conception",
+          "description": "Le parcours normal demande l’accord de l’utilisateur avant de construire, puis passe à writing-plans. C’est une consigne, pas un verrou technique."
+        },
+        "plan": {
+          "label": "Rédiger et vérifier le plan",
+          "description": "Définir tâches, étapes à cocher et vérifications. La revue personnelle contrôle couverture de la spécification, cohérence et tests."
+        },
+        "choice": {
+          "label": "Choisir l’exécution",
+          "description": "Conserver un choix existant ; sinon l’utilisateur choisit sous-agents ou exécution directe. Les deux ont lieu dans la même session."
+        },
+        "controller": {
+          "label": "Coordonner les sous-agents",
+          "description": "Préparer espace et registre, déléguer chaque tâche à un nouvel implémenteur, répondre aux questions et coordonner les revues et tâches suivantes."
+        },
+        "implementer": {
+          "label": "Implémenter, tester et se relire",
+          "description": "L’implémenteur réalise la tâche, teste, committe et se relit. Les questions reviennent au contrôleur pour préciser le contexte."
+        },
+        "review": {
+          "label": "Revue de la tâche",
+          "description": "Vérifier conformité et qualité du code. L’approbation termine la tâche ; les constats passent à la boucle de correction limitée."
+        },
+        "fix": {
+          "label": "Corrections limitées",
+          "description": "Au plus cinq tours : implémenteur initial aux tours 1–3, aide nouvelle et plus capable aux tours 4–5. Revoir le périmètre affecté ; à la limite, arbitrer, différer ou mettre en attente."
+        },
+        "inline": {
+          "label": "Exécution directe",
+          "description": "L’agent courant suit le plan avec TDD et vérifications, traite les écarts et vérifie le contrat de fin avant d’enregistrer chaque tâche."
+        },
+        "ledger": {
+          "label": "Registre et tâche suivante",
+          "description": "Consigner plan, progression, tests et commits. Terminer ou mettre en attente selon les règles, puis continuer ou revoir toute la branche."
+        },
+        "final": {
+          "label": "Revue de toute la branche",
+          "description": "Inclure les constats différés et en attente. Une vague de corrections et une revue ciblée, puis arbitrage du reste et nettoyage si la revue est propre."
+        },
+        "finish": {
+          "label": "Tests et choix d’intégration",
+          "description": "Exécuter toute la suite. Les échecs bloquent le menu d’intégration. Si elle réussit, proposer fusion, push/PR ou conservation selon l’environnement. L’utilisateur choisit."
+        }
+      },
+      "edges": {
+        "e1": {
+          "label": "parcours de conception"
+        },
+        "e2": {
+          "label": "conception prête"
+        },
+        "e3": {
+          "label": "accord utilisateur"
+        },
+        "e4": {
+          "label": "plan vérifié"
+        },
+        "e5": {
+          "label": "avec sous-agents"
+        },
+        "e6": {
+          "label": "exécution directe"
+        },
+        "e7": {
+          "label": "envoyer tâche et contexte"
+        },
+        "e8": {
+          "label": "clarification nécessaire"
+        },
+        "e9": {
+          "label": "implémentation prête"
+        },
+        "e10": {
+          "label": "constats à traiter"
+        },
+        "e11": {
+          "label": "reprendre ou nouvel implémenteur"
+        },
+        "e12": {
+          "label": "revue ciblée"
+        },
+        "e13": {
+          "label": "approuvé"
+        },
+        "e14": {
+          "label": "arbitré / mis en attente à la limite"
+        },
+        "e15": {
+          "label": "autres tâches déléguées"
+        },
+        "e16": {
+          "label": "contrat de fin rempli"
+        },
+        "e17": {
+          "label": "autres tâches directes"
+        },
+        "e18": {
+          "label": "toutes les tâches traitées"
+        },
+        "e19": {
+          "label": "une vague de corrections et revue"
+        },
+        "e20": {
+          "label": "revue propre et espace nettoyé"
+        }
+      },
+      "steps": {
+        "design-path": {
+          "title": "Concevoir avant de construire",
+          "description": "Choisir le parcours, explorer la conception et obtenir l’accord."
+        },
+        "planning": {
+          "title": "Planifier et choisir",
+          "description": "Vérifier le plan puis choisir sous-agents ou exécution directe."
+        },
+        "task": {
+          "title": "Implémenter et revoir une tâche",
+          "description": "Le parcours délégué sépare implémentation et revue."
+        },
+        "fixing": {
+          "title": "Limiter les corrections",
+          "description": "Traiter les constats dans la limite prévue et consigner arbitrages ou mises en attente."
+        },
+        "iterate": {
+          "title": "Consigner et continuer",
+          "description": "Les deux méthodes enregistrent les tâches puis arrivent à la revue de branche."
+        },
+        "integrate": {
+          "title": "Revoir la branche et décider",
+          "description": "Terminer la revue puis exécuter toute la suite avant les options d’intégration."
+        }
+      },
+      "uncertainties": [
+        "Carte statique des consignes, pas une exécution observée ni une garantie de leur respect.",
+        "Périmètre : développement de fonctionnalités. Débogage et autres entrées non développés. Petites modifications et exceptions approuvées peuvent éviter conception et planification.",
+        "Des constats peuvent rester différés ou en attente. Finir une tâche ne signifie pas avoir tout corrigé. L’intégration reste un choix utilisateur."
+      ],
+      "scenarios": {
+        "mechanism": {
+          "label": "Parcours de développement prescrit"
+        }
+      }
+    },
+    "es": {
+      "title": "Superpowers: desarrollar una función",
+      "question": "¿Cómo guía Superpowers desde el diseño hasta terminar la rama?",
+      "summary": "Un flujo prescrito con opciones de ejecución, revisiones por tarea, correcciones limitadas y decisiones de integración.",
+      "nodes": {
+        "router": {
+          "label": "Elegir skills relevantes",
+          "description": "Las instrucciones iniciales seleccionan skills para la tarea. Este grafo sigue el diseño de funciones; depuración y otras rutas no se desarrollan."
+        },
+        "design": {
+          "label": "Explorar y documentar el diseño",
+          "description": "Aclarar intención, objetivos, restricciones y enfoques, y escribir el diseño. Cambios pequeños o excepciones acordadas pueden usar una ruta más corta."
+        },
+        "approval": {
+          "label": "Aprobar el diseño",
+          "description": "La ruta normal exige aprobación del usuario antes de implementar y luego pasa a writing-plans. Es una instrucción, no un bloqueo técnico."
+        },
+        "plan": {
+          "label": "Escribir y revisar el plan",
+          "description": "Definir tareas, pasos verificables y comprobaciones. La autorrevisión comprueba cobertura de la especificación, coherencia y pruebas."
+        },
+        "choice": {
+          "label": "Elegir la ejecución",
+          "description": "Conservar una elección previa; si no existe, el usuario elige subagentes o ejecución directa. Ambas transcurren en la misma sesión."
+        },
+        "controller": {
+          "label": "Coordinar subagentes",
+          "description": "Preparar espacio y registro, enviar cada tarea a un implementador nuevo, responder preguntas y coordinar revisiones y tareas siguientes."
+        },
+        "implementer": {
+          "label": "Implementar, probar y autorrevisar",
+          "description": "El implementador realiza la tarea, prueba, crea commits y revisa. Las preguntas vuelven al controlador para obtener contexto."
+        },
+        "review": {
+          "label": "Revisar la tarea",
+          "description": "Comprobar especificación y calidad. La aprobación termina la tarea; los hallazgos pasan al ciclo de corrección limitado."
+        },
+        "fix": {
+          "label": "Ciclo de corrección limitado",
+          "description": "Hasta cinco rondas: implementador original en 1–3, ayuda nueva y más capaz en 4–5. Revisar el alcance afectado; al límite, resolver, aplazar o dejar pendiente según las reglas."
+        },
+        "inline": {
+          "label": "Ejecución directa",
+          "description": "El agente actual sigue los pasos con TDD y verificaciones, trata discrepancias y comprueba el contrato de finalización antes de registrar cada tarea."
+        },
+        "ledger": {
+          "label": "Registro y siguiente tarea",
+          "description": "Anotar plan, progreso, pruebas y commits. Finalizar o dejar pendiente según las reglas y continuar tareas o revisar toda la rama."
+        },
+        "final": {
+          "label": "Revisión de toda la rama",
+          "description": "Incluir hallazgos aplazados y pendientes. Una ronda de correcciones y una revisión focalizada, resolver lo restante y limpiar el espacio cuando la revisión esté limpia."
+        },
+        "finish": {
+          "label": "Pruebas y opción de integración",
+          "description": "Ejecutar toda la suite. Los fallos detienen el menú de integración. Si pasa, ofrecer fusión, push/PR o conservar según el entorno. Decide el usuario."
+        }
+      },
+      "edges": {
+        "e1": {
+          "label": "ruta de diseño de función"
+        },
+        "e2": {
+          "label": "diseño listo"
+        },
+        "e3": {
+          "label": "aprobado por el usuario"
+        },
+        "e4": {
+          "label": "plan revisado"
+        },
+        "e5": {
+          "label": "con subagentes"
+        },
+        "e6": {
+          "label": "ejecución directa"
+        },
+        "e7": {
+          "label": "enviar tarea y contexto"
+        },
+        "e8": {
+          "label": "necesita aclaración"
+        },
+        "e9": {
+          "label": "implementación lista"
+        },
+        "e10": {
+          "label": "hallazgos accionables"
+        },
+        "e11": {
+          "label": "reanudar o nuevo implementador"
+        },
+        "e12": {
+          "label": "revisión focalizada"
+        },
+        "e13": {
+          "label": "aprobado"
+        },
+        "e14": {
+          "label": "resuelto / pendiente al límite"
+        },
+        "e15": {
+          "label": "más tareas delegadas"
+        },
+        "e16": {
+          "label": "contrato de finalización cumplido"
+        },
+        "e17": {
+          "label": "más tareas directas"
+        },
+        "e18": {
+          "label": "todas las tareas tratadas"
+        },
+        "e19": {
+          "label": "una ronda de corrección y revisión"
+        },
+        "e20": {
+          "label": "revisión limpia y espacio limpiado"
+        }
+      },
+      "steps": {
+        "design-path": {
+          "title": "Diseñar antes de implementar",
+          "description": "Elegir la ruta, explorar el diseño y obtener aprobación."
+        },
+        "planning": {
+          "title": "Planificar y elegir",
+          "description": "Revisar el plan y elegir subagentes o ejecución directa."
+        },
+        "task": {
+          "title": "Implementar y revisar una tarea",
+          "description": "La ruta con subagentes separa implementación y revisión."
+        },
+        "fixing": {
+          "title": "Limitar las correcciones",
+          "description": "Tratar hallazgos dentro del límite y registrar resoluciones o pendientes."
+        },
+        "iterate": {
+          "title": "Registrar y continuar",
+          "description": "Ambos métodos registran tareas y continúan hasta revisar la rama."
+        },
+        "integrate": {
+          "title": "Revisar la rama y decidir",
+          "description": "Completar la revisión y ejecutar toda la suite antes de las opciones de integración."
+        }
+      },
+      "uncertainties": [
+        "Mapa estático de instrucciones, no una ejecución observada ni garantía de cumplimiento.",
+        "Alcance: desarrollo de funciones. Depuración y otras entradas no se desarrollan. Cambios pequeños y excepciones aprobadas pueden omitir diseño y planificación.",
+        "Las revisiones pueden dejar hallazgos aplazados o pendientes. Terminar una tarea no implica haber corregido todo. La integración sigue siendo decisión del usuario."
+      ],
+      "scenarios": {
+        "mechanism": {
+          "label": "Flujo de desarrollo prescrito"
+        }
+      }
+    }
+  },
+  "default_view": "map",
+  "overview": {},
+  "groups": [],
+  "repo": {
+    "name": "superpowers",
+    "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+    "dirty": false,
+    "url": "https://github.com/obra/superpowers"
+  },
+  "ui_strings": {},
+  "grounding": {
+    "status": "files-and-ranges-checked",
+    "scope": "Source existence, line ranges and fingerprints. The author must verify the interpretation; this is not a runtime trace."
+  }
+}
