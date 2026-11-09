@@ -1,5 +1,15 @@
 # Release verification
 
+## Complete languages and ordered expanded workspace — 9 November 2026
+
+New skill output includes complete English, Czech, German, French and Spanish explanations, with the user's language selecting the initial view. `--all-languages` checks populated titles, summaries, node descriptions/captions, relationships, inference reasons, steps, scenarios, overview paths and caveats before writing output. Display translations now support overview prose, relationship text and inference reasons while preserving IDs, endpoints, evidence status and source fingerprints. Canonical JSON downloads retain every language even after choosing another display language. Coverage validation cannot prove linguistic accuracy.
+
+New output also requires `presentation.levels` via `--ordered`. Inputs appear first at the top, terminal outputs last at the bottom, and authored parallel peers share exact vertical coordinates and phase numbers. The graph, navigator and default component tour use those same phases; return arrows keep their original direction. Explicit phases use an ungrouped mechanism map. Older grouped/partial artifacts still load, with top-down routing and a position-ordered navigator where no phases exist.
+
+The expanded native dialog now moves the complete existing workspace, including the component navigator and evidence inspector. Selecting components and opening Code remain inside expansion; the persistent close control and Escape return it to the original dock. On narrow screens the three areas remain reachable by scroll. Downloaded HTML restores the complete workspace outside the closed dialog.
+
+All 50 automated tests pass. Final local browser checks passed 160 graph/width/language/theme combinations, including exact phase alignment and navigator order, retained graph counts, source return and offline re-download. The scoped final layout scan returned zero findings. Current Codex, Superpowers and both Whisper examples pass complete five-language validation and retain their graph topology. Shared-band classification in the focused decoder now treats both contexts as inputs and next-token selection as its output; it remains a seven-component, seven-relationship explanation. Public media regeneration and hosted checks follow the frozen renderer commit.
+
 ## Responsibility diagrams and shared bands — 9 November 2026
 
 Component titles and short responsibility captions now render inside flat diagram blocks, with measured wrapping and orthogonal relationship labels. A validated optional `presentation` selects auto, layered or flow layout and names existing source-grounded nodes as shared top/bottom bands. Auto only selects a small simple chain when the available geometry is readable. Flow uses horizontal layout on wide screens and vertical layout below 800px; dense/grouped maps retain layered routing. The focused [Whisper decoder](../examples/whisper/decoder-loop.json) has seven components, seven relationships and four illustrative highlights; the complete Codex, Whisper and Superpowers examples retain their original topology.

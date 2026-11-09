@@ -103,8 +103,11 @@
   "artifact": "Artefakt",
   "process": "Prozess",
   "graphLanguageNote": "Graphbeschriftung auf {language}.",
-  "expandGraph": "Diagramm vergrößern",
-  "collapseGraph": "Diagramm zurücksetzen",
+  "expandGraph": "Ansicht erweitern",
+  "collapseGraph": "Erweiterte Ansicht schließen",
   "inspectSelection": "Auswahl prüfen",
-  "diagramExploreHint": "Den Hintergrund ziehen, um den Graphen zu erkunden. Einpassen zeigt die ganze Karte."
+  "diagramExploreHint": "Den Hintergrund ziehen, um den Graphen zu erkunden. Einpassen zeigt die ganze Karte.",
+  "mechanismPhase": "Phase {number}",
+  "parallelComponents": "Parallel",
+  "expandedWorkspace": "Erweiterte Ansicht"
 }

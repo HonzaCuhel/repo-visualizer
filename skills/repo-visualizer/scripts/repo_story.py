@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import sys
 
-from story_model import StoryError, prepare_story, read_story, repository_snapshot, source_path, write_story
+from story_model import StoryError, prepare_story, read_story, repository_snapshot, source_path, validate_language_coverage, validate_structure, write_story
 
 
 def main(argv=None):
@@ -23,10 +23,14 @@ def main(argv=None):
     build = commands.add_parser("build", help="Build portable HTML from a prepared graph")
     build.add_argument("story", type=Path)
     build.add_argument("--output", "-o", type=Path, required=True)
+    build.add_argument("--all-languages", action="store_true", help="Require complete explanations in English, Czech, German, French and Spanish")
+    build.add_argument("--ordered", action="store_true", help="Require authored input-to-output phases with parallel components on the same level")
     for name in ("prepare", "validate"):
         command = commands.add_parser(name, help="Check story references against the specified local checkout")
         command.add_argument("story", type=Path)
         command.add_argument("--repo", type=Path, required=True)
+        command.add_argument("--all-languages", action="store_true", help="Require complete explanations in all five bundled languages")
+        command.add_argument("--ordered", action="store_true", help="Require authored mechanism phases in presentation.levels")
         if name == "prepare":
             command.add_argument("--output", "-o", type=Path, required=True)
     args = parser.parse_args(argv)
@@ -43,14 +47,21 @@ def main(argv=None):
             write_story(args.output, graph)
             print(json.dumps({"status": "indexed", "components": len(graph["nodes"]), "static_import_edges": len(graph["edges"]), "scope": graph["analysis"]["scope"], "behavioral_analysis": "requires coding-agent review"}, indent=2))
             return 0
+        data = read_story(args.story)
+        if args.all_languages:
+            data = validate_language_coverage(data)
+        if args.ordered:
+            data = validate_structure(data)
+            if not data['presentation'].get('levels'):
+                raise StoryError('Ordered explanation needs presentation.levels: inputs first, parallel components together, outputs last')
         if args.command == "build":
             from builder import build_html, write_html
             if args.output.resolve() == args.story.resolve():
                 raise StoryError("HTML output must differ from the graph JSON")
-            write_html(args.output, build_html(read_story(args.story)))
+            write_html(args.output, build_html(data))
             print(json.dumps({"status": "built", "output": str(args.output), "format": "portable-html"}))
             return 0
-        story = prepare_story(read_story(args.story), args.repo)
+        story = prepare_story(data, args.repo)
         if args.command == "prepare":
             root = args.repo.resolve()
             if any(args.output.resolve() == source_path(root, s["path"]) for s in story["sources"]):

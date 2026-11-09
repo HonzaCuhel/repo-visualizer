@@ -154,6 +154,42 @@ class PlayerTests(unittest.TestCase):
         self.assertEqual(self.page.locator('#workspace > .graph-pane').count(),1)
         self.assertEqual(self.errors,[])
 
+    def test_ordered_phases_align_parallel_nodes_and_keep_the_entire_expanded_workspace(self):
+        (self.root/'fixture.py').write_text('value = 1\n')
+        levels=[['input'],['a','b','detached'],['join'],['output']]
+        ids=['output','b','join','input','a','detached']
+        pairs=[('input','a'),('input','b'),('a','join'),('b','join'),('join','output'),('join','a'),('b','b'),('a','join')]
+        graph=prepare_story(dict(schema_version=1,title='Parallel request',question='How does the request finish?',presentation={'levels':levels},sources=[dict(id='s',path='fixture.py',start=1,end=1)],nodes=[dict(id=identity,label='A deliberately longer branch title that wraps'if identity=='b'else identity,caption='A responsibility',kind='input'if identity=='input'else 'output'if identity=='output'else 'process',source_ids=['s'])for identity in ids],edges=[dict(id='e'+str(index),**{'from':a,'to':b},label='relationship '+str(index),source_ids=['s'])for index,(a,b)in enumerate(pairs)]),self.root)
+        self.open(graph)
+        for width in (390,768,1440):
+            self.page.set_viewport_size({'width':width,'height':1000})
+            self.assertEqual(self.page.locator('#diagram').get_attribute('data-layout'),'ordered')
+            positions=self.page.evaluate('Object.fromEntries(repoPlayer.layout.children.map(n=>[n.id,{y:n.y,h:n.height}]))')
+            for row in levels:
+                self.assertLess(max(positions[i]['y']for i in row)-min(positions[i]['y']for i in row),0.01)
+            for first,second in zip(levels,levels[1:]):
+                self.assertLess(max(positions[i]['y']+positions[i]['h']for i in first),min(positions[i]['y']for i in second))
+        self.assertEqual(self.page.locator('#component-list button').evaluate_all('(items)=>items.map(item=>item.dataset.node)'),[i for row in levels for i in row])
+        self.assertEqual(self.page.locator('#component-list [data-level="1"] .component-order').all_text_contents(),['2','2','2'])
+        self.page.evaluate("repoPlayer.setScenario('tour');renderAt(2400)")
+        self.assertEqual(self.page.locator('.graph-node.is-selected').get_attribute('data-node'),'a')
+        self.page.locator('#expand-diagram').click();self.page.wait_for_function('document.querySelector("#diagram-dialog").open&&!document.querySelector("#expand-diagram").disabled')
+        self.assertEqual(self.page.locator('#diagram-dialog #workspace').count(),1)
+        for selector in ('.component-pane','.graph-pane','.inspector'):
+            self.assertTrue(self.page.locator('#diagram-dialog '+selector).is_visible())
+        self.page.locator('#component-list [data-node=b]').click();self.page.locator('#inspect-expanded').click()
+        self.assertTrue(self.page.locator('#diagram-dialog').evaluate('(element)=>element.open'))
+        self.assertGreater(self.page.locator('#source-content pre').count(),0)
+        self.assertEqual(self.page.locator('.graph-node.is-selected').get_attribute('data-node'),'b')
+        with self.page.expect_download()as download:self.page.evaluate("repoPlayer.export('html')")
+        output=self.root/'complete-workspace.html';download.value.save_as(output);self.page.goto(output.as_uri());self.page.evaluate('repoReady')
+        self.assertEqual(self.page.locator('#workspace').count(),1)
+        self.assertEqual(self.page.locator('#diagram-dialog #workspace').count(),0)
+        self.assertFalse(self.page.locator('#diagram-dialog').evaluate('(element)=>element.open'))
+        self.page.locator('#expand-diagram').click();self.page.wait_for_function('!document.querySelector("#expand-diagram").disabled');self.page.locator('#close-workspace').click();self.page.wait_for_function('!document.querySelector("#diagram-dialog").open&&!document.querySelector("#expand-diagram").disabled')
+        self.assertEqual(self.page.evaluate('document.activeElement.id'),'expand-diagram')
+        self.assertEqual(self.errors,[])
+
     def test_cached_flow_video_scene_preserves_shared_band_typography(self):
         from hyperframes_export import composition
         source=self.open(read_story(ROOT/'examples/whisper/decoder-loop.json'))

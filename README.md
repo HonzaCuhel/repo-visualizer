@@ -63,7 +63,7 @@ The agent reads the implementation and authors a graph of responsibilities and r
 | **Focus** | Inspect a component and its immediate relationships |
 | **Path** | Follow a source-derived walkthrough over the same graph |
 
-Component blocks include short responsibility captions. Suitable flows can place shared services and state in broad bands; complex maps retain their branches and cycles. Expand the diagram for a readable detail, pan or zoom, then return to the selected source.
+Component blocks include short responsibility captions. Inputs stay at the top, outputs at the bottom, and parallel components share a phase. The navigator follows those phases while branches and feedback remain intact. Expand the full workspace to keep components, diagram and source inspection together.
 
 Select a component or relationship to read embedded excerpts and open revision-pinned source links. Search, pan, zoom and seek at your own pace. The portable HTML works offline.
 
@@ -75,7 +75,7 @@ Select a component or relationship to read embedded excerpts and open revision-p
 
 One canonical graph and one seekable scene drive the player and its exports. HTML keeps the clickable evidence; images and animation carry the visual explanation. [Export guide](skills/repo-visualizer/references/exports.md), including the optional HyperFrames adapter.
 
-Choose light, dark or system appearance with the sun, moon and monitor buttons. The language menu includes English, Czech, German, French and Spanish. Explanations follow your requested language, independently of the agent; switching an existing graph requires its translated content. [Language and appearance](skills/repo-visualizer/references/localization.md).
+Choose light, dark or system appearance with the sun, moon and monitor buttons. The language menu includes English, Czech, German, French and Spanish. New explanations include complete English, Czech, German, French and Spanish content. Your requested language selects the initial view, independently of the agent. The skill checks translation coverage before building; existing single-language files need their missing translations authored first. [Language and appearance](skills/repo-visualizer/references/localization.md).
 
 ## Evidence and limits
 

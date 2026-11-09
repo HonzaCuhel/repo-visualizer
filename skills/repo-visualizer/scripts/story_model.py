@@ -11,6 +11,8 @@ import subprocess
 import tempfile
 from urllib.parse import quote, urlsplit, urlunsplit
 
+SUPPORTED_LANGUAGES = ('en', 'cs', 'de', 'fr', 'es')
+
 
 class StoryError(ValueError):
     """An actionable model or source-reference error."""
@@ -132,7 +134,7 @@ def validate_structure(data):
         if _integer(source.get("end"), f"sources.{key}.end") < start:
             raise StoryError(f"sources.{key}: end precedes start")
     presentation = story.setdefault('presentation', {})
-    if not isinstance(presentation, dict) or set(presentation) - {'layout', 'top', 'bottom'}:
+    if not isinstance(presentation, dict) or set(presentation) - {'layout', 'top', 'bottom', 'levels'}:
         raise StoryError('presentation: expected layout and optional shared top/bottom component ids')
     if presentation.setdefault('layout', 'auto') not in ('auto', 'layered', 'flow'):
         raise StoryError('presentation.layout: expected auto, layered or flow')
@@ -144,7 +146,21 @@ def validate_structure(data):
         band_ids.extend(values)
     if len(set(band_ids)) != len(band_ids):
         raise StoryError('presentation: a shared component can appear in only one band')
-    if presentation['layout'] == 'flow' or band_ids:
+    levels = presentation.get('levels')
+    if levels is not None:
+        if not isinstance(levels, list) or not levels or any(not isinstance(row, list) or not row for row in levels):
+            raise StoryError('presentation.levels: expected non-empty phases of parallel component ids')
+        ordered = [identity for row in levels for identity in row]
+        if any(not isinstance(identity, str) or identity not in nodes for identity in ordered) or len(ordered) != len(set(ordered)) or set(ordered) != set(nodes):
+            raise StoryError('presentation.levels: include every component exactly once')
+        if groups:
+            raise StoryError('presentation.levels: scope an ungrouped mechanism map; keep subsystem responsibilities as components')
+        if not set(presentation['top']).issubset(levels[0]) or not set(presentation['bottom']).issubset(levels[-1]):
+            raise StoryError('presentation.levels: top/bottom bands must belong to the first/last phase')
+        for identity, node in nodes.items():
+            if node.get('kind') == 'input' and identity not in levels[0] or node.get('kind') == 'output' and identity not in levels[-1]:
+                raise StoryError('presentation.levels: inputs belong in the first phase and terminal outputs in the last')
+    elif presentation['layout'] == 'flow' or band_ids:
         if groups or not 1 <= len(nodes) - len(band_ids) <= 8 or presentation['layout'] == 'layered':
             raise StoryError('presentation: flow bands need an ungrouped graph with 1–8 main components; use layered for larger maps')
     for key, node in nodes.items():
@@ -193,7 +209,7 @@ def validate_structure(data):
     translations = story.setdefault('translations', {})
     if not isinstance(translations, dict):
         raise StoryError('translations: expected language-tagged display text')
-    collections = {'nodes': (nodes, {'label', 'description', 'caption'}), 'edges': (edges, {'label'}), 'groups': (groups, {'label'}), 'steps': (steps, {'title', 'description'}), 'scenarios': ({s['id']: s for s in scenarios}, {'label'})}
+    collections = {'nodes': (nodes, {'label', 'description', 'caption', 'reason'}), 'edges': (edges, {'label', 'relation', 'reason'}), 'groups': (groups, {'label'}), 'steps': (steps, {'title', 'description', 'reason'}), 'scenarios': ({s['id']: s for s in scenarios}, {'label'})}
     for locale, display in translations.items():
         if not isinstance(locale, str) or not re.fullmatch(r'[a-zA-Z]{2,8}(?:-[a-zA-Z0-9]{1,8})*', locale) or not isinstance(display, dict):
             raise StoryError('translations: expected valid language tags and display objects')
@@ -201,8 +217,22 @@ def validate_structure(data):
             if field in ('title', 'question', 'summary'):
                 _text(value, 'translations.'+field)
             elif field == 'uncertainties':
-                if not isinstance(value, list) or any(not isinstance(v, str) for v in value):
+                if not isinstance(value, list) or any(not isinstance(v, str) or not v.strip() for v in value):
                     raise StoryError('translations.uncertainties: expected text entries')
+            elif field == 'overview':
+                if not isinstance(value, dict) or set(value) - {'lead', 'path'}:
+                    raise StoryError('translations.overview: expected lead and optional path labels')
+                if 'lead' in value:
+                    _text(value['lead'], 'translations.overview.lead')
+                if 'path' in value:
+                    path = value['path']
+                    original = overview.get('path', [])
+                    if not isinstance(path, list) or len(path) != len(original):
+                        raise StoryError('translations.overview.path: preserve the original component path')
+                    for index, entry in enumerate(path):
+                        if not isinstance(entry, dict) or set(entry) - {'node_id', 'label'} or entry.get('node_id') != original[index]['node_id']:
+                            raise StoryError('translations.overview.path: preserve component ids and order')
+                        _text(entry.get('label'), 'translations.overview.path.label')
             elif field in collections:
                 available, allowed = collections[field]
                 if not isinstance(value, dict):
@@ -216,6 +246,50 @@ def validate_structure(data):
                             raise StoryError('translations.nodes.caption: keep within 180 characters')
             else:
                 raise StoryError('translations: unsupported display field '+field)
+    return story
+
+
+def validate_language_coverage(data):
+    """Require complete display text in every bundled language; never translate code."""
+    story = validate_structure(data)
+    fields = {
+        'nodes': ('label', 'description', 'caption', 'reason'),
+        'edges': ('label', 'relation', 'reason'),
+        'groups': ('label',),
+        'steps': ('title', 'description', 'reason'),
+        'scenarios': ('label',),
+    }
+    missing = {}
+    for language in SUPPORTED_LANGUAGES:
+        if language == story['language'].split('-')[0].lower():
+            continue
+        display = story['translations'].get(language, {})
+        gaps = []
+        for field in ('title', 'question', 'summary'):
+            if story.get(field) and not display.get(field):
+                gaps.append(field)
+        for collection, names in fields.items():
+            for item in story[collection]:
+                translated = display.get(collection, {}).get(item['id'], {})
+                for field in names:
+                    if item.get(field) and not translated.get(field):
+                        gaps.append(f"{collection}.{item['id']}.{field}")
+        if len(display.get('uncertainties', [])) != len(story['uncertainties']):
+            gaps.append('uncertainties (translate every entry)')
+        overview = story['overview']
+        translated = display.get('overview', {})
+        if overview.get('lead') and not translated.get('lead'):
+            gaps.append('overview.lead')
+        if overview.get('path') and len(translated.get('path', [])) != len(overview['path']):
+            gaps.append('overview.path (translate every label)')
+        if gaps:
+            missing[language] = gaps
+    if missing:
+        details = '; '.join(language + ': ' + ', '.join(gaps[:8]) +
+                            (f' (+{len(gaps)-8} more)' if len(gaps) > 8 else '')
+                            for language, gaps in missing.items())
+        raise StoryError('Incomplete explanation translations — ' + details +
+                         '. Supply all five languages; see references/localization.md')
     return story
 
 

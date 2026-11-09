@@ -103,8 +103,11 @@
   "artifact": "artifact",
   "process": "process",
   "graphLanguageNote": "Graph labels are in {language}.",
-  "expandGraph": "Expand diagram",
-  "collapseGraph": "Restore diagram",
+  "expandGraph": "Expand workspace",
+  "collapseGraph": "Close expanded workspace",
   "inspectSelection": "Inspect selection",
-  "diagramExploreHint": "Drag the background to explore. Fit shows the whole map."
+  "diagramExploreHint": "Drag the background to explore. Fit shows the whole map.",
+  "mechanismPhase": "Phase {number}",
+  "parallelComponents": "In parallel",
+  "expandedWorkspace": "Expanded workspace"
 }

@@ -703,64 +703,84 @@
       },
       "edges": {
         "e1": {
-          "label": "cesta návrhu funkce"
+          "label": "cesta návrhu funkce",
+          "relation": "cesta návrhu funkce"
         },
         "e2": {
-          "label": "návrh připraven"
+          "label": "návrh připraven",
+          "relation": "návrh připraven"
         },
         "e3": {
-          "label": "uživatel schválil"
+          "label": "uživatel schválil",
+          "relation": "uživatel schválil"
         },
         "e4": {
-          "label": "zkontrolovaný plán"
+          "label": "zkontrolovaný plán",
+          "relation": "zkontrolovaný plán"
         },
         "e5": {
-          "label": "práce se subagenty"
+          "label": "práce se subagenty",
+          "relation": "práce se subagenty"
         },
         "e6": {
-          "label": "přímé provedení"
+          "label": "přímé provedení",
+          "relation": "přímé provedení"
         },
         "e7": {
-          "label": "předat úlohu a kontext"
+          "label": "předat úlohu a kontext",
+          "relation": "předat úlohu a kontext"
         },
         "e8": {
-          "label": "potřeba vyjasnění"
+          "label": "potřeba vyjasnění",
+          "relation": "potřeba vyjasnění"
         },
         "e9": {
-          "label": "implementace úlohy hotová"
+          "label": "implementace úlohy hotová",
+          "relation": "implementace úlohy hotová"
         },
         "e10": {
-          "label": "nálezy k řešení"
+          "label": "nálezy k řešení",
+          "relation": "nálezy k řešení"
         },
         "e11": {
-          "label": "původní nebo nový implementer"
+          "label": "původní nebo nový implementer",
+          "relation": "původní nebo nový implementer"
         },
         "e12": {
-          "label": "cílená kontrola"
+          "label": "cílená kontrola",
+          "relation": "cílená kontrola"
         },
         "e13": {
-          "label": "schváleno"
+          "label": "schváleno",
+          "relation": "schváleno"
         },
         "e14": {
-          "label": "rozhodnuto / zaparkováno na limitu"
+          "label": "rozhodnuto / zaparkováno na limitu",
+          "relation": "rozhodnuto / zaparkováno na limitu"
         },
         "e15": {
-          "label": "další úlohy pro subagenty"
+          "label": "další úlohy pro subagenty",
+          "relation": "další úlohy pro subagenty"
         },
         "e16": {
-          "label": "splněny podmínky dokončení"
+          "label": "splněny podmínky dokončení",
+          "relation": "splněny podmínky dokončení"
         },
         "e17": {
-          "label": "další přímé úlohy"
+          "label": "další přímé úlohy",
+          "relation": "další přímé úlohy"
         },
         "e18": {
-          "label": "všechny úlohy zpracovány"
+          "label": "všechny úlohy zpracovány",
+          "relation": "všechny úlohy zpracovány"
         },
         "e19": {
-          "label": "jedna vlna oprav a kontrola"
+          "label": "jedna vlna oprav a kontrola",
+          "relation": "jedna vlna oprav a kontrola"
         },
         "e20": {
-          "label": "kontrola čistá a prostor uklizen"
+          "label": "kontrola čistá a prostor uklizen",
+          "relation": "kontrola čistá a prostor uklizen"
         }
       },
       "steps": {
@@ -860,64 +880,84 @@
       },
       "edges": {
         "e1": {
-          "label": "Feature-Design"
+          "label": "Feature-Design",
+          "relation": "Feature-Design"
         },
         "e2": {
-          "label": "Design bereit"
+          "label": "Design bereit",
+          "relation": "Design bereit"
         },
         "e3": {
-          "label": "Nutzer hat freigegeben"
+          "label": "Nutzer hat freigegeben",
+          "relation": "Nutzer hat freigegeben"
         },
         "e4": {
-          "label": "geprüfter Plan"
+          "label": "geprüfter Plan",
+          "relation": "geprüfter Plan"
         },
         "e5": {
-          "label": "mit Subagenten"
+          "label": "mit Subagenten",
+          "relation": "mit Subagenten"
         },
         "e6": {
-          "label": "direkt ausführen"
+          "label": "direkt ausführen",
+          "relation": "direkt ausführen"
         },
         "e7": {
-          "label": "Aufgabe und Kontext senden"
+          "label": "Aufgabe und Kontext senden",
+          "relation": "Aufgabe und Kontext senden"
         },
         "e8": {
-          "label": "Klärung nötig"
+          "label": "Klärung nötig",
+          "relation": "Klärung nötig"
         },
         "e9": {
-          "label": "Implementierung bereit"
+          "label": "Implementierung bereit",
+          "relation": "Implementierung bereit"
         },
         "e10": {
-          "label": "zu bearbeitende Befunde"
+          "label": "zu bearbeitende Befunde",
+          "relation": "zu bearbeitende Befunde"
         },
         "e11": {
-          "label": "ursprünglicher oder neuer Implementierer"
+          "label": "ursprünglicher oder neuer Implementierer",
+          "relation": "ursprünglicher oder neuer Implementierer"
         },
         "e12": {
-          "label": "gezielte Nachprüfung"
+          "label": "gezielte Nachprüfung",
+          "relation": "gezielte Nachprüfung"
         },
         "e13": {
-          "label": "freigegeben"
+          "label": "freigegeben",
+          "relation": "freigegeben"
         },
         "e14": {
-          "label": "am Limit entschieden / geparkt"
+          "label": "am Limit entschieden / geparkt",
+          "relation": "am Limit entschieden / geparkt"
         },
         "e15": {
-          "label": "weitere Subagenten-Aufgaben"
+          "label": "weitere Subagenten-Aufgaben",
+          "relation": "weitere Subagenten-Aufgaben"
         },
         "e16": {
-          "label": "Abschlussbedingungen erfüllt"
+          "label": "Abschlussbedingungen erfüllt",
+          "relation": "Abschlussbedingungen erfüllt"
         },
         "e17": {
-          "label": "weitere direkte Aufgaben"
+          "label": "weitere direkte Aufgaben",
+          "relation": "weitere direkte Aufgaben"
         },
         "e18": {
-          "label": "alle Aufgaben bearbeitet"
+          "label": "alle Aufgaben bearbeitet",
+          "relation": "alle Aufgaben bearbeitet"
         },
         "e19": {
-          "label": "eine Korrekturwelle und Nachprüfung"
+          "label": "eine Korrekturwelle und Nachprüfung",
+          "relation": "eine Korrekturwelle und Nachprüfung"
         },
         "e20": {
-          "label": "Review sauber, Arbeitsbereich aufgeräumt"
+          "label": "Review sauber, Arbeitsbereich aufgeräumt",
+          "relation": "Review sauber, Arbeitsbereich aufgeräumt"
         }
       },
       "steps": {
@@ -1017,64 +1057,84 @@
       },
       "edges": {
         "e1": {
-          "label": "parcours de conception"
+          "label": "parcours de conception",
+          "relation": "parcours de conception"
         },
         "e2": {
-          "label": "conception prête"
+          "label": "conception prête",
+          "relation": "conception prête"
         },
         "e3": {
-          "label": "accord utilisateur"
+          "label": "accord utilisateur",
+          "relation": "accord utilisateur"
         },
         "e4": {
-          "label": "plan vérifié"
+          "label": "plan vérifié",
+          "relation": "plan vérifié"
         },
         "e5": {
-          "label": "avec sous-agents"
+          "label": "avec sous-agents",
+          "relation": "avec sous-agents"
         },
         "e6": {
-          "label": "exécution directe"
+          "label": "exécution directe",
+          "relation": "exécution directe"
         },
         "e7": {
-          "label": "envoyer tâche et contexte"
+          "label": "envoyer tâche et contexte",
+          "relation": "envoyer tâche et contexte"
         },
         "e8": {
-          "label": "clarification nécessaire"
+          "label": "clarification nécessaire",
+          "relation": "clarification nécessaire"
         },
         "e9": {
-          "label": "implémentation prête"
+          "label": "implémentation prête",
+          "relation": "implémentation prête"
         },
         "e10": {
-          "label": "constats à traiter"
+          "label": "constats à traiter",
+          "relation": "constats à traiter"
         },
         "e11": {
-          "label": "reprendre ou nouvel implémenteur"
+          "label": "reprendre ou nouvel implémenteur",
+          "relation": "reprendre ou nouvel implémenteur"
         },
         "e12": {
-          "label": "revue ciblée"
+          "label": "revue ciblée",
+          "relation": "revue ciblée"
         },
         "e13": {
-          "label": "approuvé"
+          "label": "approuvé",
+          "relation": "approuvé"
         },
         "e14": {
-          "label": "arbitré / mis en attente à la limite"
+          "label": "arbitré / mis en attente à la limite",
+          "relation": "arbitré / mis en attente à la limite"
         },
         "e15": {
-          "label": "autres tâches déléguées"
+          "label": "autres tâches déléguées",
+          "relation": "autres tâches déléguées"
         },
         "e16": {
-          "label": "contrat de fin rempli"
+          "label": "contrat de fin rempli",
+          "relation": "contrat de fin rempli"
         },
         "e17": {
-          "label": "autres tâches directes"
+          "label": "autres tâches directes",
+          "relation": "autres tâches directes"
         },
         "e18": {
-          "label": "toutes les tâches traitées"
+          "label": "toutes les tâches traitées",
+          "relation": "toutes les tâches traitées"
         },
         "e19": {
-          "label": "une vague de corrections et revue"
+          "label": "une vague de corrections et revue",
+          "relation": "une vague de corrections et revue"
         },
         "e20": {
-          "label": "revue propre et espace nettoyé"
+          "label": "revue propre et espace nettoyé",
+          "relation": "revue propre et espace nettoyé"
         }
       },
       "steps": {
@@ -1174,64 +1234,84 @@
       },
       "edges": {
         "e1": {
-          "label": "ruta de diseño de función"
+          "label": "ruta de diseño de función",
+          "relation": "ruta de diseño de función"
         },
         "e2": {
-          "label": "diseño listo"
+          "label": "diseño listo",
+          "relation": "diseño listo"
         },
         "e3": {
-          "label": "aprobado por el usuario"
+          "label": "aprobado por el usuario",
+          "relation": "aprobado por el usuario"
         },
         "e4": {
-          "label": "plan revisado"
+          "label": "plan revisado",
+          "relation": "plan revisado"
         },
         "e5": {
-          "label": "con subagentes"
+          "label": "con subagentes",
+          "relation": "con subagentes"
         },
         "e6": {
-          "label": "ejecución directa"
+          "label": "ejecución directa",
+          "relation": "ejecución directa"
         },
         "e7": {
-          "label": "enviar tarea y contexto"
+          "label": "enviar tarea y contexto",
+          "relation": "enviar tarea y contexto"
         },
         "e8": {
-          "label": "necesita aclaración"
+          "label": "necesita aclaración",
+          "relation": "necesita aclaración"
         },
         "e9": {
-          "label": "implementación lista"
+          "label": "implementación lista",
+          "relation": "implementación lista"
         },
         "e10": {
-          "label": "hallazgos accionables"
+          "label": "hallazgos accionables",
+          "relation": "hallazgos accionables"
         },
         "e11": {
-          "label": "reanudar o nuevo implementador"
+          "label": "reanudar o nuevo implementador",
+          "relation": "reanudar o nuevo implementador"
         },
         "e12": {
-          "label": "revisión focalizada"
+          "label": "revisión focalizada",
+          "relation": "revisión focalizada"
         },
         "e13": {
-          "label": "aprobado"
+          "label": "aprobado",
+          "relation": "aprobado"
         },
         "e14": {
-          "label": "resuelto / pendiente al límite"
+          "label": "resuelto / pendiente al límite",
+          "relation": "resuelto / pendiente al límite"
         },
         "e15": {
-          "label": "más tareas delegadas"
+          "label": "más tareas delegadas",
+          "relation": "más tareas delegadas"
         },
         "e16": {
-          "label": "contrato de finalización cumplido"
+          "label": "contrato de finalización cumplido",
+          "relation": "contrato de finalización cumplido"
         },
         "e17": {
-          "label": "más tareas directas"
+          "label": "más tareas directas",
+          "relation": "más tareas directas"
         },
         "e18": {
-          "label": "todas las tareas tratadas"
+          "label": "todas las tareas tratadas",
+          "relation": "todas las tareas tratadas"
         },
         "e19": {
-          "label": "una ronda de corrección y revisión"
+          "label": "una ronda de corrección y revisión",
+          "relation": "una ronda de corrección y revisión"
         },
         "e20": {
-          "label": "revisión limpia y espacio limpiado"
+          "label": "revisión limpia y espacio limpiado",
+          "relation": "revisión limpia y espacio limpiado"
         }
       },
       "steps": {
@@ -1285,5 +1365,46 @@
   "grounding": {
     "status": "files-and-ranges-checked",
     "scope": "Source existence, line ranges and fingerprints. The author must verify the interpretation; this is not a runtime trace."
+  },
+  "presentation": {
+    "levels": [
+      [
+        "router"
+      ],
+      [
+        "design"
+      ],
+      [
+        "approval"
+      ],
+      [
+        "plan"
+      ],
+      [
+        "choice"
+      ],
+      [
+        "controller",
+        "inline"
+      ],
+      [
+        "implementer"
+      ],
+      [
+        "review"
+      ],
+      [
+        "fix"
+      ],
+      [
+        "ledger"
+      ],
+      [
+        "final"
+      ],
+      [
+        "finish"
+      ]
+    ]
   }
 }

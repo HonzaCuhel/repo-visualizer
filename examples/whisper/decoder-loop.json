@@ -9,7 +9,7 @@
       "id": "encoder",
       "label": "Audio encoder",
       "description": "Two convolutions with GELU (the second downsamples), positional encoding and self-attention/MLP residual blocks turn the Mel window into audio features.",
-      "kind": "process",
+      "kind": "input",
       "source_ids": [
         "encoder",
         "block"
@@ -70,7 +70,7 @@
       "id": "sample",
       "label": "Choose the next token",
       "description": "The greedy decoder uses argmax at temperature zero and categorical sampling above zero. Append the selected token and repeat until end-of-text or the context limit; beam search is another supported decoder.",
-      "kind": "decision",
+      "kind": "output",
       "source_ids": [
         "sample",
         "loop"
@@ -409,25 +409,32 @@
       },
       "edges": {
         "audio": {
-          "label": "zvukové příznaky"
+          "label": "zvukové příznaky",
+          "relation": "zvukové příznaky"
         },
         "context": {
-          "label": "aktuální sekvence tokenů"
+          "label": "aktuální sekvence tokenů",
+          "relation": "aktuální sekvence tokenů"
         },
         "embed": {
-          "label": "textová reprezentace"
+          "label": "textová reprezentace",
+          "relation": "textová reprezentace"
         },
         "causal": {
-          "label": "dotazy a reziduum"
+          "label": "dotazy a reziduum",
+          "relation": "dotazy a reziduum"
         },
         "project": {
-          "label": "opakovat bloky, normalizovat"
+          "label": "opakovat bloky, normalizovat",
+          "relation": "opakovat bloky, normalizovat"
         },
         "choose": {
-          "label": "filtrovaná skóre"
+          "label": "filtrovaná skóre",
+          "relation": "filtrovaná skóre"
         },
         "append": {
-          "label": "připojit token a opakovat"
+          "label": "připojit token a opakovat",
+          "relation": "připojit token a opakovat"
         }
       },
       "steps": {
@@ -502,25 +509,32 @@
       },
       "edges": {
         "audio": {
-          "label": "Audiomerkmale"
+          "label": "Audiomerkmale",
+          "relation": "Audiomerkmale"
         },
         "context": {
-          "label": "aktuelle Token-Sequenz"
+          "label": "aktuelle Token-Sequenz",
+          "relation": "aktuelle Token-Sequenz"
         },
         "embed": {
-          "label": "Textdarstellung"
+          "label": "Textdarstellung",
+          "relation": "Textdarstellung"
         },
         "causal": {
-          "label": "Abfragen und Residuum"
+          "label": "Abfragen und Residuum",
+          "relation": "Abfragen und Residuum"
         },
         "project": {
-          "label": "Blöcke wiederholen, normalisieren"
+          "label": "Blöcke wiederholen, normalisieren",
+          "relation": "Blöcke wiederholen, normalisieren"
         },
         "choose": {
-          "label": "gefilterte Werte"
+          "label": "gefilterte Werte",
+          "relation": "gefilterte Werte"
         },
         "append": {
-          "label": "Token anhängen und wiederholen"
+          "label": "Token anhängen und wiederholen",
+          "relation": "Token anhängen und wiederholen"
         }
       },
       "steps": {
@@ -595,25 +609,32 @@
       },
       "edges": {
         "audio": {
-          "label": "caractéristiques audio"
+          "label": "caractéristiques audio",
+          "relation": "caractéristiques audio"
         },
         "context": {
-          "label": "séquence actuelle de tokens"
+          "label": "séquence actuelle de tokens",
+          "relation": "séquence actuelle de tokens"
         },
         "embed": {
-          "label": "représentation textuelle"
+          "label": "représentation textuelle",
+          "relation": "représentation textuelle"
         },
         "causal": {
-          "label": "requêtes et résidu"
+          "label": "requêtes et résidu",
+          "relation": "requêtes et résidu"
         },
         "project": {
-          "label": "répéter les blocs, normaliser"
+          "label": "répéter les blocs, normaliser",
+          "relation": "répéter les blocs, normaliser"
         },
         "choose": {
-          "label": "scores filtrés"
+          "label": "scores filtrés",
+          "relation": "scores filtrés"
         },
         "append": {
-          "label": "ajouter le token et répéter"
+          "label": "ajouter le token et répéter",
+          "relation": "ajouter le token et répéter"
         }
       },
       "steps": {
@@ -688,25 +709,32 @@
       },
       "edges": {
         "audio": {
-          "label": "características de audio"
+          "label": "características de audio",
+          "relation": "características de audio"
         },
         "context": {
-          "label": "secuencia actual de tokens"
+          "label": "secuencia actual de tokens",
+          "relation": "secuencia actual de tokens"
         },
         "embed": {
-          "label": "representación textual"
+          "label": "representación textual",
+          "relation": "representación textual"
         },
         "causal": {
-          "label": "consultas y residuo"
+          "label": "consultas y residuo",
+          "relation": "consultas y residuo"
         },
         "project": {
-          "label": "repetir bloques, normalizar"
+          "label": "repetir bloques, normalizar",
+          "relation": "repetir bloques, normalizar"
         },
         "choose": {
-          "label": "puntuaciones filtradas"
+          "label": "puntuaciones filtradas",
+          "relation": "puntuaciones filtradas"
         },
         "append": {
-          "label": "añadir token y repetir"
+          "label": "añadir token y repetir",
+          "relation": "añadir token y repetir"
         }
       },
       "steps": {
@@ -759,7 +787,28 @@
       "encoder"
     ],
     "bottom": [
-      "tokens"
+      "sample"
+    ],
+    "levels": [
+      [
+        "encoder",
+        "tokens"
+      ],
+      [
+        "embedding"
+      ],
+      [
+        "self"
+      ],
+      [
+        "cross"
+      ],
+      [
+        "logits"
+      ],
+      [
+        "sample"
+      ]
     ]
   }
 }

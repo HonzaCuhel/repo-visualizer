@@ -1758,3 +1758,28 @@ body {
   .expand-label { display:inline; }
   .expand-diagram { display:inline-flex; align-items:center; gap:6px; width:auto; min-height:34px; padding:5px 8px; font-size:12px; }
 }
+
+/* The expanded view retains navigation, graph and evidence in one workspace. */
+.component-order { flex:none; min-width:18px; color:var(--muted); font-size:12px; font-variant-numeric:tabular-nums; text-align:center; }
+#diagram-dialog[open] { display:flex; flex-direction:column; }
+.dialog-header { display:flex; align-items:center; justify-content:space-between; gap:16px; flex:none; min-height:44px; padding:4px 12px; background:var(--paper); border-bottom:1px solid var(--line); font-size:13px; z-index:4; }
+.close-workspace { display:grid; place-items:center; width:36px; height:36px; padding:8px; background:transparent; border:1px solid var(--control-line); border-radius:5px; }
+.close-workspace svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; }
+#diagram-dialog .workspace { display:grid; grid-template-columns:minmax(210px,22%) minmax(0,1fr) minmax(260px,28%); flex:1; min-height:0; height:0; max-height:none; width:100%; max-width:none; margin:0; border:0; border-radius:0; }
+#diagram-dialog .component-pane,#diagram-dialog .inspector { min-height:0; overflow:auto; }
+#diagram-dialog .component-item { white-space:normal; }
+@media(max-width:1000px) {
+  #diagram-dialog .workspace { grid-template-columns:minmax(180px,28%) minmax(0,1fr); grid-template-rows:minmax(300px,1fr) minmax(180px,32%); }
+  #diagram-dialog .component-pane { grid-column:1; grid-row:1 / 3; }
+  #diagram-dialog .graph-pane { grid-column:2; grid-row:1; }
+  #diagram-dialog .inspector { grid-column:2; grid-row:2; border-left:0; border-top:1px solid var(--line); }
+}
+@media(max-width:600px) {
+  #diagram-dialog { overflow:auto; }
+  .dialog-header { position:sticky; top:0; }
+  #diagram-dialog .workspace { display:flex; flex-direction:column; flex:none; height:auto; overflow:visible; }
+  #diagram-dialog .component-pane { max-height:250px; flex:none; }
+  #diagram-dialog .graph-pane { height:auto; min-height:530px; flex:none; }
+  #diagram-dialog .graph-stage { height:420px; min-height:420px; flex:none; }
+  #diagram-dialog .inspector { min-height:220px; overflow:visible; }
+}

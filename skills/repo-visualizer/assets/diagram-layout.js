@@ -89,6 +89,7 @@
   function mode(story, viewport) {
     const hints = story.presentation || {},
       bands = [...(hints.top || []), ...(hints.bottom || [])];
+    if (hints.levels) return "ordered";
     if (hints.layout === "layered" || story.groups.length) return "layered";
     if (hints.layout === "flow" || bands.length) return "flow";
     // Automatic flow is deliberately limited to a single small acyclic chain,
@@ -238,6 +239,54 @@
       result.layoutMode = "layered";
       return result;
     }
+    if (chosen === "ordered") {
+      const hints = story.presentation;
+      const bandIds = new Set([...(hints.top || []), ...(hints.bottom || [])]);
+      const rowWidth = (row) =>
+        row.reduce((sum, id) => sum + nodeSizes.get(id).width, 0) +
+        (row.length - 1) * 64;
+      const contentWidth = Math.max(320, ...hints.levels.map(rowWidth));
+      for (const row of hints.levels)
+        for (const id of row) {
+          if (bandIds.has(id))
+            nodeSizes.set(
+              id,
+              measureNode(
+                story.nodes.find((node) => node.id === id),
+                fallback(id),
+                Math.max(
+                  240,
+                  (contentWidth - (row.length - 1) * 64) / row.length,
+                ),
+                true,
+              ),
+            );
+        }
+      const width = Math.max(...hints.levels.map(rowWidth)) + 128;
+      const children = [];
+      let y = 64;
+      for (const row of hints.levels) {
+        const height = Math.max(...row.map((id) => nodeSizes.get(id).height));
+        let x = (width - rowWidth(row)) / 2;
+        for (const id of row) {
+          const size = nodeSizes.get(id);
+          size.height = height;
+          children.push({ id, x, y, width: size.width, height });
+          x += size.width + 64;
+        }
+        y += height + 112;
+      }
+      const result = {
+        id: model.id,
+        width,
+        height: y - 48,
+        children,
+        edges: [],
+        layoutMode: "ordered",
+        flowDirection: "DOWN",
+      };
+      return routeConnections(result, story, model.edges, bandIds);
+    }
     const hints = story.presentation || {},
       top = hints.top || [],
       bottom = hints.bottom || [],
@@ -250,7 +299,7 @@
       id: "__flow-main",
       layoutOptions: {
         ...model.layoutOptions,
-        "elk.direction": narrow ? "DOWN" : "RIGHT",
+        "elk.direction": "DOWN",
         "elk.spacing.nodeNode": "44",
         "elk.layered.spacing.nodeNodeBetweenLayers": "24",
         "elk.padding": "[top=20,left=20,bottom=20,right=20]",
@@ -303,8 +352,11 @@
       children,
       edges: [],
       layoutMode: "flow",
-      flowDirection: narrow ? "DOWN" : "RIGHT",
+      flowDirection: "DOWN",
     };
+    return routeConnections(result, story, bandEdges, bandIds);
+  }
+  function routeConnections(result, story, routedEdges, bandIds) {
     const boxes = new Map();
     function collect(item, ox = 0, oy = 0) {
       const x = ox + (item.x || 0),
@@ -316,7 +368,7 @@
     collect(result);
     const faces = new Map(),
       faceKey = (id, face) => id + ":" + face;
-    const connections = bandEdges.map((e) => {
+    const connections = routedEdges.map((e) => {
       const a = boxes.get(e.sources[0]),
         b = boxes.get(e.targets[0]),
         down = a.y + a.height / 2 <= b.y + b.height / 2;
@@ -352,7 +404,7 @@
           });
       for (const c of item.children || []) labels(c, x, y);
     }
-    labels(inner);
+    labels(result);
     for (const connection of connections) {
       const { e, a, b, af, bf } = connection;
       function port(id, box, face, other, endPort = false) {

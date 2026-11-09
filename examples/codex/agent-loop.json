@@ -1018,61 +1018,80 @@
       },
       "edges": {
         "start": {
-          "label": "spustit běžný tah"
+          "label": "spustit běžný tah",
+          "relation": "spustit běžný tah"
         },
         "sample": {
-          "label": "historie + instrukce + nástroje"
+          "label": "historie + instrukce + nástroje",
+          "relation": "historie + instrukce + nástroje"
         },
         "call": {
-          "label": "položka volání nástroje"
+          "label": "položka volání nástroje",
+          "relation": "položka volání nástroje"
         },
         "text": {
-          "label": "položka zprávy asistenta"
+          "label": "položka zprávy asistenta",
+          "relation": "položka zprávy asistenta"
         },
         "exec": {
-          "label": "implementace exec_command"
+          "label": "implementace exec_command",
+          "relation": "implementace exec_command"
         },
         "other": {
-          "label": "výsledek jiného nástroje / neznámý nástroj"
+          "label": "výsledek jiného nástroje / neznámý nástroj",
+          "relation": "výsledek jiného nástroje / neznámý nástroj"
         },
         "requirements": {
-          "label": "požadavek zásad příkazu"
+          "label": "požadavek zásad příkazu",
+          "relation": "požadavek zásad příkazu"
         },
         "ask": {
-          "label": "posoudit požadovaná oprávnění"
+          "label": "posoudit požadovaná oprávnění",
+          "relation": "posoudit požadovaná oprávnění"
         },
         "verdict": {
-          "label": "schválení, odmítnutí nebo přerušení"
+          "label": "schválení, odmítnutí nebo přerušení",
+          "relation": "schválení, odmítnutí nebo přerušení"
         },
         "attempt": {
-          "label": "pokus ve zvoleném sandboxu"
+          "label": "pokus ve zvoleném sandboxu",
+          "relation": "pokus ve zvoleném sandboxu"
         },
         "denied": {
-          "label": "odmítnutí sandboxem"
+          "label": "odmítnutí sandboxem",
+          "relation": "odmítnutí sandboxem"
         },
         "retry": {
-          "label": "opakování povolené zásadami"
+          "label": "opakování povolené zásadami",
+          "relation": "opakování povolené zásadami"
         },
         "rejected": {
-          "label": "zákaz / odmítnutí / zachované zamítnutí"
+          "label": "zákaz / odmítnutí / zachované zamítnutí",
+          "relation": "zákaz / odmítnutí / zachované zamítnutí"
         },
         "output": {
-          "label": "výstup + návratový kód nebo ID procesu"
+          "label": "výstup + návratový kód nebo ID procesu",
+          "relation": "výstup + návratový kód nebo ID procesu"
         },
         "loop": {
-          "label": "uložit výstupy; znovu požádat model"
+          "label": "uložit výstupy; znovu požádat model",
+          "relation": "uložit výstupy; znovu požádat model"
         },
         "stop": {
-          "label": "dokončit bez dalšího pokračování"
+          "label": "dokončit bez dalšího pokračování",
+          "relation": "dokončit bez dalšího pokračování"
         },
         "hook": {
-          "label": "háček Stop může vyžádat pokračování"
+          "label": "háček Stop může vyžádat pokračování",
+          "relation": "háček Stop může vyžádat pokračování"
         },
         "bad": {
-          "label": "chyba rozboru nebo koncová chyba požadavku"
+          "label": "chyba rozboru nebo koncová chyba požadavku",
+          "relation": "chyba rozboru nebo koncová chyba požadavku"
         },
         "recover": {
-          "label": "řešitelná chyba rozboru jako odpověď"
+          "label": "řešitelná chyba rozboru jako odpověď",
+          "relation": "řešitelná chyba rozboru jako odpověď"
         }
       },
       "steps": {
@@ -1169,61 +1188,80 @@
       },
       "edges": {
         "start": {
-          "label": "regulären Turn starten"
+          "label": "regulären Turn starten",
+          "relation": "regulären Turn starten"
         },
         "sample": {
-          "label": "Verlauf + Anweisungen + Werkzeuge"
+          "label": "Verlauf + Anweisungen + Werkzeuge",
+          "relation": "Verlauf + Anweisungen + Werkzeuge"
         },
         "call": {
-          "label": "Werkzeugaufruf"
+          "label": "Werkzeugaufruf",
+          "relation": "Werkzeugaufruf"
         },
         "text": {
-          "label": "Assistentennachricht"
+          "label": "Assistentennachricht",
+          "relation": "Assistentennachricht"
         },
         "exec": {
-          "label": "exec_command-Laufzeit"
+          "label": "exec_command-Laufzeit",
+          "relation": "exec_command-Laufzeit"
         },
         "other": {
-          "label": "anderes Ergebnis / unbekanntes Werkzeug"
+          "label": "anderes Ergebnis / unbekanntes Werkzeug",
+          "relation": "anderes Ergebnis / unbekanntes Werkzeug"
         },
         "requirements": {
-          "label": "Freigabeanforderung des Befehls"
+          "label": "Freigabeanforderung des Befehls",
+          "relation": "Freigabeanforderung des Befehls"
         },
         "ask": {
-          "label": "erforderliche Berechtigung prüfen"
+          "label": "erforderliche Berechtigung prüfen",
+          "relation": "erforderliche Berechtigung prüfen"
         },
         "verdict": {
-          "label": "Freigabe, Ablehnung oder Abbruch"
+          "label": "Freigabe, Ablehnung oder Abbruch",
+          "relation": "Freigabe, Ablehnung oder Abbruch"
         },
         "attempt": {
-          "label": "Versuch in ausgewählter Sandbox"
+          "label": "Versuch in ausgewählter Sandbox",
+          "relation": "Versuch in ausgewählter Sandbox"
         },
         "denied": {
-          "label": "Sandbox-Ablehnung"
+          "label": "Sandbox-Ablehnung",
+          "relation": "Sandbox-Ablehnung"
         },
         "retry": {
-          "label": "laut Richtlinie erlaubte Wiederholung"
+          "label": "laut Richtlinie erlaubte Wiederholung",
+          "relation": "laut Richtlinie erlaubte Wiederholung"
         },
         "rejected": {
-          "label": "verboten / abgelehnt / Ablehnung beibehalten"
+          "label": "verboten / abgelehnt / Ablehnung beibehalten",
+          "relation": "verboten / abgelehnt / Ablehnung beibehalten"
         },
         "output": {
-          "label": "Ausgabe + Exitcode oder Prozesskennung"
+          "label": "Ausgabe + Exitcode oder Prozesskennung",
+          "relation": "Ausgabe + Exitcode oder Prozesskennung"
         },
         "loop": {
-          "label": "Ausgaben speichern; erneut anfragen"
+          "label": "Ausgaben speichern; erneut anfragen",
+          "relation": "Ausgaben speichern; erneut anfragen"
         },
         "stop": {
-          "label": "ohne Folgearbeit abschließen"
+          "label": "ohne Folgearbeit abschließen",
+          "relation": "ohne Folgearbeit abschließen"
         },
         "hook": {
-          "label": "Stop-Hook kann Fortsetzung verlangen"
+          "label": "Stop-Hook kann Fortsetzung verlangen",
+          "relation": "Stop-Hook kann Fortsetzung verlangen"
         },
         "bad": {
-          "label": "Parsefehler oder endgültiger Anfragefehler"
+          "label": "Parsefehler oder endgültiger Anfragefehler",
+          "relation": "Parsefehler oder endgültiger Anfragefehler"
         },
         "recover": {
-          "label": "behandelbare Parsefehler-Antwort"
+          "label": "behandelbare Parsefehler-Antwort",
+          "relation": "behandelbare Parsefehler-Antwort"
         }
       },
       "steps": {
@@ -1316,61 +1354,80 @@
       },
       "edges": {
         "start": {
-          "label": "démarrer un tour normal"
+          "label": "démarrer un tour normal",
+          "relation": "démarrer un tour normal"
         },
         "sample": {
-          "label": "historique + instructions + outils"
+          "label": "historique + instructions + outils",
+          "relation": "historique + instructions + outils"
         },
         "call": {
-          "label": "élément d’appel d’outil"
+          "label": "élément d’appel d’outil",
+          "relation": "élément d’appel d’outil"
         },
         "text": {
-          "label": "message de l’assistant"
+          "label": "message de l’assistant",
+          "relation": "message de l’assistant"
         },
         "exec": {
-          "label": "exécuteur exec_command"
+          "label": "exécuteur exec_command",
+          "relation": "exécuteur exec_command"
         },
         "other": {
-          "label": "autre résultat / outil inconnu"
+          "label": "autre résultat / outil inconnu",
+          "relation": "autre résultat / outil inconnu"
         },
         "requirements": {
-          "label": "exigence de politique de commande"
+          "label": "exigence de politique de commande",
+          "relation": "exigence de politique de commande"
         },
         "ask": {
-          "label": "examiner l’autorité requise"
+          "label": "examiner l’autorité requise",
+          "relation": "examiner l’autorité requise"
         },
         "verdict": {
-          "label": "approbation, refus ou abandon"
+          "label": "approbation, refus ou abandon",
+          "relation": "approbation, refus ou abandon"
         },
         "attempt": {
-          "label": "tentative dans le bac choisi"
+          "label": "tentative dans le bac choisi",
+          "relation": "tentative dans le bac choisi"
         },
         "denied": {
-          "label": "refus du bac à sable"
+          "label": "refus du bac à sable",
+          "relation": "refus du bac à sable"
         },
         "retry": {
-          "label": "nouvelle tentative autorisée"
+          "label": "nouvelle tentative autorisée",
+          "relation": "nouvelle tentative autorisée"
         },
         "rejected": {
-          "label": "interdit / rejeté / refus conservé"
+          "label": "interdit / rejeté / refus conservé",
+          "relation": "interdit / rejeté / refus conservé"
         },
         "output": {
-          "label": "sortie + code ou identifiant"
+          "label": "sortie + code ou identifiant",
+          "relation": "sortie + code ou identifiant"
         },
         "loop": {
-          "label": "enregistrer les sorties ; redemander"
+          "label": "enregistrer les sorties ; redemander",
+          "relation": "enregistrer les sorties ; redemander"
         },
         "stop": {
-          "label": "terminer si aucune suite"
+          "label": "terminer si aucune suite",
+          "relation": "terminer si aucune suite"
         },
         "hook": {
-          "label": "le hook Stop peut demander une suite"
+          "label": "le hook Stop peut demander une suite",
+          "relation": "le hook Stop peut demander une suite"
         },
         "bad": {
-          "label": "erreur d’analyse ou échec définitif"
+          "label": "erreur d’analyse ou échec définitif",
+          "relation": "erreur d’analyse ou échec définitif"
         },
         "recover": {
-          "label": "réponse d’erreur d’analyse récupérable"
+          "label": "réponse d’erreur d’analyse récupérable",
+          "relation": "réponse d’erreur d’analyse récupérable"
         }
       },
       "steps": {
@@ -1463,61 +1520,80 @@
       },
       "edges": {
         "start": {
-          "label": "iniciar turno normal"
+          "label": "iniciar turno normal",
+          "relation": "iniciar turno normal"
         },
         "sample": {
-          "label": "historial + instrucciones + herramientas"
+          "label": "historial + instrucciones + herramientas",
+          "relation": "historial + instrucciones + herramientas"
         },
         "call": {
-          "label": "elemento de llamada a herramienta"
+          "label": "elemento de llamada a herramienta",
+          "relation": "elemento de llamada a herramienta"
         },
         "text": {
-          "label": "mensaje del asistente"
+          "label": "mensaje del asistente",
+          "relation": "mensaje del asistente"
         },
         "exec": {
-          "label": "ejecutor exec_command"
+          "label": "ejecutor exec_command",
+          "relation": "ejecutor exec_command"
         },
         "other": {
-          "label": "otro resultado / herramienta desconocida"
+          "label": "otro resultado / herramienta desconocida",
+          "relation": "otro resultado / herramienta desconocida"
         },
         "requirements": {
-          "label": "requisito de política del comando"
+          "label": "requisito de política del comando",
+          "relation": "requisito de política del comando"
         },
         "ask": {
-          "label": "revisar la autoridad requerida"
+          "label": "revisar la autoridad requerida",
+          "relation": "revisar la autoridad requerida"
         },
         "verdict": {
-          "label": "aprobar, rechazar o cancelar"
+          "label": "aprobar, rechazar o cancelar",
+          "relation": "aprobar, rechazar o cancelar"
         },
         "attempt": {
-          "label": "intento en el sandbox seleccionado"
+          "label": "intento en el sandbox seleccionado",
+          "relation": "intento en el sandbox seleccionado"
         },
         "denied": {
-          "label": "rechazo del sandbox"
+          "label": "rechazo del sandbox",
+          "relation": "rechazo del sandbox"
         },
         "retry": {
-          "label": "reintento permitido por la política"
+          "label": "reintento permitido por la política",
+          "relation": "reintento permitido por la política"
         },
         "rejected": {
-          "label": "prohibido / rechazado / rechazo conservado"
+          "label": "prohibido / rechazado / rechazo conservado",
+          "relation": "prohibido / rechazado / rechazo conservado"
         },
         "output": {
-          "label": "salida + código o identificador"
+          "label": "salida + código o identificador",
+          "relation": "salida + código o identificador"
         },
         "loop": {
-          "label": "guardar salidas; solicitar de nuevo"
+          "label": "guardar salidas; solicitar de nuevo",
+          "relation": "guardar salidas; solicitar de nuevo"
         },
         "stop": {
-          "label": "terminar si no hay continuación"
+          "label": "terminar si no hay continuación",
+          "relation": "terminar si no hay continuación"
         },
         "hook": {
-          "label": "el hook Stop puede pedir continuar"
+          "label": "el hook Stop puede pedir continuar",
+          "relation": "el hook Stop puede pedir continuar"
         },
         "bad": {
-          "label": "error de análisis o fallo definitivo"
+          "label": "error de análisis o fallo definitivo",
+          "relation": "error de análisis o fallo definitivo"
         },
         "recover": {
-          "label": "respuesta de error de análisis recuperable"
+          "label": "respuesta de error de análisis recuperable",
+          "relation": "respuesta de error de análisis recuperable"
         }
       },
       "steps": {
@@ -1567,5 +1643,40 @@
   "grounding": {
     "status": "files-and-ranges-checked",
     "scope": "Source existence, line ranges and fingerprints. The author must verify the interpretation; this is not a runtime trace."
+  },
+  "presentation": {
+    "levels": [
+      [
+        "input"
+      ],
+      [
+        "turn"
+      ],
+      [
+        "model"
+      ],
+      [
+        "dispatch"
+      ],
+      [
+        "shell"
+      ],
+      [
+        "gate"
+      ],
+      [
+        "review"
+      ],
+      [
+        "process"
+      ],
+      [
+        "results"
+      ],
+      [
+        "answer",
+        "error"
+      ]
+    ]
   }
 }

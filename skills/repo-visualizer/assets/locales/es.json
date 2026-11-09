@@ -103,8 +103,11 @@
   "artifact": "artefacto",
   "process": "proceso",
   "graphLanguageNote": "Las etiquetas del grafo están en {language}.",
-  "expandGraph": "Ampliar diagrama",
-  "collapseGraph": "Restaurar diagrama",
+  "expandGraph": "Ampliar la vista",
+  "collapseGraph": "Cerrar la vista ampliada",
   "inspectSelection": "Inspeccionar selección",
-  "diagramExploreHint": "Arrastra el fondo para explorar. Ajustar muestra el mapa completo."
+  "diagramExploreHint": "Arrastra el fondo para explorar. Ajustar muestra el mapa completo.",
+  "mechanismPhase": "Fase {number}",
+  "parallelComponents": "En paralelo",
+  "expandedWorkspace": "Vista ampliada"
 }

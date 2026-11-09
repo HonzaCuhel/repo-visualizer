@@ -12,6 +12,8 @@
       if (["nodes", "edges", "groups", "steps", "scenarios"].includes(key)) {
         for (const item of value[key])
           Object.assign(item, translated[item.id] || {});
+      } else if (key === "overview") {
+        value.overview = { ...value.overview, ...translated };
       } else value[key] = translated;
     }
     value.language = window.repoAppearance.language;
@@ -109,7 +111,7 @@
   }
   function tour() {
     if (scenarioId === "tour" || !S.scenarios.length)
-      return S.nodes.map((n) => ({
+      return orderedNodes().map((n) => ({
         id: "tour-" + n.id,
         title: n.label,
         description: n.description,
@@ -232,6 +234,7 @@
     selected = { type, id };
     paint();
     inspect();
+    if (dialog.open && !fromTimeline) ensureReadable(true);
     if (announce)
       status(
         t(type === "node" ? "selectedNode" : "selectedEdge", {
@@ -414,7 +417,8 @@
     const list = $("component-list");
     list.replaceChildren();
     const query = $("component-search").value.trim().toLowerCase();
-    for (const n of S.nodes.filter((n) =>
+    const levels = S.presentation?.levels;
+    for (const n of orderedNodes().filter((n) =>
       (n.label + " " + n.kind + " " + n.description)
         .toLowerCase()
         .includes(query),
@@ -422,6 +426,16 @@
       const b = document.createElement("button");
       b.className = "component-item";
       b.dataset.node = n.id;
+      if (levels) {
+        const rank = levels.findIndex((row) => row.includes(n.id));
+        b.dataset.level = rank;
+        const badge = text("span", rank + 1, "component-order");
+        badge.setAttribute("aria-hidden", "true");
+        b.append(badge);
+        b.title =
+          t("mechanismPhase", { number: rank + 1 }) +
+          (levels[rank].length > 1 ? " · " + t("parallelComponents") : "");
+      }
       b.setAttribute(
         "aria-pressed",
         String(selected.type === "node" && selected.id === n.id),
@@ -433,6 +447,18 @@
       list.append(b);
     }
     $("no-components").hidden = Boolean(list.childElementCount);
+  }
+  function orderedNodes() {
+    const levels = S.presentation?.levels;
+    if (levels) return levels.flat().map((id) => nodes.get(id));
+    return [...S.nodes].sort((a, b) => {
+      const left = positions.get(a.id),
+        right = positions.get(b.id);
+      if (!left || !right) return 0;
+      return Math.abs(left.y - right.y) > 16
+        ? left.y - right.y
+        : left.x - right.x;
+    });
   }
   function setView(value) {
     if (!["map", "focus", "path"].includes(value))
@@ -560,6 +586,7 @@
     for (const [id, data] of measurements) nodeLines.set(id, data);
     diagram.dataset.layout = layout.layoutMode || "layered";
     draw();
+    fillComponents();
     fit();
     $("loading").hidden = true;
     paint();
@@ -853,12 +880,12 @@
     configureTimeline();
     renderAt(0);
   }
-  const graphPane = document.querySelector(".graph-pane"),
+  const workspace = $("workspace"),
     dialog = $("diagram-dialog"),
     expandButton = $("expand-diagram");
   const graphDock = document.createElement("template");
   graphDock.id = "graph-dock";
-  graphPane.before(graphDock);
+  workspace.before(graphDock);
   let savedCamera = null,
     resizingDiagram = false;
   let readabilityRequested = false,
@@ -918,14 +945,14 @@
         savedCamera = camera ? { ...camera } : null;
         readabilityRequested = true;
         readableDetail = false;
-        dialog.append(graphPane);
+        dialog.append(workspace);
         dialog.showModal();
         document.body.classList.add("diagram-open");
       } else {
         dialog.close();
         readabilityRequested = readableDetail = false;
         $("diagram-hint").hidden = true;
-        graphDock.after(graphPane);
+        graphDock.after(workspace);
         document.body.classList.remove("diagram-open");
       }
       expansionIcon();
@@ -939,7 +966,9 @@
     } finally {
       resizingDiagram = false;
       expandButton.disabled = false;
-      expandButton.focus();
+      (open ? $("close-workspace") : expandButton).focus({
+        preventScroll: true,
+      });
     }
   }
   let resizeTimer;
@@ -959,8 +988,7 @@
             S,
             $("graph-stage").getBoundingClientRect(),
           ) !== (layout.layoutMode || "layered") ||
-          (layout.layoutMode === "flow" &&
-            layout.flowDirection !== (innerWidth < 800 ? "DOWN" : "RIGHT"))
+          (layout.layoutMode === "flow" && layout.flowDirection !== "DOWN")
         )
           layOut().then(() => ensureReadable());
         else if (dialog.open) ensureReadable();
@@ -968,12 +996,12 @@
     }).observe($("graph-stage"));
   expansionIcon();
   expandButton.addEventListener("click", () => toggleDiagram());
+  $("close-workspace").addEventListener("click", () => toggleDiagram(false));
   dialog.addEventListener("cancel", (event) => {
     event.preventDefault();
     toggleDiagram(false);
   });
   $("inspect-expanded").addEventListener("click", async () => {
-    await toggleDiagram(false);
     $("code-tab").click();
     $("code-tab").focus();
   });
@@ -1108,10 +1136,9 @@
     try {
       if (format === "html") {
         const copy = document.documentElement.cloneNode(true);
-        const copiedPane = copy.querySelector(".graph-pane");
-        copy
-          .querySelector("#workspace")
-          .insertBefore(copiedPane, copy.querySelector(".inspector"));
+        const copiedWorkspace = copy.querySelector("#workspace"),
+          copiedDock = copy.querySelector("#graph-dock");
+        copiedDock.after(copiedWorkspace);
         copy.querySelector("#graph-dock")?.remove();
         copy.querySelector("#diagram-dialog").removeAttribute("open");
         copy.querySelector("body").classList.remove("diagram-open");
@@ -1154,7 +1181,7 @@
           slug() + ".html",
         );
       } else if (format === "json") {
-        const data = JSON.parse(JSON.stringify(S));
+        const data = JSON.parse(JSON.stringify(baseStory));
         download(
           new Blob([JSON.stringify(data, null, 2) + "\n"], {
             type: "application/json",

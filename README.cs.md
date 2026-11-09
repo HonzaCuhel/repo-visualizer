@@ -49,9 +49,11 @@ Pro jednoho agenta ponechte jen jeho `-a`. S `-g` platí instalace pro všechny 
 
 </details>
 
+Nová vysvětlení obsahují angličtinu, češtinu, němčinu, francouzštinu a španělštinu. Zvolený jazyk určuje úvodní zobrazení; kontrola před sestavením hlídá úplnost překladu samotného vysvětlení.
+
 ## Sledujte mechanismus
 
-Agent přečte implementaci a popíše její odpovědnosti a vztahy. Graf zachová větvení, cykly, souběžné vazby i hranice subsystémů.
+Agent přečte implementaci a popíše její odpovědnosti a vztahy. Vstupy jsou nahoře, výstupy dole a paralelní komponenty ve stejné fázi. Stejné pořadí používá seznam komponent; rozšířené zobrazení zachová i seznam a detail zdrojů. Větvení a návratové vazby zůstávají součástí grafu.
 
 | Pohled | Co ukáže |
 | --- | --- |

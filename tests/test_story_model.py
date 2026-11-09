@@ -30,6 +30,20 @@ def draft():
 
 
 class StoryTests(unittest.TestCase):
+    def test_mechanism_phases_require_complete_unique_coverage_and_boundary_roles(self):
+        graph = draft()
+        graph['nodes'][0]['kind'] = 'input'
+        graph['presentation'] = {'levels': [['lookup'], ['result']]}
+        self.assertEqual(validate_structure(graph)['presentation']['levels'], [['lookup'], ['result']])
+        for levels in ([['lookup']], [['lookup'], ['lookup', 'result']], [['lookup'], ['missing']], [['result'], ['lookup']], []):
+            value = copy.deepcopy(graph)
+            value['presentation']['levels'] = levels
+            with self.subTest(levels=levels), self.assertRaises(StoryError):
+                validate_structure(value)
+        graph['presentation']['top'] = ['result']
+        with self.assertRaisesRegex(StoryError, 'first/last phase'):
+            validate_structure(graph)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)

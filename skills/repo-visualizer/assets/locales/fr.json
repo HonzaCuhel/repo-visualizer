@@ -103,8 +103,11 @@
   "artifact": "artefact",
   "process": "processus",
   "graphLanguageNote": "Les libellés du graphe sont en {language}.",
-  "expandGraph": "Agrandir le diagramme",
-  "collapseGraph": "Rétablir le diagramme",
+  "expandGraph": "Agrandir la vue",
+  "collapseGraph": "Fermer la vue agrandie",
   "inspectSelection": "Examiner la sélection",
-  "diagramExploreHint": "Faites glisser le fond pour explorer. Le bouton d’ajustement affiche toute la carte."
+  "diagramExploreHint": "Faites glisser le fond pour explorer. Le bouton d’ajustement affiche toute la carte.",
+  "mechanismPhase": "Phase {number}",
+  "parallelComponents": "En parallèle",
+  "expandedWorkspace": "Vue agrandie"
 }

@@ -103,8 +103,11 @@
   "artifact": "soubor",
   "process": "proces",
   "graphLanguageNote": "Popisky grafu jsou v jazyce: {language}.",
-  "expandGraph": "Zvětšit diagram",
-  "collapseGraph": "Vrátit diagram",
+  "expandGraph": "Rozšířit zobrazení",
+  "collapseGraph": "Zavřít rozšířené zobrazení",
   "inspectSelection": "Prozkoumat výběr",
-  "diagramExploreHint": "Tažením pozadí procházejte graf. Tlačítko „Celý graf“ vrátí přehled."
+  "diagramExploreHint": "Tažením pozadí procházejte graf. Tlačítko „Celý graf“ vrátí přehled.",
+  "mechanismPhase": "Fáze {number}",
+  "parallelComponents": "Paralelně",
+  "expandedWorkspace": "Rozšířené zobrazení"
 }

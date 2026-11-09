@@ -53,7 +53,7 @@
       "id": "tokens",
       "label": "Task & prompt tokens",
       "description": "Initial tokens encode the transcription/translation task and language, with optional prefix and previous context. The decoding task computes or receives audio features before the token loop.",
-      "kind": "input",
+      "kind": "process",
       "source_ids": [
         "initial",
         "features",
@@ -731,55 +731,72 @@
       },
       "edges": {
         "e1": {
-          "label": "zvukový průběh"
+          "label": "zvukový průběh",
+          "relation": "zvukový průběh"
         },
         "e2": {
-          "label": "výřez a doplnění"
+          "label": "výřez a doplnění",
+          "relation": "výřez a doplnění"
         },
         "e3": {
-          "label": "Mel okno"
+          "label": "Mel okno",
+          "relation": "Mel okno"
         },
         "e4": {
-          "label": "prompt a nastavení"
+          "label": "prompt a nastavení",
+          "relation": "prompt a nastavení"
         },
         "e5": {
-          "label": "zvukové klíče a hodnoty"
+          "label": "zvukové klíče a hodnoty",
+          "relation": "zvukové klíče a hodnoty"
         },
         "e6": {
-          "label": "počáteční kontext"
+          "label": "počáteční kontext",
+          "relation": "počáteční kontext"
         },
         "e7": {
-          "label": "textová reprezentace"
+          "label": "textová reprezentace",
+          "relation": "textová reprezentace"
         },
         "e8": {
-          "label": "dotazy a reziduum"
+          "label": "dotazy a reziduum",
+          "relation": "dotazy a reziduum"
         },
         "e9": {
-          "label": "opakovat bloky, normalizovat"
+          "label": "opakovat bloky, normalizovat",
+          "relation": "opakovat bloky, normalizovat"
         },
         "e10": {
-          "label": "filtrovaná skóre"
+          "label": "filtrovaná skóre",
+          "relation": "filtrovaná skóre"
         },
         "e11": {
-          "label": "připojit token a opakovat"
+          "label": "připojit token a opakovat",
+          "relation": "připojit token a opakovat"
         },
         "e12": {
-          "label": "dokončené dekódování"
+          "label": "dokončené dekódování",
+          "relation": "dokončené dekódování"
         },
         "e13": {
-          "label": "opakovat s další teplotou"
+          "label": "opakovat s další teplotou",
+          "relation": "opakovat s další teplotou"
         },
         "e14": {
-          "label": "přijato nebo vyčerpány pokusy"
+          "label": "přijato nebo vyčerpány pokusy",
+          "relation": "přijato nebo vyčerpány pokusy"
         },
         "e15": {
-          "label": "přeskočit ticho"
+          "label": "přeskočit ticho",
+          "relation": "přeskočit ticho"
         },
         "e16": {
-          "label": "další zvukové okno"
+          "label": "další zvukové okno",
+          "relation": "další zvukové okno"
         },
         "e17": {
-          "label": "předchozí text dle nastavení"
+          "label": "předchozí text dle nastavení",
+          "relation": "předchozí text dle nastavení"
         }
       },
       "steps": {
@@ -876,55 +893,72 @@
       },
       "edges": {
         "e1": {
-          "label": "Wellenform"
+          "label": "Wellenform",
+          "relation": "Wellenform"
         },
         "e2": {
-          "label": "ausschneiden und ergänzen"
+          "label": "ausschneiden und ergänzen",
+          "relation": "ausschneiden und ergänzen"
         },
         "e3": {
-          "label": "Mel-Fenster"
+          "label": "Mel-Fenster",
+          "relation": "Mel-Fenster"
         },
         "e4": {
-          "label": "Prompt und Optionen"
+          "label": "Prompt und Optionen",
+          "relation": "Prompt und Optionen"
         },
         "e5": {
-          "label": "Audio-Schlüssel und -Werte"
+          "label": "Audio-Schlüssel und -Werte",
+          "relation": "Audio-Schlüssel und -Werte"
         },
         "e6": {
-          "label": "Anfangskontext"
+          "label": "Anfangskontext",
+          "relation": "Anfangskontext"
         },
         "e7": {
-          "label": "Textdarstellung"
+          "label": "Textdarstellung",
+          "relation": "Textdarstellung"
         },
         "e8": {
-          "label": "Abfragen und Residuum"
+          "label": "Abfragen und Residuum",
+          "relation": "Abfragen und Residuum"
         },
         "e9": {
-          "label": "Blöcke wiederholen, normalisieren"
+          "label": "Blöcke wiederholen, normalisieren",
+          "relation": "Blöcke wiederholen, normalisieren"
         },
         "e10": {
-          "label": "gefilterte Werte"
+          "label": "gefilterte Werte",
+          "relation": "gefilterte Werte"
         },
         "e11": {
-          "label": "Token anhängen und wiederholen"
+          "label": "Token anhängen und wiederholen",
+          "relation": "Token anhängen und wiederholen"
         },
         "e12": {
-          "label": "Dekodierung beendet"
+          "label": "Dekodierung beendet",
+          "relation": "Dekodierung beendet"
         },
         "e13": {
-          "label": "nächste Temperatur versuchen"
+          "label": "nächste Temperatur versuchen",
+          "relation": "nächste Temperatur versuchen"
         },
         "e14": {
-          "label": "akzeptiert oder Versuche erschöpft"
+          "label": "akzeptiert oder Versuche erschöpft",
+          "relation": "akzeptiert oder Versuche erschöpft"
         },
         "e15": {
-          "label": "Stille überspringen"
+          "label": "Stille überspringen",
+          "relation": "Stille überspringen"
         },
         "e16": {
-          "label": "nächstes Audiofenster"
+          "label": "nächstes Audiofenster",
+          "relation": "nächstes Audiofenster"
         },
         "e17": {
-          "label": "vorheriger Text, falls aktiviert"
+          "label": "vorheriger Text, falls aktiviert",
+          "relation": "vorheriger Text, falls aktiviert"
         }
       },
       "steps": {
@@ -1021,55 +1055,72 @@
       },
       "edges": {
         "e1": {
-          "label": "signal audio"
+          "label": "signal audio",
+          "relation": "signal audio"
         },
         "e2": {
-          "label": "découper et compléter"
+          "label": "découper et compléter",
+          "relation": "découper et compléter"
         },
         "e3": {
-          "label": "fenêtre Mel"
+          "label": "fenêtre Mel",
+          "relation": "fenêtre Mel"
         },
         "e4": {
-          "label": "prompt et options"
+          "label": "prompt et options",
+          "relation": "prompt et options"
         },
         "e5": {
-          "label": "clés et valeurs audio"
+          "label": "clés et valeurs audio",
+          "relation": "clés et valeurs audio"
         },
         "e6": {
-          "label": "contexte initial"
+          "label": "contexte initial",
+          "relation": "contexte initial"
         },
         "e7": {
-          "label": "représentation textuelle"
+          "label": "représentation textuelle",
+          "relation": "représentation textuelle"
         },
         "e8": {
-          "label": "requêtes et résidu"
+          "label": "requêtes et résidu",
+          "relation": "requêtes et résidu"
         },
         "e9": {
-          "label": "répéter les blocs, normaliser"
+          "label": "répéter les blocs, normaliser",
+          "relation": "répéter les blocs, normaliser"
         },
         "e10": {
-          "label": "scores filtrés"
+          "label": "scores filtrés",
+          "relation": "scores filtrés"
         },
         "e11": {
-          "label": "ajouter le token et répéter"
+          "label": "ajouter le token et répéter",
+          "relation": "ajouter le token et répéter"
         },
         "e12": {
-          "label": "décodage terminé"
+          "label": "décodage terminé",
+          "relation": "décodage terminé"
         },
         "e13": {
-          "label": "essayer la température suivante"
+          "label": "essayer la température suivante",
+          "relation": "essayer la température suivante"
         },
         "e14": {
-          "label": "accepté ou tentatives épuisées"
+          "label": "accepté ou tentatives épuisées",
+          "relation": "accepté ou tentatives épuisées"
         },
         "e15": {
-          "label": "ignorer le silence"
+          "label": "ignorer le silence",
+          "relation": "ignorer le silence"
         },
         "e16": {
-          "label": "fenêtre audio suivante"
+          "label": "fenêtre audio suivante",
+          "relation": "fenêtre audio suivante"
         },
         "e17": {
-          "label": "texte précédent si activé"
+          "label": "texte précédent si activé",
+          "relation": "texte précédent si activé"
         }
       },
       "steps": {
@@ -1166,55 +1217,72 @@
       },
       "edges": {
         "e1": {
-          "label": "señal de audio"
+          "label": "señal de audio",
+          "relation": "señal de audio"
         },
         "e2": {
-          "label": "recortar y rellenar"
+          "label": "recortar y rellenar",
+          "relation": "recortar y rellenar"
         },
         "e3": {
-          "label": "ventana Mel"
+          "label": "ventana Mel",
+          "relation": "ventana Mel"
         },
         "e4": {
-          "label": "prompt y opciones"
+          "label": "prompt y opciones",
+          "relation": "prompt y opciones"
         },
         "e5": {
-          "label": "claves y valores de audio"
+          "label": "claves y valores de audio",
+          "relation": "claves y valores de audio"
         },
         "e6": {
-          "label": "contexto inicial"
+          "label": "contexto inicial",
+          "relation": "contexto inicial"
         },
         "e7": {
-          "label": "representación textual"
+          "label": "representación textual",
+          "relation": "representación textual"
         },
         "e8": {
-          "label": "consultas y residuo"
+          "label": "consultas y residuo",
+          "relation": "consultas y residuo"
         },
         "e9": {
-          "label": "repetir bloques, normalizar"
+          "label": "repetir bloques, normalizar",
+          "relation": "repetir bloques, normalizar"
         },
         "e10": {
-          "label": "puntuaciones filtradas"
+          "label": "puntuaciones filtradas",
+          "relation": "puntuaciones filtradas"
         },
         "e11": {
-          "label": "añadir token y repetir"
+          "label": "añadir token y repetir",
+          "relation": "añadir token y repetir"
         },
         "e12": {
-          "label": "decodificación completada"
+          "label": "decodificación completada",
+          "relation": "decodificación completada"
         },
         "e13": {
-          "label": "reintentar con otra temperatura"
+          "label": "reintentar con otra temperatura",
+          "relation": "reintentar con otra temperatura"
         },
         "e14": {
-          "label": "aceptado o intentos agotados"
+          "label": "aceptado o intentos agotados",
+          "relation": "aceptado o intentos agotados"
         },
         "e15": {
-          "label": "omitir silencio"
+          "label": "omitir silencio",
+          "relation": "omitir silencio"
         },
         "e16": {
-          "label": "siguiente ventana de audio"
+          "label": "siguiente ventana de audio",
+          "relation": "siguiente ventana de audio"
         },
         "e17": {
-          "label": "texto previo si está activado"
+          "label": "texto previo si está activado",
+          "relation": "texto previo si está activado"
         }
       },
       "steps": {
@@ -1269,5 +1337,43 @@
   "grounding": {
     "status": "files-and-ranges-checked",
     "scope": "Source existence, line ranges and fingerprints. The author must verify the interpretation; this is not a runtime trace."
+  },
+  "presentation": {
+    "levels": [
+      [
+        "audio"
+      ],
+      [
+        "mel"
+      ],
+      [
+        "window"
+      ],
+      [
+        "encoder",
+        "tokens"
+      ],
+      [
+        "embedding"
+      ],
+      [
+        "self"
+      ],
+      [
+        "cross"
+      ],
+      [
+        "logits"
+      ],
+      [
+        "sample"
+      ],
+      [
+        "quality"
+      ],
+      [
+        "output"
+      ]
+    ]
   }
 }
