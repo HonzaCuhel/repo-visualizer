@@ -495,7 +495,7 @@ input {
 .graph-node .node-title {
   fill: var(--ink);
   font-family: Atkinson, system-ui, sans-serif;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 600;
 }
 .graph-node .node-kind {
@@ -550,7 +550,7 @@ input {
 }
 .graph-edge text {
   fill: var(--muted);
-  font-size: 11px;
+  font-size: 14px;
   font-family: Atkinson, system-ui, sans-serif;
   paint-order: stroke;
   stroke: var(--paper);
@@ -1718,3 +1718,43 @@ body {
   }
 }
 .export-frame.standalone .site-header{height:48px}
+
+/* Responsibility diagrams: labels and short explanations share one source graph. */
+:root { --diagram-surface:#fbfcfe; --diagram-node:var(--paper); --diagram-band:#edf2f7; }
+:root[data-theme="dark"] { --diagram-surface:#141b23; --diagram-node:#141b23; --diagram-band:#1c2732; --edge-line:#b9c4d3; }
+.diagram-frame { fill:var(--diagram-surface); stroke:var(--line); stroke-width:1; }
+.graph-node rect { fill:var(--diagram-node); }
+.graph-node.shared-band rect { fill:var(--diagram-band); stroke:var(--line); }
+.graph-node.is-selected rect,.graph-node.is-active rect { fill:var(--blue-light); stroke:var(--blue); }
+.graph-node .node-caption { fill:var(--muted); font-family:Atkinson,system-ui,sans-serif; font-size:14px; font-weight:400; }
+.graph-edge .edge-line { stroke-width:1.6; }
+.graph-edge text { stroke:var(--diagram-surface); stroke-width:5; }
+
+.graph-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-left:auto; flex:none; }
+.expand-diagram { border:1px solid var(--control-line); border-radius:5px; width:34px; height:34px; }
+.expanded-source { display:none; font-size:13px; min-height:34px; padding:6px 10px; border:1px solid var(--control-line); border-radius:5px; background:var(--paper); }
+.diagram-dialog { inset:16px; margin:auto; width:calc(100% - 32px); height:calc(100% - 32px); max-width:none; max-height:none; padding:0; background:var(--paper); color:var(--ink); border:1px solid var(--control-line); border-radius:14px; }
+.diagram-dialog::backdrop { background:#08101a99; }
+#diagram-dialog .graph-pane { height:100%; min-height:0; padding:0 20px 10px; }
+#diagram-dialog .graph-stage { height:auto; min-height:0; flex:1; }
+.diagram-dialog .expanded-source { display:inline-flex; align-items:center; }
+#diagram-dialog .graph-heading { height:auto; min-height:60px; padding-block:10px; flex-wrap:wrap; }
+.diagram-open { overflow:hidden; }
+.export-frame .expand-diagram,.export-frame .expanded-source { display:none; }
+@media(max-width:600px) {
+  .graph-heading { height:auto; min-height:57px; flex-wrap:wrap; gap:8px; padding-block:8px; }
+  .graph-pane { height:auto; min-height:0; }
+  .graph-stage { height:420px; flex:none; }
+  .diagram-dialog { inset:6px; width:calc(100% - 12px); height:calc(100% - 12px); }
+  #diagram-dialog .graph-pane { padding-inline:10px; }
+  #diagram-dialog .graph-actions { flex-wrap:wrap; }
+}
+
+.expand-label { display:none; }
+.diagram-hint { color:var(--muted); font-size:12px; line-height:1.5; padding:4px 0 8px; margin:0; }
+.diagram-hint[hidden] { display:none; }
+#diagram-dialog .graph-actions { max-width:100%; flex-wrap:wrap; }
+@media(max-width:600px) {
+  .expand-label { display:inline; }
+  .expand-diagram { display:inline-flex; align-items:center; gap:6px; width:auto; min-height:34px; padding:5px 8px; font-size:12px; }
+}

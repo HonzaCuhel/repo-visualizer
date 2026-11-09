@@ -477,39 +477,10 @@
     const last = points[points.length - 1];
     return d + " L" + last.x + " " + last.y;
   }
-  const measure = document.createElement("canvas").getContext("2d");
-  function wrap(label, width = 160) {
-    measure.font = "600 17px Atkinson";
-    const result = [];
-    let line = "";
-    const words = label.replace(/([/_.])/g, "$1 ").split(/\s+/);
-    for (let word of words) {
-      if (measure.measureText(word).width > width) {
-        if (line) {
-          result.push(line);
-          line = "";
-        }
-        while (measure.measureText(word).width > width) {
-          let cut = word.length - 1;
-          while (
-            cut > 1 &&
-            measure.measureText(word.slice(0, cut)).width > width
-          )
-            cut--;
-          result.push(word.slice(0, cut));
-          word = word.slice(cut);
-        }
-      }
-      const next = line ? line + " " + word : word;
-      if (measure.measureText(next).width > width) {
-        result.push(line);
-        line = word;
-      } else line = next;
-    }
-    if (line) result.push(line);
-    return result;
-  }
+  let layoutSerial = 0;
   async function layOut() {
+    const serial = ++layoutSerial,
+      measurements = new Map();
     const groupMap = new Map(
       S.groups.map((g) => [
         g.id,
@@ -518,8 +489,8 @@
           children: [],
           layoutOptions: {
             "elk.direction": "DOWN",
-            "elk.padding": "[top=37,left=20,bottom=20,right=20]",
-            "elk.spacing.nodeNode": "22",
+            "elk.padding": "[top=42,left=24,bottom=24,right=24]",
+            "elk.spacing.nodeNode": "36",
             "elk.layered.spacing.nodeNodeBetweenLayers": "20",
           },
         },
@@ -532,26 +503,22 @@
       else children.push(item);
     }
     for (const n of S.nodes) {
-      const lines = wrap(n.label),
-        item = {
-          id: n.id,
-          width: 192,
-          height: Math.max(70, 37 + lines.length * 21),
-        };
-      nodeLines.set(n.id, lines);
+      const data = window.repoDiagram.measureNode(n, t(n.kind)),
+        item = { id: n.id, width: data.width, height: data.height };
+      measurements.set(n.id, data);
       if (n.group) groupMap.get(n.group).children.push(item);
       else children.push(item);
     }
     const model = {
-      id: "root",
+      id: "__repo-root",
       layoutOptions: {
         "elk.algorithm": "layered",
         "elk.direction": "DOWN",
         "elk.hierarchyHandling": "INCLUDE_CHILDREN",
         "elk.edgeRouting": "ORTHOGONAL",
         "elk.randomSeed": "42",
-        "elk.spacing.nodeNode": "22",
-        "elk.layered.spacing.nodeNodeBetweenLayers": "24",
+        "elk.spacing.nodeNode": "36",
+        "elk.layered.spacing.nodeNodeBetweenLayers": "36",
         "elk.spacing.edgeNode": "22",
         "elk.padding": "[top=18,left=18,bottom=18,right=18]",
       },
@@ -561,22 +528,37 @@
         sources: [e.from],
         targets: [e.to],
         labels: e.label
-          ? [
-              {
-                text: e.label,
-                width: Math.min(200, e.label.length * 5.8),
-                height: 15,
-              },
-            ]
+          ? [{ text: e.label, ...window.repoDiagram.measureEdge(e) }]
           : [],
       })),
     };
+    let nextLayout;
     if (window.REPO_PRECOMPUTED_LAYOUT) {
-      layout = JSON.parse(JSON.stringify(window.REPO_PRECOMPUTED_LAYOUT));
+      nextLayout = JSON.parse(JSON.stringify(window.REPO_PRECOMPUTED_LAYOUT));
+      if (nextLayout.typography) {
+        measurements.clear();
+        for (const [id, data] of Object.entries(nextLayout.typography))
+          measurements.set(id, data);
+      }
     } else {
-      const elk = new ELK();
-      layout = await elk.layout(model);
+      nextLayout = await window.repoDiagram.layOut(
+        model,
+        S,
+        {
+          width: $("graph-stage").clientWidth,
+          height: $("graph-stage").clientHeight,
+          pageWidth: innerWidth,
+        },
+        measurements,
+        (id) => t(nodes.get(id).kind),
+      );
     }
+    if (serial !== layoutSerial) return;
+    nextLayout.typography = Object.fromEntries(measurements);
+    layout = nextLayout;
+    nodeLines.clear();
+    for (const [id, data] of measurements) nodeLines.set(id, data);
+    diagram.dataset.layout = layout.layoutMode || "layered";
     draw();
     fit();
     $("loading").hidden = true;
@@ -605,7 +587,17 @@
       marker.append(svg("path", { d: "M1 1 9 5 1 9z", fill: color }));
       defs.append(marker);
     }
-    diagram.append(defs);
+    diagram.append(
+      defs,
+      svg("rect", {
+        class: "diagram-frame",
+        x: -10,
+        y: -10,
+        width: layout.width + 20,
+        height: layout.height + 20,
+        rx: 16,
+      }),
+    );
     const groupsLayer = svg("g"),
       edgeLayer = svg("g"),
       nodeLayer = svg("g");
@@ -616,7 +608,7 @@
       const x = ox + (item.x || 0),
         y = oy + (item.y || 0);
       containerPositions.set(item.id, { x, y });
-      if (item.id !== "root") {
+      if (item !== layout) {
         if (nodes.has(item.id)) {
           positions.set(item.id, {
             x,
@@ -624,7 +616,7 @@
             width: item.width,
             height: item.height,
           });
-        } else {
+        } else if (S.groups.some((g) => g.id === item.id)) {
           const group = S.groups.find((g) => g.id === item.id),
             g = svg("g", { class: "graph-group" });
           g.append(
@@ -675,18 +667,25 @@
           svg("path", { class: "edge-line", d, "marker-end": "url(#arrow)" }),
         );
       }
-      for (const label of edge.labels || [])
-        g.append(
-          svg(
-            "text",
-            {
-              x: x + label.x + label.width / 2,
-              y: y + label.y + 11,
-              "text-anchor": "middle",
-            },
-            e.label,
+      for (const label of edge.labels || []) {
+        const lines = window.repoDiagram.measureEdge(e).lines;
+        const value = svg("text", {
+          x: x + label.x + label.width / 2,
+          y: y + label.y + 14,
+          "text-anchor": "middle",
+        });
+        lines.forEach((line, i) =>
+          value.append(
+            svg(
+              "tspan",
+              { x: x + label.x + label.width / 2, dy: i ? 18 : 0 },
+              line,
+            ),
           ),
         );
+        g.append(value);
+      }
+      g.append(svg("title", {}, e.label || e.relation));
       g.append(
         svg("circle", { class: "edge-pulse", r: 3, visibility: "hidden" }),
       );
@@ -704,36 +703,64 @@
       const p = positions.get(n.id);
       if (!p) throw Error("Layout did not return component " + n.id);
       const g = svg("g", {
-        class: "graph-node",
+        class:
+          "graph-node" +
+          ([
+            ...(S.presentation?.top || []),
+            ...(S.presentation?.bottom || []),
+          ].includes(n.id)
+            ? " shared-band"
+            : ""),
         transform: `translate(${p.x},${p.y})`,
         "data-node": n.id,
         role: "button",
         tabindex: 0,
         "aria-label": n.label + " · " + t(n.kind),
       });
-      g.append(svg("rect", { width: p.width, height: p.height, rx: 7 }));
+      g.append(svg("rect", { width: p.width, height: p.height, rx: 9 }));
+      const data = nodeLines.get(n.id);
       const label = svg("text", {
         class: "node-title",
         x: p.width / 2,
-        y: 25,
+        y: 36,
         "text-anchor": "middle",
       });
-      nodeLines
-        .get(n.id)
-        .forEach((line, i) =>
-          label.append(svg("tspan", { x: p.width / 2, dy: i ? 21 : 0 }, line)),
+      data.title.forEach((line, i) =>
+        label.append(svg("tspan", { x: p.width / 2, dy: i ? 24 : 0 }, line)),
+      );
+      g.append(label);
+      if (data.caption.length) {
+        const caption = svg("text", {
+          class: "node-caption",
+          x: p.width / 2,
+          y: 36 + (data.title.length - 1) * 24 + 28,
+          "text-anchor": "middle",
+        });
+        data.caption.forEach((line, i) =>
+          caption.append(
+            svg("tspan", { x: p.width / 2, dy: i ? 19 : 0 }, line),
+          ),
+        );
+        g.append(caption);
+      }
+      if (data.inferred)
+        g.append(
+          svg(
+            "text",
+            {
+              class: "node-kind",
+              x: p.width / 2,
+              y: p.height - 12,
+              "text-anchor": "middle",
+            },
+            t("inferred"),
+          ),
         );
       g.append(
-        label,
         svg(
-          "text",
-          {
-            class: "node-kind",
-            x: p.width / 2,
-            y: p.height - 12,
-            "text-anchor": "middle",
-          },
-          t(n.kind) + (n.evidence === "inferred" ? " · " + t("inferred") : ""),
+          "title",
+          {},
+          n.label + "\n" + (n.description || n.caption || t(n.kind)),
         ),
       );
       g.addEventListener("click", () => select("node", n.id));
@@ -761,11 +788,13 @@
   }
   function fit() {
     if (!bounds) return;
+    if ($("diagram-hint")) $("diagram-hint").hidden = true;
     camera = { ...bounds };
     applyCamera();
   }
   function zoom(factor) {
     if (!camera) return;
+    readabilityRequested = false;
     const w = Math.max(bounds.w / 8, Math.min(bounds.w * 2, camera.w * factor)),
       h = (w * camera.h) / camera.w;
     camera = {
@@ -782,13 +811,16 @@
       0,
       Math.min(total - 0.001, Number.isFinite(Number(ms)) ? Number(ms) : 0),
     );
-    const active = activeAt(current);
+    const active = activeAt(current),
+      previousSelection = selected.id;
     selected = { type: "node", id: active.step.node_ids[0] };
     $("seek").value = String(current);
     $("elapsed").textContent = time(current) + " / " + time(total);
     $("step-count").textContent = active.index + 1 + " / " + tour().length;
     paint(active);
     inspect();
+    if (readableDetail && previousSelection !== selected.id)
+      ensureReadable(true);
     return {
       timeMs: current,
       durationMs: total,
@@ -821,6 +853,130 @@
     configureTimeline();
     renderAt(0);
   }
+  const graphPane = document.querySelector(".graph-pane"),
+    dialog = $("diagram-dialog"),
+    expandButton = $("expand-diagram");
+  const graphDock = document.createElement("template");
+  graphDock.id = "graph-dock";
+  graphPane.before(graphDock);
+  let savedCamera = null,
+    resizingDiagram = false;
+  let readabilityRequested = false,
+    readableDetail = false;
+  function ensureReadable(force = false) {
+    if (!dialog.open || !readabilityRequested || !camera || !bounds) return;
+    let stage = $("graph-stage").getBoundingClientRect();
+    const scale = Math.min(stage.width / camera.w, stage.height / camera.h);
+    if (!force && scale >= 0.55) return;
+    $("diagram-hint").hidden = false;
+    stage = $("graph-stage").getBoundingClientRect();
+    const id =
+      selected.type === "node" ? selected.id : edges.get(selected.id)?.from;
+    const node = positions.get(id) || positions.values().next().value;
+    const w = stage.width,
+      h = stage.height;
+    const clamp = (center, size, start, total) =>
+      size >= total
+        ? start + (total - size) / 2
+        : Math.max(start, Math.min(start + total - size, center - size / 2));
+    camera = {
+      x: clamp(node.x + node.width / 2, w, bounds.x, bounds.w),
+      y: clamp(node.y + node.height / 2, h, bounds.y, bounds.h),
+      w,
+      h,
+    };
+    readableDetail = true;
+    applyCamera();
+  }
+  function expansionIcon() {
+    const expanded = dialog.open,
+      key = expanded ? "collapseGraph" : "expandGraph";
+    expandButton.dataset.i18nAria = expandButton.dataset.i18nTitle = key;
+    expandButton.setAttribute("aria-label", t(key));
+    expandButton.title = t(key);
+    expandButton.setAttribute("aria-expanded", String(expanded));
+    expandButton.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' +
+      (expanded
+        ? "M9 3v6H3m12-6v6h6M9 21v-6H3m12 6v-6h6"
+        : "M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6") +
+      '"/></svg>';
+    const caption = text("span", t(key), "expand-label");
+    caption.dataset.i18n = key;
+    expandButton.append(caption);
+  }
+  async function toggleDiagram(force) {
+    if (resizingDiagram) return;
+    await window.repoReady;
+    if (resizingDiagram) return;
+    const open = force ?? !dialog.open;
+    if (open === dialog.open) return;
+    resizingDiagram = true;
+    expandButton.disabled = true;
+    try {
+      if (open) {
+        savedCamera = camera ? { ...camera } : null;
+        readabilityRequested = true;
+        readableDetail = false;
+        dialog.append(graphPane);
+        dialog.showModal();
+        document.body.classList.add("diagram-open");
+      } else {
+        dialog.close();
+        readabilityRequested = readableDetail = false;
+        $("diagram-hint").hidden = true;
+        graphDock.after(graphPane);
+        document.body.classList.remove("diagram-open");
+      }
+      expansionIcon();
+      await new Promise(requestAnimationFrame);
+      await layOut();
+      if (open) ensureReadable();
+      if (!open && savedCamera) {
+        camera = savedCamera;
+        applyCamera();
+      }
+    } finally {
+      resizingDiagram = false;
+      expandButton.disabled = false;
+      expandButton.focus();
+    }
+  }
+  let resizeTimer;
+  if ("ResizeObserver" in window)
+    new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (
+          !layout ||
+          exporting ||
+          resizingDiagram ||
+          window.REPO_PRECOMPUTED_LAYOUT
+        )
+          return;
+        if (
+          window.repoDiagram.mode(
+            S,
+            $("graph-stage").getBoundingClientRect(),
+          ) !== (layout.layoutMode || "layered") ||
+          (layout.layoutMode === "flow" &&
+            layout.flowDirection !== (innerWidth < 800 ? "DOWN" : "RIGHT"))
+        )
+          layOut().then(() => ensureReadable());
+        else if (dialog.open) ensureReadable();
+      }, 120);
+    }).observe($("graph-stage"));
+  expansionIcon();
+  expandButton.addEventListener("click", () => toggleDiagram());
+  dialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    toggleDiagram(false);
+  });
+  $("inspect-expanded").addEventListener("click", async () => {
+    await toggleDiagram(false);
+    $("code-tab").click();
+    $("code-tab").focus();
+  });
   function exportSVG() {
     const copy = diagram.cloneNode(true);
     copy.removeAttribute("id");
@@ -952,6 +1108,18 @@
     try {
       if (format === "html") {
         const copy = document.documentElement.cloneNode(true);
+        const copiedPane = copy.querySelector(".graph-pane");
+        copy
+          .querySelector("#workspace")
+          .insertBefore(copiedPane, copy.querySelector(".inspector"));
+        copy.querySelector("#graph-dock")?.remove();
+        copy.querySelector("#diagram-dialog").removeAttribute("open");
+        copy.querySelector("body").classList.remove("diagram-open");
+        copy.querySelector("#diagram-hint").hidden = true;
+        const copiedExpand = copy.querySelector("#expand-diagram");
+        copiedExpand.setAttribute("aria-expanded", "false");
+        copiedExpand.dataset.i18nAria = copiedExpand.dataset.i18nTitle =
+          "expandGraph";
         copy
           .querySelector("body")
           .classList.remove("export-busy", "export-frame", "landing");
@@ -1131,6 +1299,7 @@
     selectNode: (id) => select("node", id),
     selectEdge: (id) => select("edge", id),
     exportSVG,
+    renderFrame: rasterFrame,
     export: browserExport,
     fit,
     pause,
@@ -1160,10 +1329,14 @@
   });
   $("zoom-out").addEventListener("click", () => zoom(1.25));
   $("zoom-in").addEventListener("click", () => zoom(0.8));
-  $("zoom-fit").addEventListener("click", fit);
+  $("zoom-fit").addEventListener("click", () => {
+    readabilityRequested = readableDetail = false;
+    fit();
+  });
   let drag = null;
   diagram.addEventListener("pointerdown", (event) => {
     if (event.target.closest(".graph-node,.graph-edge") || !camera) return;
+    readabilityRequested = false;
     drag = { x: event.clientX, y: event.clientY, camera: { ...camera } };
     diagram.setPointerCapture(event.pointerId);
   });
@@ -1208,6 +1381,11 @@
       event.preventDefault();
       skip(-1);
     } else if (event.key === "Escape") {
+      if (dialog.open) {
+        event.preventDefault();
+        toggleDiagram(false);
+        return;
+      }
       pause();
       setView("map");
       document.querySelector(".export-menu").open = false;
@@ -1269,6 +1447,7 @@
       renderAt(current);
       select(previous.type, previous.id, { announce: false });
       setPlayIcon();
+      if (dialog.open) ensureReadable();
       status(t("ready", { nodes: S.nodes.length, edges: S.edges.length }));
     })();
   });

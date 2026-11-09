@@ -61,7 +61,7 @@ Agent přečte implementaci a popíše její odpovědnosti a vztahy. Graf zachov
 
 U komponent i vztahů můžete číst vložené úryvky a otevřít zdroj na konkrétní revizi. Hledejte, přibližujte a přehrávejte vlastním tempem. Přenositelné HTML funguje offline.
 
-[Agentní smyčka Codexu](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html?lang=cs) · [Spuštění příkazu](https://honzacuhel.github.io/repo-visualizer/codex-shell.html?lang=cs) · [Workflow Superpowers](https://honzacuhel.github.io/repo-visualizer/superpowers.html?lang=cs) · [Model Whisper](https://honzacuhel.github.io/repo-visualizer/whisper.html?lang=cs)
+[Agentní smyčka Codexu](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html?lang=cs) · [Spuštění příkazu](https://honzacuhel.github.io/repo-visualizer/codex-shell.html?lang=cs) · [Workflow Superpowers](https://honzacuhel.github.io/repo-visualizer/superpowers.html?lang=cs) · [Model Whisper](https://honzacuhel.github.io/repo-visualizer/whisper.html?lang=cs) · [Uvnitř decoderu](https://honzacuhel.github.io/repo-visualizer/whisper-decoder.html?lang=cs)
 
 ## Sdílejte vysvětlení
 

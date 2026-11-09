@@ -102,5 +102,9 @@
   "actor": "Akteur",
   "artifact": "Artefakt",
   "process": "Prozess",
-  "graphLanguageNote": "Graphbeschriftung auf {language}."
+  "graphLanguageNote": "Graphbeschriftung auf {language}.",
+  "expandGraph": "Diagramm vergrößern",
+  "collapseGraph": "Diagramm zurücksetzen",
+  "inspectSelection": "Auswahl prüfen",
+  "diagramExploreHint": "Den Hintergrund ziehen, um den Graphen zu erkunden. Einpassen zeigt die ganze Karte."
 }

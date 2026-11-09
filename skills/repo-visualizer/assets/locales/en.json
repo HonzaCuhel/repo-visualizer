@@ -102,5 +102,9 @@
   "actor": "actor",
   "artifact": "artifact",
   "process": "process",
-  "graphLanguageNote": "Graph labels are in {language}."
+  "graphLanguageNote": "Graph labels are in {language}.",
+  "expandGraph": "Expand diagram",
+  "collapseGraph": "Restore diagram",
+  "inspectSelection": "Inspect selection",
+  "diagramExploreHint": "Drag the background to explore. Fit shows the whole map."
 }

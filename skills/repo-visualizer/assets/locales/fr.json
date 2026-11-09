@@ -102,5 +102,9 @@
   "actor": "acteur",
   "artifact": "artefact",
   "process": "processus",
-  "graphLanguageNote": "Les libellés du graphe sont en {language}."
+  "graphLanguageNote": "Les libellés du graphe sont en {language}.",
+  "expandGraph": "Agrandir le diagramme",
+  "collapseGraph": "Rétablir le diagramme",
+  "inspectSelection": "Examiner la sélection",
+  "diagramExploreHint": "Faites glisser le fond pour explorer. Le bouton d’ajustement affiche toute la carte."
 }

@@ -49,6 +49,7 @@ def build_html(data, *, landing=False):
         '@@STORY@@': safe_json(story),
         '@@CSS@@': (ASSETS / 'player.css').read_text(encoding='utf-8'),
         '@@INTERACTION@@': (ASSETS / 'interaction.js').read_text(encoding='utf-8'),
+        '@@DIAGRAM_LAYOUT@@': (ASSETS / 'diagram-layout.js').read_text(encoding='utf-8'),
         '@@JS@@': (ASSETS / 'player.js').read_text(encoding='utf-8'),
         '@@ELK@@': (ASSETS / 'vendor/elk.bundled.js').read_text(encoding='utf-8').replace('</script', '<\\/script'),
         '@@GIFENC@@': (ASSETS / 'vendor/gifenc.js').read_text(encoding='utf-8').replace('</script', '<\\/script'),

@@ -102,5 +102,9 @@
   "actor": "actor",
   "artifact": "artefacto",
   "process": "proceso",
-  "graphLanguageNote": "Las etiquetas del grafo están en {language}."
+  "graphLanguageNote": "Las etiquetas del grafo están en {language}.",
+  "expandGraph": "Ampliar diagrama",
+  "collapseGraph": "Restaurar diagrama",
+  "inspectSelection": "Inspeccionar selección",
+  "diagramExploreHint": "Arrastra el fondo para explorar. Ajustar muestra el mapa completo."
 }

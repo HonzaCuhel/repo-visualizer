@@ -52,7 +52,10 @@
     "superpowersMeta": "obra/superpowers · 13 components",
     "whisperTitle": "How Whisper turns audio into text",
     "whisperDescription": "The audio encoder, the text decoder, token generation and transcription fallback.",
-    "whisperMeta": "openai/whisper · 12 components"
+    "whisperMeta": "openai/whisper · 12 components",
+    "decoderTitle": "Inside Whisper’s decoder",
+    "decoderDescription": "Shared audio features, causal text attention and the next-token feedback loop.",
+    "decoderMeta": "openai/whisper · 7 components"
   },
   "cs": {
     "examplesTitle": "Začněte skutečným mechanismem.",
@@ -107,7 +110,10 @@
     "superpowersMeta": "obra/superpowers · 13 komponent",
     "whisperTitle": "Jak Whisper mění zvuk na text",
     "whisperDescription": "Zvukový encoder, textový decoder, generování tokenů a opakování přepisu.",
-    "whisperMeta": "openai/whisper · 12 komponent"
+    "whisperMeta": "openai/whisper · 12 komponent",
+    "decoderTitle": "Uvnitř decoderu Whisperu",
+    "decoderDescription": "Sdílené zvukové příznaky, kauzální attention a smyčka dalšího tokenu.",
+    "decoderMeta": "openai/whisper · 7 komponent"
   },
   "de": {
     "examplesTitle": "Beginne mit einem echten Mechanismus.",
@@ -162,7 +168,10 @@
     "superpowersMeta": "obra/superpowers · 13 Komponenten",
     "whisperTitle": "Wie Whisper Audio in Text umwandelt",
     "whisperDescription": "Audio-Encoder, Text-Decoder, Token-Erzeugung und erneute Transkriptionsversuche.",
-    "whisperMeta": "openai/whisper · 12 Komponenten"
+    "whisperMeta": "openai/whisper · 12 Komponenten",
+    "decoderTitle": "Im Decoder von Whisper",
+    "decoderDescription": "Gemeinsame Audiomerkmale, kausale Text-Attention und die Schleife zum nächsten Token.",
+    "decoderMeta": "openai/whisper · 7 Komponenten"
   },
   "fr": {
     "examplesTitle": "Partez d’un mécanisme réel.",
@@ -217,7 +226,10 @@
     "superpowersMeta": "obra/superpowers · 13 composants",
     "whisperTitle": "Comment Whisper transforme l’audio en texte",
     "whisperDescription": "Encodeur audio, décodeur de texte, génération de tokens et nouvelles tentatives de transcription.",
-    "whisperMeta": "openai/whisper · 12 composants"
+    "whisperMeta": "openai/whisper · 12 composants",
+    "decoderTitle": "Dans le décodeur de Whisper",
+    "decoderDescription": "Caractéristiques audio partagées, attention causale et boucle du token suivant.",
+    "decoderMeta": "openai/whisper · 7 composants"
   },
   "es": {
     "examplesTitle": "Empieza con un mecanismo real.",
@@ -272,6 +284,9 @@
     "superpowersMeta": "obra/superpowers · 13 componentes",
     "whisperTitle": "Cómo Whisper convierte audio en texto",
     "whisperDescription": "El codificador de audio, el decodificador de texto, la generación de tokens y los reintentos de transcripción.",
-    "whisperMeta": "openai/whisper · 12 componentes"
+    "whisperMeta": "openai/whisper · 12 componentes",
+    "decoderTitle": "Dentro del decodificador de Whisper",
+    "decoderDescription": "Características de audio compartidas, atención causal y bucle del siguiente token.",
+    "decoderMeta": "openai/whisper · 7 componentes"
   }
 }

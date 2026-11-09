@@ -63,9 +63,11 @@ The agent reads the implementation and authors a graph of responsibilities and r
 | **Focus** | Inspect a component and its immediate relationships |
 | **Path** | Follow a source-derived walkthrough over the same graph |
 
+Component blocks include short responsibility captions. Suitable flows can place shared services and state in broad bands; complex maps retain their branches and cycles. Expand the diagram for a readable detail, pan or zoom, then return to the selected source.
+
 Select a component or relationship to read embedded excerpts and open revision-pinned source links. Search, pan, zoom and seek at your own pace. The portable HTML works offline.
 
-[Codex agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [Superpowers workflow](https://honzacuhel.github.io/repo-visualizer/superpowers.html) · [Whisper model](https://honzacuhel.github.io/repo-visualizer/whisper.html)
+[Codex agent loop](https://honzacuhel.github.io/repo-visualizer/codex-agent-loop.html) · [Shell execution](https://honzacuhel.github.io/repo-visualizer/codex-shell.html) · [Superpowers workflow](https://honzacuhel.github.io/repo-visualizer/superpowers.html) · [Whisper model](https://honzacuhel.github.io/repo-visualizer/whisper.html) · [Inside the decoder](https://honzacuhel.github.io/repo-visualizer/whisper-decoder.html)
 
 ## Share the explanation
 

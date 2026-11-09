@@ -119,6 +119,24 @@ class StoryTests(unittest.TestCase):
         self.assertEqual([(e["from"],e["to"]) for e in story["edges"]], [("lookup","result"),("result","lookup"),("lookup","result")])
         self.assertEqual(len(story["nodes"]), 3)
 
+    def test_presentation_only_uses_real_components_and_cannot_duplicate_them(self):
+        raw = draft()
+        raw['presentation'] = {'layout':'flow', 'top':['lookup']}
+        raw['nodes'][0]['caption'] = 'Shared cache state'
+        raw['translations'] = {'cs':{'nodes':{'lookup':{'caption':'Sdílený stav cache'}}}}
+        story = validate_structure(raw)
+        self.assertEqual(story['presentation']['top'], ['lookup'])
+        self.assertEqual(story['translations']['cs']['nodes']['lookup']['caption'], 'Sdílený stav cache')
+        for value in ({'layout':'unknown'}, {'top':['missing']}, {'top':['lookup'],'bottom':['lookup']}, {'top':['lookup','result']}, {'layout':'layered','top':['lookup']}, {'layout':'flow','order':['lookup']}):
+            raw['presentation'] = value
+            with self.subTest(value=value), self.assertRaises(StoryError): validate_structure(raw)
+        raw['presentation'] = {'layout':'flow'}
+        raw['groups'] = [{'id':'group','label':'A group'}]
+        with self.assertRaises(StoryError): validate_structure(raw)
+        raw.pop('groups')
+        raw['nodes'][0]['caption'] = 'x'*181
+        with self.assertRaises(StoryError): validate_structure(raw)
+
     def test_nested_component_groups_have_valid_acyclic_parentage(self):
         raw = draft()
         raw["groups"] = [{"id": "app", "label": "Application"}, {"id": "cache", "label": "Cache", "parent": "app"}]

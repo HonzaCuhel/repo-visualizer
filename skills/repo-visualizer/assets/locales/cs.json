@@ -102,5 +102,9 @@
   "actor": "aktér",
   "artifact": "soubor",
   "process": "proces",
-  "graphLanguageNote": "Popisky grafu jsou v jazyce: {language}."
+  "graphLanguageNote": "Popisky grafu jsou v jazyce: {language}.",
+  "expandGraph": "Zvětšit diagram",
+  "collapseGraph": "Vrátit diagram",
+  "inspectSelection": "Prozkoumat výběr",
+  "diagramExploreHint": "Tažením pozadí procházejte graf. Tlačítko „Celý graf“ vrátí přehled."
 }

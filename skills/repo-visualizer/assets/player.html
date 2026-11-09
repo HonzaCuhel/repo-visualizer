@@ -141,6 +141,9 @@
                 Path
               </button>
             </div>
+            <div class="graph-actions">
+              <button id="inspect-expanded" class="expanded-source" type="button" data-i18n="inspectSelection">Inspect selection</button>
+              <button id="expand-diagram" class="icon-button expand-diagram" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="diagram-dialog" data-i18n-aria="expandGraph" data-i18n-title="expandGraph" aria-label="Expand diagram"></button>
             <details class="export-menu">
               <summary>
                 <span data-i18n="export">Export</span>
@@ -164,7 +167,9 @@
                 ><button data-export="webm" data-i18n="webm">Video WebM</button>
               </div>
             </details>
+            </div>
           </div>
+          <p id="diagram-hint" class="diagram-hint" data-i18n="diagramExploreHint" hidden>Drag the background to explore. Fit shows the whole map.</p>
           <div class="graph-stage" id="graph-stage">
             <div class="loading" id="loading" role="status">
               Laying out the graph…
@@ -304,6 +309,7 @@
         <pre>@@GIF_LICENSE@@</pre>
       </details>
     </footer>
+    <dialog id="diagram-dialog" class="diagram-dialog" data-i18n-aria="graphPlayback" aria-label="Graph and playback"></dialog>
     <script id="repo-font" type="application/json">
       "@@FONT@@"
     </script>
@@ -317,6 +323,7 @@
       var Gifenc=(()=>{var exports={};@@GIFENC@@
       return exports;})();
     </script>
+    <script id="diagram-layout">@@DIAGRAM_LAYOUT@@</script>
     <script>
       window.REPO_LANDING=@@LANDING@@;@@JS@@
     </script>

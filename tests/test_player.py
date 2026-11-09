@@ -96,4 +96,80 @@ class PlayerTests(unittest.TestCase):
         self.assertFalse(self.page.locator('#diagram').get_attribute('viewBox').find('NaN')>=0)
         self.assertEqual(self.errors,[])
 
+    def test_shared_flow_bands_route_real_edges_and_expanded_download_restores_workspace(self):
+        source=self.root/'fixture.py';source.write_text('value = 1\n')
+        names=['gateway','a','b','c','root','state']
+        pairs=[('a','b'),('b','c'),('c','a'),('a','b'),('b','b'),('gateway','a'),('gateway','b'),('gateway','b'),('c','state'),('state','a'),('gateway','state'),('state','state')]
+        graph=prepare_story(dict(schema_version=1,title='A real topology fixture',question='How are shared services reused?',presentation={'layout':'flow','top':['gateway'],'bottom':['state']},sources=[dict(id='s',path='fixture.py',start=1,end=1)],nodes=[dict(id=n,label=n,caption='Shared responsibility' if n in ('gateway','state') else 'A short responsibility caption',source_ids=['s']) for n in names],edges=[dict(id='e'+str(i),**{'from':a,'to':b},label='relationship '+str(i),source_ids=['s']) for i,(a,b) in enumerate(pairs)]),self.root)
+        self.open(graph)
+        self.assertEqual(self.page.locator('#diagram').get_attribute('data-layout'),'flow')
+        self.assertEqual(self.page.locator('.shared-band').count(),2)
+        self.assertEqual(self.page.locator('.graph-node').count(),6)
+        self.assertEqual(self.page.locator('.graph-edge').count(),len(pairs))
+        # Check actual rendered endpoints and sampled paths, including parallel,
+        # cyclic, shared-to-shared, self and disconnected components.
+        issues=self.page.evaluate("""()=>{const issues=[],rects=new Map([...document.querySelectorAll('.graph-node')].map(e=>{let m=e.transform.baseVal.consolidate().matrix,r=e.querySelector('rect');return [e.dataset.node,{x:m.e,y:m.f,w:+r.getAttribute('width'),h:+r.getAttribute('height')}]}));const attached=(p,r)=>((Math.abs(p.x-r.x)<1||Math.abs(p.x-r.x-r.w)<1)&&p.y>=r.y-1&&p.y<=r.y+r.h+1)||((Math.abs(p.y-r.y)<1||Math.abs(p.y-r.y-r.h)<1)&&p.x>=r.x-1&&p.x<=r.x+r.w+1);for(const e of repoPlayer.graph.edges){let paths=document.querySelector('[data-edge="'+e.id+'"]').querySelectorAll('.edge-line');let first=paths[0],last=paths[paths.length-1];if(!attached(first.getPointAtLength(0),rects.get(e.from))||!attached(last.getPointAtLength(last.getTotalLength()),rects.get(e.to)))issues.push(e.id+' endpoint');for(const path of paths)for(let i=2;i<path.getTotalLength()-2;i+=4){const p=path.getPointAtLength(i);for(const [id,r]of rects)if(id!==e.from&&id!==e.to&&p.x>r.x+1&&p.x<r.x+r.w-1&&p.y>r.y+1&&p.y<r.y+r.h-1)issues.push(e.id+' crosses '+id)}}return [...new Set(issues)]}""")
+        self.assertEqual(issues,[])
+        self.page.locator('#expand-diagram').click()
+        self.page.wait_for_function('document.querySelector("#diagram-dialog").open && !document.querySelector("#expand-diagram").disabled')
+        with self.page.expect_download() as download:self.page.evaluate('repoPlayer.export("html")')
+        saved=self.root/'expanded-download.html';download.value.save_as(saved)
+        self.page.goto(saved.as_uri());self.page.evaluate('repoReady')
+        self.assertEqual(self.page.locator('#workspace > .graph-pane').count(),1)
+        self.assertFalse(self.page.locator('#diagram-dialog').evaluate('(e)=>e.open'))
+        self.page.locator('#expand-diagram').click();self.page.wait_for_function('!document.querySelector("#expand-diagram").disabled')
+        self.page.locator('#expand-diagram').press('Escape');self.page.wait_for_function('!document.querySelector("#diagram-dialog").open && !document.querySelector("#expand-diagram").disabled')
+        self.assertEqual(self.page.evaluate('document.activeElement.id'),'expand-diagram')
+        self.assertEqual(self.errors,[])
+
+    def test_auto_flow_respects_geometry_cycles_and_resize(self):
+        source=self.root/'fixture.py';source.write_text('value = 1\n')
+        def make(cycle=False):
+            return prepare_story(dict(schema_version=1,title='Simple chain',question='How does the chain work?',sources=[dict(id='s',path='fixture.py',start=1,end=1)],nodes=[dict(id=n,label=n,caption='A short explanation',source_ids=['s'])for n in ['a','b','c']],edges=[dict(id='ab',**{'from':'a','to':'b'},source_ids=['s']),dict(id='bc',**{'from':'b','to':'c'},source_ids=['s'])]+([dict(id='ca',**{'from':'c','to':'a'},source_ids=['s'])]if cycle else [])),self.root)
+        self.open(make());self.assertEqual(self.page.locator('#diagram').get_attribute('data-layout'),'flow')
+        self.page.set_viewport_size({'width':390,'height':900});self.page.wait_for_function('document.querySelector("#diagram").dataset.layout==="layered"')
+        self.page.set_viewport_size({'width':1440,'height':900});self.page.wait_for_function('document.querySelector("#diagram").dataset.layout==="flow"')
+        self.open(make(True));self.assertEqual(self.page.locator('#diagram').get_attribute('data-layout'),'layered')
+        self.assertEqual(self.page.locator('.node-caption').count(),3)
+        self.assertEqual(self.errors,[])
+
+    def test_mobile_expansion_has_readable_text_and_explicit_fit_is_respected(self):
+        self.page.set_viewport_size({'width':390,'height':844})
+        self.open(read_story(ROOT/'examples/whisper/decoder-loop.json'))
+        self.page.locator('#expand-diagram').click()
+        self.page.wait_for_function('document.querySelector("#diagram-dialog").open && !document.querySelector("#expand-diagram").disabled')
+        scale=self.page.locator('#diagram').evaluate('(e)=>{let m=e.getScreenCTM();return Math.hypot(m.a,m.b)}')
+        self.assertGreaterEqual(14*scale,12)
+        self.assertTrue(self.page.locator('#diagram-hint').is_visible())
+        self.page.evaluate('renderAt(9000)')
+        visible=self.page.locator('.graph-node[data-node=logits] .node-title').evaluate('(e)=>{let t=e.getBoundingClientRect(),s=document.querySelector("#diagram").getBoundingClientRect();return t.top>=s.top&&t.bottom<=s.bottom&&t.left>=s.left&&t.right<=s.right}')
+        self.assertTrue(visible)
+        self.page.locator('#zoom-fit').click()
+        overview=self.page.locator('#diagram').get_attribute('viewBox')
+        self.page.evaluate('renderAt(0)');self.page.wait_for_timeout(180)
+        self.assertEqual(self.page.locator('#diagram').get_attribute('viewBox'),overview)
+        self.assertTrue(self.page.locator('#diagram-hint').is_hidden())
+        self.page.locator('#expand-diagram').press('Escape')
+        self.page.wait_for_function('!document.querySelector("#diagram-dialog").open && !document.querySelector("#expand-diagram").disabled')
+        self.assertEqual(self.page.locator('#workspace > .graph-pane').count(),1)
+        self.assertEqual(self.errors,[])
+
+    def test_cached_flow_video_scene_preserves_shared_band_typography(self):
+        from hyperframes_export import composition
+        source=self.open(read_story(ROOT/'examples/whisper/decoder-loop.json'))
+        self.page.evaluate("document.body.classList.add('export-frame');repoPlayer.setView('path')")
+        layout=self.page.evaluate('repoPlayer.layout')
+        self.assertIn('typography',layout)
+        output=self.root/'composition.html'
+        output.write_text(composition(source.read_text(),12000,1440,900,8,layout=layout))
+        self.page.goto(output.as_uri());self.page.evaluate('window.__hf.buildReady.repoVisualizer')
+        self.assertEqual(self.page.locator('.shared-band').count(),2)
+        self.assertEqual(self.page.locator('.graph-node').count(),7)
+        self.assertEqual(self.page.locator('.graph-edge').count(),7)
+        overflow=self.page.evaluate("""()=>[...document.querySelectorAll('.shared-band')].some(n=>{let r=n.querySelector('rect').getBBox();return [...n.querySelectorAll('text')].some(t=>{let b=t.getBBox();return b.y<0||b.y+b.height>r.height+1||b.x<0||b.x+b.width>r.width+1})})""")
+        self.assertFalse(overflow)
+        self.page.evaluate('window.__timelines.root.seek(9)')
+        self.assertGreater(self.page.locator('.graph-edge.is-active').count(),0)
+        self.assertEqual(self.errors,[])
+
 if __name__=='__main__':unittest.main()

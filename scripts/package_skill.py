@@ -14,7 +14,7 @@ FILES = (
     'scripts/story_model.py', 'scripts/inventory.py', 'scripts/repo_story.py',
     'scripts/builder.py', 'scripts/export.py', 'scripts/hyperframes_export.py',
     'references/graph-format.md', 'references/exports.md', 'references/localization.md',
-    'assets/brand.css', 'assets/brand-mark.svg',
+    'assets/diagram-layout.js', 'assets/brand.css', 'assets/brand-mark.svg',
     'assets/appearance.js', 'assets/locales/en.json', 'assets/locales/cs.json',
     'assets/locales/de.json', 'assets/locales/fr.json', 'assets/locales/es.json',
     'assets/player.html', 'assets/player.css', 'assets/player.js', 'assets/interaction.js',

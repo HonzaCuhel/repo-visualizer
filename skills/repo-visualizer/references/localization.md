@@ -25,6 +25,6 @@ For a bilingual graph, `translations` is an optional object keyed by language ta
 }
 ```
 
-Translations are display-only. They cannot change topology, ids, sources or fingerprints. Nodes allow `label` and `description`; edges, groups and scenarios allow `label`; steps allow `title` and `description`. Omitted values retain the original text. Supply all relevant fields for a complete graph translation.
+Translations are display-only. They cannot change topology, ids, sources or fingerprints. Nodes allow `label`, `description` and `caption` (at most 180 characters); edges, groups and scenarios allow `label`; steps allow `title` and `description`. Omitted values retain the original text. Supply all relevant fields for a complete graph translation.
 
 Local deterministic exports accept `--theme light|dark|system` and `--language <tag>`. Interface language, graph translation and original code evidence are separate. A language switch never rewrites source excerpts.

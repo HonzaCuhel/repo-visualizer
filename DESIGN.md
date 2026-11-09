@@ -35,8 +35,12 @@ colors:
   dark-code-surface: '#19222f'
   dark-control-line: '#3c4b60'
   dark-node-line: '#687992'
-  dark-edge-line: '#91a0b5'
+  dark-edge-line: '#b9c4d3'
   landing-dark-selected-ink: '#bcd7ff'
+  diagram-surface: '#fbfcfe'
+  diagram-band: '#edf2f7'
+  dark-diagram-surface: '#141b23'
+  dark-diagram-band: '#1c2732'
 typography:
   standalone-display:
     fontFamily: Atkinson, system-ui, sans-serif
@@ -79,6 +83,21 @@ typography:
     fontSize: 13px
     fontWeight: 500
     lineHeight: 1.3
+  diagram-title:
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 20px
+    fontWeight: 600
+    lineHeight: 24px
+  diagram-caption:
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 19px
+  diagram-edge:
+    fontFamily: Atkinson, system-ui, sans-serif
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 18px
   code:
     fontFamily: ui-monospace, monospace
     fontSize: 11px
@@ -99,7 +118,10 @@ rounded:
   container: 7px
   landing-action: 8px
   landing-command: 9px
+  diagram-node: 9px
   graph-group: 10px
+  diagram-dialog: 14px
+  diagram-frame: 16px
   landing-video: 12px
   landing-installation: 14px
   landing-workspace-mobile: 17px
@@ -115,6 +137,18 @@ spacing:
   pane-large: 28px
   landing-gutter: clamp(24px, 3.53vw, 56px)
 components:
+  diagram-node:
+    backgroundColor: '{colors.paper}'
+    textColor: '{colors.ink}'
+    typography: '{typography.diagram-title}'
+    rounded: '{rounded.diagram-node}'
+  diagram-dialog:
+    backgroundColor: '{colors.paper}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.diagram-dialog}'
+    padding: 0
+    width: calc(100% - 32px)
+    height: calc(100% - 32px)
   public-detail-source:
     backgroundColor: transparent
     textColor: '{colors.ink}'
@@ -192,6 +226,7 @@ The frontmatter records observed light and dark primitives. Landing-prefixed tok
 - **Fine Rule**, **Cool Surface** and **Quiet Hover** (`line`, `surface`, `hover`): boundaries, installation surfaces and neutral interaction states.
 - **Source Paper** and **Group Paper** (`code-surface`, `group-fill`): inset code and subtle graph group regions.
 - **Control Rule**, **Node Rule** and **Relationship Rule** (`control-line`, `node-line`, `edge-line`): control boundaries and unselected graph structure.
+- **Diagram Paper** and **Shared Band** (`diagram-surface`, `diagram-band`): the neutral diagram frame and sourced shared-component bands. Light nodes use white paper; dark frames and nodes share dark-diagram-surface while bands use dark-diagram-band. The dark relationship rule is lighter to preserve route readability.
 - The corresponding `dark-*` tokens carry the same roles on a charcoal canvas. The landing landscape darkens with brightness and saturation filtering while the working panes use the shared theme.
 
 ### Named Rules
@@ -211,14 +246,14 @@ The frontmatter records observed light and dark primitives. Landing-prefixed tok
 - **Landing section headline:** the landing-headline role. Example and guide titles use 18px. Landing explorer navigation uses 20px titles and 13px component rows; its inspector uses 24px headings and 15px descriptions, with contextual responsive overrides.
 - **Standalone explorer:** navigation headings use 18px, rows 14px, inspector headings 23px and descriptions 15px. Phone rows become 12px while search uses 16px.
 - **Controls:** compact 13px graph controls in both surfaces. Landing hero actions use 16px, becoming 14px on phones. Tiny metadata and source-coordinate text are contextual, not a general reading-size standard.
-- **Graph:** labels explicitly retain Atkinson even on the Rethink landing. SVG-coordinate titles use 17px, kinds and relations 11px, groups 13px; camera fitting controls their displayed size.
+- **Graph:** labels retain Atkinson even on the Rethink landing. Measured SVG titles use the diagram-title role; short responsibility captions use diagram-caption with at most two lines and explicit ellipsis. Edge labels use diagram-edge with at most three measured lines. Group labels remain 13px and the separate inferred marker remains 11px. These are graph-coordinate sizes; camera fitting controls displayed size. Full descriptions remain available in the inspector and tooltip.
 
 ### Named Rules
 **The Source Identity Rule.** Keep source paths, revisions and literal code visually distinct through monospace; use the surface's sans family for explanations and Atkinson for graph labels.
 
 ## Layout
 
-The standalone desktop workspace caps at 1320px with 23% navigation, 50% graph and 27% evidence. It is 590px high, becoming 620px from 1600px. At 900px and below, navigation and graph use 31% / 69% above the inspector; at 600px and below the working panes stack, navigation becomes horizontally scrollable and the graph pane declares a 450px height while retaining the earlier 455px minimum. Standalone introductions stay compact; optional orientation choices reference actual graph components and long summaries use disclosure.
+The standalone desktop workspace caps at 1320px with 23% navigation, 50% graph and 27% evidence. It is 590px high, becoming 620px from 1600px. At 900px and below, navigation and graph use 31% / 69% above the inspector; at 600px and below the working panes stack, navigation becomes horizontally scrollable and the shared graph pane now grows intrinsically with zero minimum height while its stage is 420px high. Standalone introductions stay compact; optional orientation choices reference actual graph components and long summaries use disclosure.
 
 The public landing centers its introduction above the real explorer. Header, workspace, selection status and footer share a 1480px maximum frame with the landing-gutter spacing on each side. The transparent header stays between 56px and 64px high. The introduction caps at 1280px wide, with a height of `clamp(320px, 23.077vw, 366px)`. The desktop workspace retains 21.6% / 51.8% / 26.6% columns with a height of `clamp(510px, 35.44vw, 600px)`. The landscape height is capped at 800px. The thick paper frame has an inset rule; it separates the working surface from the image without adding a shadow. The actual first viewport, not a percentage from the mockup, governs review.
 
@@ -226,18 +261,18 @@ At 1200px the landing uses 23% / 49% / 28% columns. At 1000px and below it switc
 
 The public command scrolls internally on wide screens; on phones its text wraps anywhere, the command container grows naturally and only the copy icon remains visible. At 600px and below the shared landing gutter becomes 12px, the introduction grows intrinsically and the working frame remains aligned with the status and footer. The compact flag and sun/moon/system controls remain in the header; text navigation disappears at 1000px. At 360px and below the locale code also hides.
 
-Landing sections cap at 1240px with 76px vertical padding, becoming 46px at 600px. Example/download rows use thin dividers; the installation surface caps at 1184px with 40px padding. Guides and exports collapse at their source-defined 700px breakpoint. Export-frame mode retains its separate fixed-frame composition.
+Landing sections cap at 1240px with 76px vertical padding, becoming 46px at 600px. Example/download rows use thin dividers; the installation surface caps at 1184px with 40px padding. Guides and exports collapse at their source-defined 700px breakpoint. Export-frame mode retains its separate fixed-frame composition. An expanded diagram uses a native modal dialog inset by 16px, reducing to 6px on phones; the graph stage fills the available dialog height instead of retaining its phone-stage height.
 
 ## Elevation & Depth
 
-Persistent working surfaces are flat: thin rules, tonal fills and selected outlines communicate structure. The public landscape carries photographic depth outside the explorer. Its light overlay fades into the paper canvas; dark mode filters the image and fades into dark paper. Floating export and language menus share the ambient shadow (`0 8px 22px #1d2b4514`). The inspector tab's one-pixel blue box-shadow is an active-state underline, not an elevation tier.
+Persistent working surfaces are flat: thin rules, tonal fills and selected outlines communicate structure. The public landscape carries photographic depth outside the explorer. Its light overlay fades into the paper canvas; dark mode filters the image and fades into dark paper. Floating export and language menus share the ambient shadow (`0 8px 22px #1d2b4514`). The diagram frame and shared-component bands add quiet neutral layering inside the graph. The expanded native dialog uses a dark translucent backdrop (`#08101a99`), a thin control rule and no new shadow tier. The inspector tab's one-pixel blue box-shadow is an active-state underline, not an elevation tier.
 
 ### Named Rules
 **The Flat Workspace Rule.** Use borders and tone for persistent tooling structure; reserve ambient shadow for floating menus.
 
 ## Shapes
 
-Small practical curves define the shared tools: inset code, conventional controls, a gently rounded workspace and graph nodes, and larger group bounds. The public presentation uses broader curves for its 22px explorer frame, 17px phone frame, 9px hero command, 8px hero actions, 14px installation surface and 12px video. The shared header theme switch is a 20px capsule with 16px selected segments in every generated HTML, including raw skill, ZIP-built, offline and public examples. These are scoped component shapes, not a universal pill-button rule. Thin rectilinear rules remain the organizing device inside the workspace.
+Small practical curves define the shared tools: inset code, conventional controls, a gently rounded workspace and graph nodes, and larger group bounds. The public presentation uses broader curves for its 22px explorer frame, 17px phone frame, 9px hero command, 8px hero actions, 14px installation surface and 12px video. The shared header theme switch is a 20px capsule with 16px selected segments in every generated HTML, including raw skill, ZIP-built, offline and public examples. These are scoped component shapes, not a universal pill-button rule. Diagram nodes use 9px corners, the neutral diagram frame 16px and the expanded dialog 14px. Thin rectilinear rules remain the organizing device inside the workspace.
 
 ## Components
 
@@ -257,7 +292,7 @@ Desktop component choices are left-aligned rows; hover adds a quiet neutral surf
 
 ### Cards / Containers
 
-The explorer, source blocks and commands are ruled containers with contextual corner sizes. Source excerpts preserve literal whitespace and scroll internally. The public copy command keeps its text and copy action in one translucent paper row; clipboard failure selects the text and exposes feedback. Examples and downloads stay open, ruled rows rather than a card grid. The current public gallery links to the Codex loop, Codex shell execution, Superpowers workflow and Whisper transcription; repository identity, pinned source attribution and the explore action remain legible parts of each example pattern.
+The explorer, source blocks and commands are ruled containers with contextual corner sizes. Source excerpts preserve literal whitespace and scroll internally. The public copy command keeps its text and copy action in one translucent paper row; clipboard failure selects the text and exposes feedback. Examples and downloads stay open, ruled rows rather than a card grid. The current public gallery links to the Codex loop, Codex shell execution, Superpowers workflow, Whisper transcription and a focused Whisper decoder loop; repository identity, pinned source attribution and the explore action remain legible parts of each example pattern.
 
 ### Inputs / Fields
 
@@ -273,7 +308,11 @@ Every standalone HTML keeps an understated source-jump action in the desktop hea
 
 ### Component Graph and Motion
 
-Nodes and neutral relationships sit within subtle group bounds. Selection and active paths use blue outlines and pale blue interiors; inferred edges are dashed (`5 4`). Focus strengthens outlines; Focus and Path modes dim unrelated graph content to 0.22 opacity. Nested relationship geometry respects the edge's declared container. Labels and topology come from the graph model.
+Nodes and neutral relationships sit within a quiet diagram frame; grouped graphs retain their subtle group bounds. Measured node titles are followed by short responsibility captions: authored captions are limited to 180 characters, including translations, and render in at most two lines with an explicit ellipsis when clipped. Without an authored caption, the description or kind supplies the fallback. Full text remains in the inspector and tooltip. Edge labels are measured and wrapped to at most three lines; a diagram-surface stroke behind text keeps routes readable. Node and relationship identities, evidence and selection remain canonical. Selection and active paths use blue outlines and pale blue interiors; inferred edges retain dashed (`5 4`) styling and inferred nodes retain their separate marker. Focus strengthens outlines; Focus and Path modes dim unrelated graph content to 0.22 opacity.
+
+Presentation selects geometry rather than inventing topology. Automatic flow is limited to an ungrouped acyclic chain of 3–6 components with enough available width; other graphs retain layered layout. Explicit flow supports 1–8 main components plus up to two top and two bottom shared components, each an existing sourced node ID used in only one band. Bands cannot be combined with groups or layered hints. Flow follows physical page width: below 800px the main components run downward, while wider pages run left to right; expanding the dialog does not substitute pane width for this page-width decision. Main-flow layer spacing is 24px. On narrow pages, shared-band title and caption measurement is clamped to the available text width, with a 204px minimum, so long shared bars do not create excessively wide text lines. Orthogonal routing keeps shared-component relationships out of node bodies while preserving branches, cycles, parallel edges and self-edges. Nested layered relationships retain their declared container geometry.
+
+The expand control moves the existing graph pane into a native modal dialog rather than creating a second SVG. Selection persists, geometry is recalculated for the new space, and collapse restores the pane and its previous camera. If the expanded fit would scale below 0.55, it opens a readable detail centered on the selected node, targeting one logical diagram unit per screen pixel, instead of reducing every label to a tiny overview. A short pan hint explains how to explore and return to the full graph. Explicit pan, zoom and Fit choices take precedence over automatic readable-detail framing; Fit restores the overview. The phone expand control includes a visible translated label, and expanded graph actions wrap within the available width. Escape collapses the dialog and restores the expand control's focus. Inspect selection collapses it and focuses the source-code tab for the selected component or relationship. Full-graph Fit is an overview on a narrow phone; reading individual captions uses the expanded detail and panning. Cached-layout projections retain their measured typography alongside geometry so captions and titles use the same line measurements as the cached nodes. HTML downloaded while expanded normalizes the pane back into the workspace, closes the dialog and resets expansion state. Export-frame controls hide the expand and expanded-inspection actions.
 
 Playback is explicit and supports deterministic seeking; scrolling does not start graph playback. On the landing, the background moves by 0.075 times scroll distance, capped at 700px of input scroll (52.5px translation). Section headings, example rows, the installation surface, guide articles, the export showcase and the privacy note reveal according to scroll progress. Between 94% and 68% of viewport height, each pending element moves from 20px below its resting position to zero while opacity rises from 0.22 to 1. There is no timed reveal or blur. On reaching full progress the element is completed and its transient styles are removed. Keyboard focus or navigation to an anchor completes the relevant reveal immediately. Scroll and resize updates use animation frames with geometry reads batched before writes.
 

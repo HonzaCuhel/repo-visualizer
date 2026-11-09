@@ -9,6 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'skills/repo-visualizer/scripts'))
@@ -21,6 +22,9 @@ def main():
     args = parser.parse_args()
     source = ROOT / 'site/codex-agent-loop.html'
     graph = json.loads((ROOT / 'examples/codex/agent-loop.json').read_text())
+    head = subprocess.run(['git','rev-parse','HEAD'],cwd=ROOT,capture_output=True,text=True).stdout.strip()
+    committed = subprocess.run(['git','show',head+':site/codex-agent-loop.html'],cwd=ROOT,capture_output=True).stdout
+    source_commit = head if committed == source.read_bytes() else None
     jobs = []
     for language in ('en', 'cs', 'de', 'fr', 'es'):
         for theme in ('light', 'dark'):
@@ -50,6 +54,8 @@ def main():
             'settings': {key: value for key, value in settings.items() if key != 'browser_path'},
             'source_repository': graph['repo']['url'],
             'source_revision': graph['repo']['commit'],
+            'source_html_commit': source_commit,
+            'source_html_path': 'site/codex-agent-loop.html',
             'source_html_sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
             'artifact_sha256': hashlib.sha256(output.read_bytes()).hexdigest(),
             'note': 'Source-derived graph explanation, not recorded execution. No image generation model used.',

@@ -91,6 +91,7 @@ def build():
     write_html(site/'full-pipeline.html',branded(build_html(full)))
     for example in ('superpowers', 'whisper'):
         write_html(site/f'{example}.html',branded(build_html(read_story(ROOT/f'examples/{example}/graph.json'))))
+    write_html(site/'whisper-decoder.html',branded(build_html(read_story(ROOT/'examples/whisper/decoder-loop.json'))))
     (site/'.nojekyll').touch()
     mark=(ROOT/'skills/repo-visualizer/assets/brand-mark.svg').read_text()
     (site/'favicon.svg').write_text(mark.replace('</svg>','<style>@media(prefers-color-scheme:dark){svg{color:#8bb9ff}}</style></svg>'))

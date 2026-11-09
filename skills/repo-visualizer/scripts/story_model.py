@@ -131,9 +131,28 @@ def validate_structure(data):
         start = _integer(source.get("start"), f"sources.{key}.start")
         if _integer(source.get("end"), f"sources.{key}.end") < start:
             raise StoryError(f"sources.{key}: end precedes start")
+    presentation = story.setdefault('presentation', {})
+    if not isinstance(presentation, dict) or set(presentation) - {'layout', 'top', 'bottom'}:
+        raise StoryError('presentation: expected layout and optional shared top/bottom component ids')
+    if presentation.setdefault('layout', 'auto') not in ('auto', 'layered', 'flow'):
+        raise StoryError('presentation.layout: expected auto, layered or flow')
+    band_ids = []
+    for side in ('top', 'bottom'):
+        values = presentation.setdefault(side, [])
+        if not isinstance(values, list) or len(values) > 2 or any(not isinstance(i, str) or i not in nodes for i in values):
+            raise StoryError('presentation.' + side + ': expected up to two existing component ids')
+        band_ids.extend(values)
+    if len(set(band_ids)) != len(band_ids):
+        raise StoryError('presentation: a shared component can appear in only one band')
+    if presentation['layout'] == 'flow' or band_ids:
+        if groups or not 1 <= len(nodes) - len(band_ids) <= 8 or presentation['layout'] == 'layered':
+            raise StoryError('presentation: flow bands need an ungrouped graph with 1–8 main components; use layered for larger maps')
     for key, node in nodes.items():
         node["label"] = _text(node.get("label"), f"nodes.{key}.label")
         node["description"] = _text(node.get("description"), f"nodes.{key}.description", optional=True)
+        node["caption"] = _text(node.get("caption"), f"nodes.{key}.caption", optional=True)
+        if len(node["caption"]) > 180:
+            raise StoryError(f"nodes.{key}.caption: keep the diagram caption within 180 characters")
         if node.setdefault("kind", "module") not in ("input", "process", "decision", "output", "external", "module", "function", "service", "store", "queue", "actor", "artifact"):
             raise StoryError(f"nodes.{key}.kind: unknown node kind")
         group = node.get("group")
@@ -174,7 +193,7 @@ def validate_structure(data):
     translations = story.setdefault('translations', {})
     if not isinstance(translations, dict):
         raise StoryError('translations: expected language-tagged display text')
-    collections = {'nodes': (nodes, {'label', 'description'}), 'edges': (edges, {'label'}), 'groups': (groups, {'label'}), 'steps': (steps, {'title', 'description'}), 'scenarios': ({s['id']: s for s in scenarios}, {'label'})}
+    collections = {'nodes': (nodes, {'label', 'description', 'caption'}), 'edges': (edges, {'label'}), 'groups': (groups, {'label'}), 'steps': (steps, {'title', 'description'}), 'scenarios': ({s['id']: s for s in scenarios}, {'label'})}
     for locale, display in translations.items():
         if not isinstance(locale, str) or not re.fullmatch(r'[a-zA-Z]{2,8}(?:-[a-zA-Z0-9]{1,8})*', locale) or not isinstance(display, dict):
             raise StoryError('translations: expected valid language tags and display objects')
@@ -191,8 +210,10 @@ def validate_structure(data):
                 for identity, fields in value.items():
                     if identity not in available or not isinstance(fields, dict) or set(fields) - allowed:
                         raise StoryError('translations: display text cannot change graph topology or evidence')
-                    for text_value in fields.values():
+                    for text_key, text_value in fields.items():
                         _text(text_value, 'translations.'+field)
+                        if field == 'nodes' and text_key == 'caption' and len(text_value) > 180:
+                            raise StoryError('translations.nodes.caption: keep within 180 characters')
             else:
                 raise StoryError('translations: unsupported display field '+field)
     return story

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-09T07:14:31.057271+00:00",
+  "generatedAt": "2026-11-09T10:10:18.756663+00:00",
   "title": "Design System: Repo Visualizer",
   "extensions": {
     "colorMeta": {
@@ -503,16 +503,16 @@
         "role": "neutral",
         "displayName": "Dark Edge Line",
         "tonalRamp": [
-          "oklch(15% 0.01233 256.79)",
-          "oklch(26% 0.02290 256.79)",
-          "oklch(38% 0.03171 256.79)",
-          "oklch(50% 0.03524 256.79)",
-          "oklch(62% 0.03524 256.79)",
-          "oklch(74% 0.02995 256.79)",
-          "oklch(86% 0.01938 256.79)",
-          "oklch(95% 0.00705 256.79)"
+          "oklch(15% 0.00852 256.12)",
+          "oklch(26% 0.01582 256.12)",
+          "oklch(38% 0.02191 256.12)",
+          "oklch(50% 0.02434 256.12)",
+          "oklch(62% 0.02434 256.12)",
+          "oklch(74% 0.02069 256.12)",
+          "oklch(86% 0.01339 256.12)",
+          "oklch(95% 0.00487 256.12)"
         ],
-        "scope": "shared dark appearance"
+        "scope": "Shared responsibility diagrams in every generated HTML."
       },
       "landing-dark-selected-ink": {
         "role": "primary",
@@ -528,6 +528,66 @@
           "oklch(95% 0.01256 258.09)"
         ],
         "scope": "public landing"
+      },
+      "diagram-surface": {
+        "role": "neutral",
+        "displayName": "Diagram Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00100 264.54)",
+          "oklch(26% 0.00186 264.54)",
+          "oklch(38% 0.00257 264.54)",
+          "oklch(50% 0.00286 264.54)",
+          "oklch(62% 0.00286 264.54)",
+          "oklch(74% 0.00243 264.54)",
+          "oklch(86% 0.00157 264.54)",
+          "oklch(95% 0.00057 264.54)"
+        ],
+        "scope": "Shared responsibility diagrams in every generated HTML."
+      },
+      "diagram-band": {
+        "role": "neutral",
+        "displayName": "Diagram Band",
+        "tonalRamp": [
+          "oklch(15% 0.00301 247.92)",
+          "oklch(26% 0.00558 247.92)",
+          "oklch(38% 0.00773 247.92)",
+          "oklch(50% 0.00859 247.92)",
+          "oklch(62% 0.00859 247.92)",
+          "oklch(74% 0.00730 247.92)",
+          "oklch(86% 0.00472 247.92)",
+          "oklch(95% 0.00172 247.92)"
+        ],
+        "scope": "Shared responsibility diagrams in every generated HTML."
+      },
+      "dark-diagram-surface": {
+        "role": "neutral",
+        "displayName": "Dark Diagram Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00662 252.06)",
+          "oklch(26% 0.01230 252.06)",
+          "oklch(38% 0.01703 252.06)",
+          "oklch(50% 0.01892 252.06)",
+          "oklch(62% 0.01892 252.06)",
+          "oklch(74% 0.01608 252.06)",
+          "oklch(86% 0.01041 252.06)",
+          "oklch(95% 0.00378 252.06)"
+        ],
+        "scope": "Shared responsibility diagrams in every generated HTML."
+      },
+      "dark-diagram-band": {
+        "role": "neutral",
+        "displayName": "Dark Diagram Band",
+        "tonalRamp": [
+          "oklch(15% 0.00901 248.81)",
+          "oklch(26% 0.01674 248.81)",
+          "oklch(38% 0.02317 248.81)",
+          "oklch(50% 0.02575 248.81)",
+          "oklch(62% 0.02575 248.81)",
+          "oklch(74% 0.02189 248.81)",
+          "oklch(86% 0.01416 248.81)",
+          "oklch(95% 0.00515 248.81)"
+        ],
+        "scope": "Shared responsibility diagrams in every generated HTML."
       }
     },
     "typographyMeta": {
@@ -574,6 +634,18 @@
       "public-detail-control": {
         "displayName": "Public Detail Control",
         "purpose": "Shared compact neutral desktop source-jump action in all core-generated standalone HTML; historical token name retained."
+      },
+      "diagram-title": {
+        "displayName": "Diagram Title",
+        "purpose": "Measured node title;24px line spacing;no artificial title-line cap."
+      },
+      "diagram-caption": {
+        "displayName": "Diagram Caption",
+        "purpose": "Authored or fallback responsibility caption;19px line spacing;at most two lines with ellipsis."
+      },
+      "diagram-edge": {
+        "displayName": "Diagram Edge",
+        "purpose": "Measured relationship text;18px line spacing;at most three lines with ellipsis."
       }
     },
     "shadows": [
@@ -653,6 +725,11 @@
       {
         "name": "narrow-header",
         "value": "360px"
+      },
+      {
+        "name": "diagram-flow-orientation",
+        "value": "800px",
+        "comparison": "physical page width<800px => DOWN;otherwise RIGHT"
       }
     ],
     "surfaceScopes": {
@@ -714,14 +791,15 @@
         "lightAction": "{colors.blue}",
         "darkAction": "{colors.dark-action}",
         "freshTheme": "system unless artifact preference supplied",
-        "mobileGraphPane": "height:450px; inherited min-height:455px",
+        "mobileGraphPane": "height:auto;min-height:0",
         "offline": "Embedded player, shared header brand styles, inline SVG mark, data-URL favicon, font, UI catalogs, graph and source data; no landing landscape styles.",
         "scope": "Every core-generated standalone HTML, including raw installed skill output, ZIP-built output, offline exports and public details. Public details additionally apply their public-only preferences and return navigation.",
         "languageBehavior": "User/artifact and graph language behavior remains unchanged by public defaults.",
         "headerHeight": "64px;56px at <=600px",
         "sourceAction": "{components.public-detail-source}",
         "sourceActionMinHeight": "36px",
-        "sourceActionHidden": "<=600px and export-frame mode"
+        "sourceActionHidden": "<=600px and export-frame mode",
+        "mobileGraphStage": "height:420px;flex:none"
       },
       "graphLabels": {
         "fontFamily": "Atkinson, system-ui, sans-serif",
@@ -773,15 +851,15 @@
         },
         {
           "path": "scripts/build_site.py",
-          "sha256": "c62955ef98380c495cf107a7ae62823018f67e8c37468068c7a1e3dd91b4906b"
+          "sha256": "c6471f0c5a81f833b8f4f63aa28e1517e16235f6f70b0ba204b67a205869ab66"
         },
         {
           "path": "skills/repo-visualizer/assets/player.css",
-          "sha256": "0cf388633c5adec1fbd163ce5b4ae91bec781958e27632dd600c8c9fe31f4ad6"
+          "sha256": "c6a971aa8aaaee76e3002113ac13a82445ce06000c5db5c8a8beda14d2e1ed0e"
         },
         {
           "path": "skills/repo-visualizer/assets/player.html",
-          "sha256": "b64bb641186cc4d11d96fcef72601c4174ccc3dac93a32554196fb4ce684dd85"
+          "sha256": "86d92e26f92655dca0bc82e32199e3df5811f6e70202219c6ccba94a3b15793b"
         },
         {
           "path": "skills/repo-visualizer/assets/appearance.js",
@@ -789,7 +867,7 @@
         },
         {
           "path": "skills/repo-visualizer/assets/player.js",
-          "sha256": "566aa57e796a7258d5fc7e000465e4b380c941a8330e48d2be54aa718fb03de8"
+          "sha256": "71b8731a7a4fb11183234cbf8a02a4d196896cb38502cbe150ccb9f104d5c795"
         },
         {
           "path": "PRODUCT.md",
@@ -805,11 +883,11 @@
         },
         {
           "path": "site-src/sections.html",
-          "sha256": "6650030b9c602fba2f8a70ee89c52bf7969c80e4679ef9df0f337362537674f5"
+          "sha256": "11758a535daf26b6c58d530876f81e2049dffcbb86d6a137499442d077a17ac6"
         },
         {
           "path": "site-src/locales.json",
-          "sha256": "07676e0190be5b2573cb2b69f1b90e099f03636ea03ea435258690171c297892"
+          "sha256": "79721402e39a54111a04c155d8be3ce2a696d6979b40899d62a52d441d444003"
         },
         {
           "path": "examples/superpowers/graph.json",
@@ -829,7 +907,23 @@
         },
         {
           "path": "skills/repo-visualizer/scripts/builder.py",
-          "sha256": "ea40811a4340f2a7dfe5f47f1536e34f4d405f4b044e72e1e5bad9f470b4bb2e"
+          "sha256": "0a983f80af9c45ce71ad253a20d5337f530d5938285b6ff857d8cf5f9afaad60"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/diagram-layout.js",
+          "sha256": "51c56a8d32e969828ff1adfe58d5781c3f2a15c03a55fea2e1ed8079eda0ebfb"
+        },
+        {
+          "path": "skills/repo-visualizer/scripts/story_model.py",
+          "sha256": "dcf04fefa7ea6436e34755a39b9fa2660cad5e608961fc9b81711634e910e0b8"
+        },
+        {
+          "path": "skills/repo-visualizer/references/graph-format.md",
+          "sha256": "7f22b11ea18e3c0dba298a89db9d539a591655438d1e4e88620a77f179f4c8ac"
+        },
+        {
+          "path": "examples/whisper/decoder-loop.json",
+          "sha256": "e7b9f9b64780dfbf10e6fc16f28000def3bb64d7f8aa4c38b052a4710dfb86cd"
         }
       ],
       "screenshots": [
@@ -852,6 +946,26 @@
         {
           "path": ".impeccable/review/mobile-dark.png",
           "scope": "Earlier landscape merge screenshots, visually inspected then; historical context only, not viewport evidence for this frame/motion refinement."
+        },
+        {
+          "path": ".work/diagram-only.png",
+          "scope": "Supplied actual responsibility-diagram capture visually inspected;no new browser interaction audit by documenter."
+        },
+        {
+          "path": ".work/diagram-codex-agent-loop-desktop.png",
+          "scope": "Supplied actual responsibility-diagram capture visually inspected;no new browser interaction audit by documenter."
+        },
+        {
+          "path": ".work/diagram-decoder-expanded-1440-dark.png",
+          "scope": "Supplied actual responsibility-diagram capture visually inspected;no new browser interaction audit by documenter."
+        },
+        {
+          "path": ".work/diagram-decoder-mobile.png",
+          "scope": "Supplied actual responsibility-diagram capture visually inspected;no new browser interaction audit by documenter."
+        },
+        {
+          "path": ".work/diagram-mobile-readable.png",
+          "scope": "Supplied actual readable expanded-phone capture visually inspected;no new browser interaction audit by documenter."
         }
       ],
       "qualitativeAuthority": "User-selected landscape comp and explicit assembled-render confirmation in chat: ne, v pohode, potvrzuju, udelej to. Existing flat professional standalone system preserved. No new metaphor interview claimed. User explicitly chose to merge the new website with the existing player rules: Sloučit nový web se stávajícími pravidly přehrávače (doporučuji).",
@@ -859,14 +973,14 @@
       "snippetScope": "Self-contained ds-prefixed HTML/CSS. Actual CSS custom properties have source-value fallbacks. Host must supply bundled Rethink/Atkinson fonts for exact type rendering. Static previews carry states but no application handlers; navigation hrefs are representative.",
       "tokenScope": "Frontmatter primitives are normative. Dark and landing variants remain explicitly scoped. Spacing names label observed repeated values, not a new runtime scale.",
       "documentationLimits": [
-        "Current source extraction includes canonical shared header ownership in the installed skill/core builder. Supplied core-style unit/QA reports were inspected; their checks were not rerun by the documenter.",
+        "Current source extraction and supplied actual diagram captures were inspected. Responsibility-diagram QA/unit reports are supporting evidence,not independent documenter reruns. Regenerated media is pending after frozen-code review;no new media-render completion is claimed.",
         "Impeccable comparison ledger remains hero/open on the tiny GitHub control despite explicit user approval. No closed build gate, browser hero approval receipt or publication is claimed; see docs/verification.md.",
-        "Stale incumbent edge-line color, two-language wording and public pre-landscape composition are reconciled to current source. Tiny helper text and inherited standalone phone height constraints are contextual observations, not new design mandates.",
+        "Stale incumbent edge-line color, two-language wording and public pre-landscape composition are reconciled to current source. Tiny helper text and superseded standalone phone height constraints are contextual observations, not new design mandates.",
         "No invented field-error styling, global photographic requirement, or universal reduced-motion playback/export behavior."
       ],
       "shippingRasterRule": "Generated images retain their generation prompt; derived raster media retain runtime origin/render input provenance.",
       "documentationDisposition": "Merged DESIGN.md and sidecar refreshed within the authorized two-file boundary. Standalone player guidance retained. Documentation completion does not close the independent hero/open comparison ledger.",
-      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact. Canonical brand assets now belong to the installed skill and are embedded by the core builder into every HTML; public-only English/light preferences and Back navigation remain separate.",
+      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact. Canonical brand assets now belong to the installed skill and are embedded by the core builder into every HTML; public-only English/light preferences and Back navigation remain separate. Shared responsibility diagrams add measured captions/edge labels,source-grounded flow bands,neutral frames and a single-pane expanded dialog. Focused Whisper decoder example is7nodes/7edges/4steps/12seconds. Responsive flow now follows physical page width and narrow shared-band text measurement;expanded diagrams choose readable detail below0.55 fit scale with manual camera controls respected and visible phone labels. Final typography cache stores measured node lines with geometry;scoped reviewerP2 mobile readability is resolved. Final supplied tests42/42,diagramQA160cases and expanded-readability20cases pass. Real media rerender remains pending.",
       "supportingVerification": [
         {
           "path": ".work/header-qa.json",
@@ -887,8 +1001,31 @@
           "path": ".work/core-style-qa.json",
           "sha256": "39f123b069841bf5b9c9f6131d203d73f0e0a06db65eee17cb8442f6f250d43a",
           "status": "Supplied report inspected:no errors;ZIP-built80 width/language/theme variants,actual HTML redownload and exact raw/public computed-header comparison;not rerun by documenter."
+        },
+        {
+          "path": ".work/diagram-tests-final.log",
+          "sha256": "78952812d5f9fb2a60bc45d8a525d4254d23e4519df06472936aa2d0ab3b97ad",
+          "status": "Final supplied log inspected:42 tests passed,including HyperFrames cached-layout typography regression;not rerun by documenter."
+        },
+        {
+          "path": ".work/responsibility-diagram-qa.json",
+          "sha256": "164453a8bc933c1757d07ba9be801b26a555242090afade5fe23e475a3cc8a5d",
+          "status": "Final supplied report inspected:160 cases,errors/issues empty;not rerun by documenter."
+        },
+        {
+          "path": ".work/expanded-readability-qa.json",
+          "sha256": "f452712aa32ff5814951af8ae27c4b434ea035ab7e7c34c88b8dcdf357a8c859",
+          "status": "Final supplied20-case expanded-readability report inspected;all controls inside. Czech390px example title18.65px/caption13.05px. These are scoped measurements,not global minimum-type tokens;not rerun by documenter."
         }
-      ]
+      ],
+      "scopedFinishReview": {
+        "path": ".work/responsibility-diagram-finish-review.md",
+        "sha256": "075a05533a75cf0a6339cf2b5dcf5a21033b992eb24d6db56ef0c6cf5435da19",
+        "finding": "P2 mobile readability",
+        "status": "resolved in reviewer follow-up",
+        "basis": "Reviewer independently rechecked local headless Brave at320/390px Czech/dark:expanded detail readable,Fit overview respected,Escape/source return retained. Supplied20-case report covers4widths×5languages.",
+        "limits": "Local headless evidence,not physical-device or hosted verification. Complete fitted overview remains small and reading detail requires panning. This resolves the scoped P2 only;historicalhero/open comparison ledger remains separate."
+      }
     },
     "galleryEvidence": {
       "superpowers": {
@@ -918,6 +1055,31 @@
         ],
         "sourceRevision": "86098128c0b4f24f0e2aa2994de830614b474227",
         "scope": "Current public gallery example; counts and topology are data, not design invariants."
+      },
+      "whisperDecoder": {
+        "graph": "examples/whisper/decoder-loop.json",
+        "components": 7,
+        "relationships": 7,
+        "steps": 4,
+        "durationMs": 12000,
+        "displayLanguages": [
+          "en",
+          "cs",
+          "de",
+          "fr",
+          "es"
+        ],
+        "sourceRevision": "86098128c0b4f24f0e2aa2994de830614b474227",
+        "presentation": {
+          "layout": "flow",
+          "top": [
+            "encoder"
+          ],
+          "bottom": [
+            "tokens"
+          ]
+        },
+        "scope": "Focused public decoder example;existing full graphs remain unchanged;counts are data,not design invariants."
       }
     },
     "sharedHeaderAppearance": {
@@ -931,6 +1093,39 @@
       "builder": "skills/repo-visualizer/scripts/builder.py",
       "mark": "skills/repo-visualizer/assets/brand-mark.svg",
       "embedding": "Core player template embeds exactly one brand stylesheet, inline mark and favicon; public wrapper supplies only its additional preferences/navigation/content."
+    },
+    "responsibilityDiagrams": {
+      "sources": [
+        "skills/repo-visualizer/assets/diagram-layout.js",
+        "skills/repo-visualizer/assets/player.js",
+        "skills/repo-visualizer/assets/player.css",
+        "skills/repo-visualizer/scripts/story_model.py",
+        "skills/repo-visualizer/references/graph-format.md"
+      ],
+      "title": "{typography.diagram-title}",
+      "caption": "{typography.diagram-caption}",
+      "captionLimit": "180 authored characters in base language and translations;maximum two display lines with ellipsis. Fallback is description or kind;inspector/tooltip retain full text.",
+      "edgeLabel": "{typography.diagram-edge}",
+      "edgeLimit": "Measured128px wrapping width;maximum three display lines with ellipsis.",
+      "frame": "16px rounded neutral frame;light diagram-surface,dark dark-diagram-surface;node fill is paper in light and dark-diagram-surface in dark.",
+      "bands": "Light diagram-band,dark dark-diagram-band;actual sourced component IDs,not decorative buses.",
+      "layout": "Auto flow only for a3–6node ungrouped acyclic chain meeting available-width geometry threshold;otherwise layered. Explicit flow permits1–8main nodes and≤2top/≤2bottom unique existing IDs;no groups or layered hints with bands. Flow runs DOWN below physical page width800px and RIGHT otherwise. Main-flow between-layer spacing24px.",
+      "routing": "Orthogonal visibility routing avoids shared-component node bodies;branches,cycles,parallel and self relationships retain canonical IDs/evidence.",
+      "inferred": "Dashed inferred edges and separate inferred node marker retained.",
+      "expandedDialog": {
+        "primitive": "Native dialog;existing graph pane is moved,not cloned;single SVG.",
+        "desktopGeometry": "inset16px;width/height calc(100% - 32px);14px radius;thin control rule;#08101a99 backdrop.",
+        "mobileGeometry": "inset6px;width/height calc(100% - 12px);graph-stage:flex1;height:auto.",
+        "selection": "Retained on expand/collapse;collapse restores prior camera.",
+        "keyboard": "Escape collapses;expand button focus restored. Inspect selection collapses and focuses selected source Code tab.",
+        "exports": "HTML export returns pane to workspace,closes dialog,resets expanded state. Expand/inspect actions hidden in fixed export frames.",
+        "readableDetail": "If fitted scale<0.55,center on selected node (or source endpoint for edge selection),targeting one logical diagram unit per screen pixel. The full graph remains available through pan/zoom/Fit;this is camera framing,not a topology change.",
+        "manualControls": "Explicit pan or zoom disables automatic readable framing;Fit disables it and restores overview. Source inspection and Escape behavior remain unchanged.",
+        "mobileControls": "Visible translated Expand/Collapse label;graph-actions max-width100% and flex-wrap prevent overflow. A12px/1.5line pan hint explains moving through the graph and Fit.",
+        "overviewLimit": "Full graph/Fit remains a compact overview on narrow phones;reading captions uses selected-component detail plus panning. No claim that every caption is simultaneously readable in the fitted overview."
+      },
+      "sharedBandTextMeasure": "On pageWidth<800px clamp title/caption text measurement to max(204,min(bandWidth-36,graphViewportWidth-36));wide pages use full band text measure. Captions retain the two-line/ellipsis limit.",
+      "cachedLayoutTypography": "Precomputed layout cache retains measured per-node title/caption lines and sizes. Reusing cached geometry restores that typography before drawing;HyperFrames cached-layout regression included in supplied42-test suite."
     }
   },
   "components": [
@@ -1005,11 +1200,12 @@
       "css": ".ds-header-controls{font-family:Rethink,Atkinson,sans-serif;display:flex;align-items:center;gap:24px}.ds-nav{display:flex;gap:28px;font-size:16px}.ds-nav-link{color:var(--ink,#151720);text-decoration:none;text-underline-offset:4px}.ds-nav-link:hover{text-decoration:underline}.ds-language{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;gap:8px;min-width:92px;min-height:36px;padding:6px 9px;background:#ffffff30;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink,#151720);cursor:pointer}.ds-flag{width:21px;height:15px;border-radius:2px}.ds-themes{display:inline-flex;gap:2px;padding:3px;border:1px solid #c3dff8;border-radius:20px;background:#98c4f0}.ds-theme{display:grid;place-items:center;width:40px;height:28px;padding:5px;border:0;border-radius:16px;background:transparent;color:#172332;cursor:pointer}.ds-theme[aria-pressed=\"true\"]{background:#ffffffdc}.ds-theme:hover,.ds-language:hover{background:var(--hover,#f1f4f8)}.ds-theme-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ds-theme:focus-visible,.ds-language:focus-visible,.ds-nav-link:focus-visible{outline:2px solid #0854e5;outline-offset:3px}@media(max-width:1000px){.ds-nav{display:none}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-theme{width:26px}}@media(max-width:1200px){.ds-nav{gap:20px}.ds-header-controls{gap:12px}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-language{min-width:0;padding:6px}}@media(max-width:360px){.ds-header-controls{gap:6px}.ds-locale-code{display:none}.ds-theme{width:24px}}"
     },
     {
-      "name": "Graph node",
+      "name": "Responsibility diagram node",
       "kind": "custom",
-      "description": "Shared selected SVG node retains Atkinson, including on the public Rethink surface.",
-      "html": "<svg class=\"ds-graph\" viewBox=\"0 0 220 84\" xmlns=\"http://www.w3.org/2000/svg\"><g class=\"ds-node\" role=\"button\" tabindex=\"0\" aria-label=\"Model request · module\"><rect class=\"ds-node-box\" x=\"5\" y=\"5\" width=\"210\" height=\"74\" rx=\"7\"/><text class=\"ds-node-title\" x=\"110\" y=\"35\" text-anchor=\"middle\">Model request</text><text class=\"ds-node-kind\" x=\"110\" y=\"63\" text-anchor=\"middle\">module</text></g></svg>",
-      "css": ".ds-graph{width:220px;max-width:100%;height:auto}.ds-node{cursor:pointer}.ds-node-box{fill:var(--blue-light,#eaf2ff);stroke:var(--blue,#2164c7);stroke-width:2}.ds-node-title{fill:var(--selected-ink,#1558b7);font-family:Atkinson,system-ui,sans-serif;font-size:17px;font-weight:600}.ds-node-kind{fill:var(--muted,#5e6674);font-family:Atkinson,system-ui,sans-serif;font-size:11px;font-weight:400}.ds-node:hover .ds-node-box{stroke:var(--blue,#2164c7);stroke-width:2}.ds-node:focus-visible{outline:none}.ds-node:focus-visible .ds-node-box{stroke:var(--blue,#2164c7);stroke-width:3}"
+      "description": "Measured20px title with14px responsibility caption in a neutral diagram frame;Atkinson is retained on every surface.",
+      "html": "<svg class=\"ds-graph\" viewBox=\"0 0 280 152\" xmlns=\"http://www.w3.org/2000/svg\"><rect class=\"ds-diagram-frame\" x=\"1\" y=\"1\" width=\"278\" height=\"150\" rx=\"16\"/><g class=\"ds-node\" transform=\"translate(20 20)\" role=\"button\" tabindex=\"0\" aria-label=\"Model request · module\"><rect class=\"ds-node-box\" width=\"240\" height=\"112\" rx=\"9\"/><text class=\"ds-node-title\" x=\"120\" y=\"36\" text-anchor=\"middle\">Model request</text><text class=\"ds-node-caption\" x=\"120\" y=\"64\" text-anchor=\"middle\"><tspan x=\"120\">Sends instructions and history;</tspan><tspan x=\"120\" dy=\"19\">receives response items.</tspan></text></g></svg>",
+      "css": ".ds-graph{width:280px;max-width:100%;height:auto}.ds-diagram-frame{fill:var(--diagram-surface,#fbfcfe);stroke:var(--line,#dce1e8);stroke-width:1}.ds-node{cursor:pointer}.ds-node-box{fill:var(--diagram-node,#fff);stroke:var(--node-line,#a9b2bf);stroke-width:1.2}.ds-node-title{fill:var(--ink,#151720);font-family:Atkinson,system-ui,sans-serif;font-size:20px;font-weight:600}.ds-node-caption{fill:var(--muted,#5e6674);font-family:Atkinson,system-ui,sans-serif;font-size:14px;font-weight:400}.ds-node:hover .ds-node-box{stroke:var(--blue,#2164c7);stroke-width:2}.ds-node:focus-visible{outline:none}.ds-node:focus-visible .ds-node-box{stroke:var(--blue,#2164c7);stroke-width:3}",
+      "refersTo": "diagram-node"
     }
   ],
   "narrative": {

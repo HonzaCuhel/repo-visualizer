@@ -31,6 +31,8 @@ Turn code into a graph someone can understand. The graph is the artifact; a narr
 
 Use the shipped professional explorer: compact component navigation, a dominant graph, and a readable source inspector. White/cool neutral background, charcoal text, restrained blue selection, thin rules, no decorative 3D or glowing effects. The overview is immediately visible; animation is optional and respects reduced motion. Make sources and controls work by keyboard. For large graphs, scope before shrinking text into illegibility.
 
+Give components a short responsibility `caption` when it makes the map easier to scan. Use the reference-style horizontal flow with shared top/bottom bands only when it suits the actual mechanism; keep complex maps layered and scope a focused graph rather than forcing one row. See the presentation fields in [graph-format.md](references/graph-format.md). The explorer can expand the same diagram for reading and return to the selected source.
+
 ## Tools and paths
 
 The explorer has user-controlled light/dark/system appearance and interface language. English, Czech, German, French and Spanish controls are bundled. For another requested language, translate every value from `assets/locales/en.json` into the graph's `ui_strings` object; preserve keys and `{placeholders}`. Optional `translations` provide display text in multiple graph languages while preserving ids, topology and source evidence. See [references/localization.md](references/localization.md). Do not claim automatic translation of existing graph content or source code.
