@@ -24,7 +24,7 @@ class BuilderTests(unittest.TestCase):
             (assets/'player.html').write_text('<title>@@TITLE@@</title><script type="application/json">@@STORY@@</script><script>@@JS@@</script>')
             for language in ('de','fr','es'):
                 (assets/'locales'/(language+'.json')).write_text('{}')
-            for file,content in [('appearance.js','/*appearance*/'),('locales/en.json','{}'),('locales/cs.json','{}'),('player.css','body{}'),('player.js','/*real-player*/'),('interaction.js','/*controls*/'),('vendor/elk.bundled.js','/*elk*/'),('vendor/ELK-LICENSE.md','license'),('vendor/gifenc.js','/*gif*/'),('vendor/GIFENC-LICENSE.txt','license'),('fonts/OFL-AtkinsonHyperlegibleNext.txt','license')]:
+            for file,content in [('brand.css','.wordmark{}'),('brand-mark.svg','<svg xmlns="http://www.w3.org/2000/svg"/>'),('appearance.js','/*appearance*/'),('locales/en.json','{}'),('locales/cs.json','{}'),('player.css','body{}'),('player.js','/*real-player*/'),('interaction.js','/*controls*/'),('vendor/elk.bundled.js','/*elk*/'),('vendor/ELK-LICENSE.md','license'),('vendor/gifenc.js','/*gif*/'),('vendor/GIFENC-LICENSE.txt','license'),('fonts/OFL-AtkinsonHyperlegibleNext.txt','license')]:
                 (assets/file).write_text(content)
             (assets/'fonts/AtkinsonHyperlegibleNext.ttf').write_bytes(b'font')
             with patch('builder.ASSETS',assets):

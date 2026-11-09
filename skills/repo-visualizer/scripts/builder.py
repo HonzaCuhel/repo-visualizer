@@ -34,7 +34,12 @@ def build_html(data, *, landing=False):
             from urllib.parse import quote
             source['url'] = f"{origin}/blob/{commit}/{quote(source['path'], safe='/')}#L{source['start']}-L{source['end']}"
     template = (ASSETS / 'player.html').read_text(encoding='utf-8')
+    mark = (ASSETS / 'brand-mark.svg').read_text(encoding='utf-8').strip()
+    icon = mark.replace('</svg>', '<style>@media(prefers-color-scheme:dark){svg{color:#8bb9ff}}</style></svg>')
     replacements = {
+        '@@BRAND_MARK@@': mark.replace('<svg ', '<svg aria-hidden="true" ', 1),
+        '@@BRAND_CSS@@': (ASSETS / 'brand.css').read_text(encoding='utf-8'),
+        '@@FAVICON@@': 'data:image/svg+xml;base64,' + base64.b64encode(icon.encode('utf-8')).decode(),
         '@@APPEARANCE@@': (ASSETS / 'appearance.js').read_text(encoding='utf-8'),
         '@@BODY_CLASS@@': 'landing' if landing else 'standalone',
         '@@UI_CONFIG@@': safe_json({'language': story['language'], 'ui_strings': story.get('ui_strings', {}), 'content_languages': [story['language'], *story.get('translations', {})], 'landing': landing}),

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-08T12:51:20.322084+00:00",
+  "generatedAt": "2026-11-09T07:14:31.057271+00:00",
   "title": "Design System: Repo Visualizer",
   "extensions": {
     "colorMeta": {
@@ -573,7 +573,7 @@
       },
       "public-detail-control": {
         "displayName": "Public Detail Control",
-        "purpose": "Compact neutral desktop source-jump action on branded public detail pages."
+        "purpose": "Shared compact neutral desktop source-jump action in all core-generated standalone HTML; historical token name retained."
       }
     },
     "shadows": [
@@ -705,7 +705,7 @@
       },
       "standalone": {
         "selector": ".standalone",
-        "stylesheet": "skills/repo-visualizer/assets/player.css",
+        "stylesheet": "skills/repo-visualizer/assets/player.css plus skills/repo-visualizer/assets/brand.css",
         "fontRoles": [
           "standalone-display",
           "standalone-body",
@@ -715,18 +715,22 @@
         "darkAction": "{colors.dark-action}",
         "freshTheme": "system unless artifact preference supplied",
         "mobileGraphPane": "height:450px; inherited min-height:455px",
-        "offline": "Embedded player, font, UI catalogs, graph and source data; no landing landscape styles.",
-        "scope": "Raw installed skill player; branded public details add the publicDetails scope.",
-        "languageBehavior": "User/artifact and graph language behavior remains unchanged by public defaults."
+        "offline": "Embedded player, shared header brand styles, inline SVG mark, data-URL favicon, font, UI catalogs, graph and source data; no landing landscape styles.",
+        "scope": "Every core-generated standalone HTML, including raw installed skill output, ZIP-built output, offline exports and public details. Public details additionally apply their public-only preferences and return navigation.",
+        "languageBehavior": "User/artifact and graph language behavior remains unchanged by public defaults.",
+        "headerHeight": "64px;56px at <=600px",
+        "sourceAction": "{components.public-detail-source}",
+        "sourceActionMinHeight": "36px",
+        "sourceActionHidden": "<=600px and export-frame mode"
       },
       "graphLabels": {
         "fontFamily": "Atkinson, system-ui, sans-serif",
         "scope": "both surfaces"
       },
       "publicDetails": {
-        "selector": ".standalone with public brand-style and detail-navigation script",
+        "selector": ".standalone with public preferences and detail-navigation script",
         "sources": [
-          "site-src/brand.css",
+          "skills/repo-visualizer/assets/brand.css",
           "site-src/detail-navigation.js",
           "scripts/build_site.py"
         ],
@@ -744,7 +748,8 @@
         "sourceActionMinHeight": "36px",
         "sourceActionHidden": "<=600px and export-frame mode",
         "backLink": "Translated Back to examples above h1;13px weight500;min-height36px;16px stroke SVG arrow;hidden in export-frame mode",
-        "returnDestination": "Preserve lang and theme query parameters; Back adds #examples; file: uses https://honzacuhel.github.io/repo-visualizer/."
+        "returnDestination": "Preserve lang and theme query parameters; Back adds #examples; file: uses https://honzacuhel.github.io/repo-visualizer/.",
+        "sharedHeader": "Inherited from the core builder and canonical skill assets; no duplicate public branding injection."
       }
     },
     "provenance": {
@@ -763,12 +768,12 @@
           "sha256": "c0db4a137afc6305e63b9c4ab792a6e5674506b08b153ce32e23188d585ac6c5"
         },
         {
-          "path": "site-src/brand.css",
+          "path": "skills/repo-visualizer/assets/brand.css",
           "sha256": "49783c798f7f02645b810f7547ceb4da8e2d31bd7b32119262f3402cc94eec06"
         },
         {
           "path": "scripts/build_site.py",
-          "sha256": "641e9aca403a2e83b3c31b13fb3f095580d24760758f6da3145f24c0795b9410"
+          "sha256": "c62955ef98380c495cf107a7ae62823018f67e8c37468068c7a1e3dd91b4906b"
         },
         {
           "path": "skills/repo-visualizer/assets/player.css",
@@ -776,7 +781,7 @@
         },
         {
           "path": "skills/repo-visualizer/assets/player.html",
-          "sha256": "b33c9c5a01567f2a835e4d1d6d31217f288c809f1a26283bbf5ee7caac23f43e"
+          "sha256": "b64bb641186cc4d11d96fcef72601c4174ccc3dac93a32554196fb4ce684dd85"
         },
         {
           "path": "skills/repo-visualizer/assets/appearance.js",
@@ -817,6 +822,14 @@
         {
           "path": "site-src/detail-navigation.js",
           "sha256": "5d6256b80f50985e2e3f2637e338d69bb8b5c442ac7d64ae277fc7298b1b452c"
+        },
+        {
+          "path": "skills/repo-visualizer/assets/brand-mark.svg",
+          "sha256": "2ff6b21846f175aa982752f70140dcd14d820f41265be55f4e9f06787d61aee2"
+        },
+        {
+          "path": "skills/repo-visualizer/scripts/builder.py",
+          "sha256": "ea40811a4340f2a7dfe5f47f1536e34f4d405f4b044e72e1e5bad9f470b4bb2e"
         }
       ],
       "screenshots": [
@@ -846,14 +859,14 @@
       "snippetScope": "Self-contained ds-prefixed HTML/CSS. Actual CSS custom properties have source-value fallbacks. Host must supply bundled Rethink/Atkinson fonts for exact type rendering. Static previews carry states but no application handlers; navigation hrefs are representative.",
       "tokenScope": "Frontmatter primitives are normative. Dark and landing variants remain explicitly scoped. Spacing names label observed repeated values, not a new runtime scale.",
       "documentationLimits": [
-        "Current source extraction includes shared public headers, detail return navigation and public-only defaults; no new browser interaction audit was performed by the documenter. Supplied header QA and export-equivalence reports are supporting evidence, not documenter reruns.",
+        "Current source extraction includes canonical shared header ownership in the installed skill/core builder. Supplied core-style unit/QA reports were inspected; their checks were not rerun by the documenter.",
         "Impeccable comparison ledger remains hero/open on the tiny GitHub control despite explicit user approval. No closed build gate, browser hero approval receipt or publication is claimed; see docs/verification.md.",
         "Stale incumbent edge-line color, two-language wording and public pre-landscape composition are reconciled to current source. Tiny helper text and inherited standalone phone height constraints are contextual observations, not new design mandates.",
         "No invented field-error styling, global photographic requirement, or universal reduced-motion playback/export behavior."
       ],
       "shippingRasterRule": "Generated images retain their generation prompt; derived raster media retain runtime origin/render input provenance.",
       "documentationDisposition": "Merged DESIGN.md and sidecar refreshed within the authorized two-file boundary. Standalone player guidance retained. Documentation completion does not close the independent hero/open comparison ledger.",
-      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact.",
+      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact. Canonical brand assets now belong to the installed skill and are embedded by the core builder into every HTML; public-only English/light preferences and Back navigation remain separate.",
       "supportingVerification": [
         {
           "path": ".work/header-qa.json",
@@ -864,6 +877,16 @@
           "path": ".work/header-export-equivalence.json",
           "sha256": "0faab4098198a311ced7eca8d8b6beab912be2b45d03cc599e8812abd0d6cc34",
           "status": "Supplied comparison report inspected;90 pixel-identical frame samples;not rerun by documenter."
+        },
+        {
+          "path": ".work/core-style-unit-tests.log",
+          "sha256": "77b46e0456caaff35d824054e37f1182b04ce497c26471336f8f9e8ba7b56dbe",
+          "status": "Supplied log inspected:37 tests passed;not rerun by documenter."
+        },
+        {
+          "path": ".work/core-style-qa.json",
+          "sha256": "39f123b069841bf5b9c9f6131d203d73f0e0a06db65eee17cb8442f6f250d43a",
+          "status": "Supplied report inspected:no errors;ZIP-built80 width/language/theme variants,actual HTML redownload and exact raw/public computed-header comparison;not rerun by documenter."
         }
       ]
     },
@@ -897,21 +920,24 @@
         "scope": "Current public gallery example; counts and topology are data, not design invariants."
       }
     },
-    "publicHeaderAppearance": {
-      "scope": "Landing and branded public detail pages; raw player defaults remain distinct.",
-      "source": "site-src/brand.css",
+    "sharedHeaderAppearance": {
+      "scope": "All core-generated HTML, including raw skill, ZIP-built, offline, landing and public detail pages. Language/theme defaults remain artifact-specific.",
+      "source": "skills/repo-visualizer/assets/brand.css",
       "languageTrigger": "Inline SVG flag and locale code; name hidden;min-width92px, removed on phones;code hidden at <=360px.",
       "themeCapsule": "20px outer radius;16px segments;40px segment width,26px at <=600px and24px at <=360px.",
       "groupGaps": "24px;12px at <=1200px;8px at <=600px;6px at <=360px.",
       "landingNavigation": "Content-sized flex links;28px equal gaps;20px at <=1200px;hidden at <=1000px.",
-      "darkAppearance": "Translucent dark surface and neutral rule;selected segment uses var(--hover),icon uses var(--ink)."
+      "darkAppearance": "Translucent dark surface and neutral rule;selected segment uses var(--hover),icon uses var(--ink).",
+      "builder": "skills/repo-visualizer/scripts/builder.py",
+      "mark": "skills/repo-visualizer/assets/brand-mark.svg",
+      "embedding": "Core player template embeds exactly one brand stylesheet, inline mark and favicon; public wrapper supplies only its additional preferences/navigation/content."
     }
   },
   "components": [
     {
-      "name": "Public detail navigation",
+      "name": "Standalone source action and public return link",
       "kind": "nav",
-      "description": "Branded detail source action and translated return link; shown together as separate location-specific primitives. Raw installed skill action remains documented separately.",
+      "description": "Shared neutral source action in all standalone HTML; public-only translated Back link appears above the detail heading. Preview combines these location-specific primitives.",
       "html": "<div class=\"ds-detail-header\"><a class=\"ds-detail-source\" href=\"#source\">Open source</a></div><a class=\"ds-detail-back\" href=\"./?lang=en&amp;theme=light#examples\"><svg class=\"ds-detail-arrow\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m10 5-7 7 7 7M3 12h18\"/></svg>Back to examples</a>",
       "css": ".ds-detail-header{font-family:Atkinson,system-ui,sans-serif;display:flex;justify-content:flex-end}.ds-detail-source{display:inline-flex;align-items:center;justify-content:center;font-size:13px;line-height:1.3;font-weight:500;min-height:36px;padding:7px 12px;border-radius:6px;background:transparent;color:var(--ink,#151720);border:1px solid var(--control-line,#cbd3df);white-space:nowrap;text-decoration:none}.ds-detail-source:hover{background:var(--hover,#f1f4f8)}.ds-detail-back{font-family:Atkinson,system-ui,sans-serif;display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;min-height:36px;font-size:13px;font-weight:500;color:var(--muted,#5e6674);text-decoration:none}.ds-detail-arrow{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ds-detail-back:hover{color:var(--ink,#151720);text-decoration:underline;text-underline-offset:4px}.ds-detail-source:focus-visible,.ds-detail-back:focus-visible{outline:2px solid var(--blue,#2164c7);outline-offset:3px}@media(max-width:600px){.ds-detail-source{display:none}}",
       "refersTo": "public-detail-source"
@@ -974,7 +1000,7 @@
     {
       "name": "Navigation and appearance",
       "kind": "nav",
-      "description": "Shared public flag/code and theme capsule; preview uses the landing typeface and content-sized equal-gap navigation. No application handlers.",
+      "description": "Shared core flag/code and theme capsule across all generated HTML; preview uses landing typography and its equal-gap navigation. No application handlers.",
       "html": "<div class=\"ds-header-controls\"><nav class=\"ds-nav\" aria-label=\"Main navigation\"><a class=\"ds-nav-link\" href=\"#examples\">Examples</a><a class=\"ds-nav-link\" href=\"#guide\">How it works</a></nav><button class=\"ds-language\" aria-label=\"Interface language: English\" aria-haspopup=\"listbox\" aria-expanded=\"false\"><svg class=\"ds-flag\" viewBox=\"0 0 28 20\" aria-hidden=\"true\"><rect width=\"28\" height=\"20\" fill=\"#21468b\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"m0 0 28 20m0-20L0 20\" stroke=\"#c8102e\" stroke-width=\"1.5\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#fff\" stroke-width=\"7\"/><path d=\"M14 0v20M0 10h28\" stroke=\"#c8102e\" stroke-width=\"4\"/></svg><span class=\"ds-locale-code\">EN</span></button><div class=\"ds-themes\" role=\"group\" aria-label=\"Color theme\"><button class=\"ds-theme\" aria-label=\"Light theme\" aria-pressed=\"true\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\"/></svg></button><button class=\"ds-theme\" aria-label=\"Dark theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z\"/></svg></button><button class=\"ds-theme\" aria-label=\"System theme\" aria-pressed=\"false\"><svg class=\"ds-theme-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M12 17v4m-4 0h8\"/></svg></button></div></div>",
       "css": ".ds-header-controls{font-family:Rethink,Atkinson,sans-serif;display:flex;align-items:center;gap:24px}.ds-nav{display:flex;gap:28px;font-size:16px}.ds-nav-link{color:var(--ink,#151720);text-decoration:none;text-underline-offset:4px}.ds-nav-link:hover{text-decoration:underline}.ds-language{font-family:Rethink,Atkinson,sans-serif;display:inline-flex;align-items:center;gap:8px;min-width:92px;min-height:36px;padding:6px 9px;background:#ffffff30;border:1px solid transparent;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink,#151720);cursor:pointer}.ds-flag{width:21px;height:15px;border-radius:2px}.ds-themes{display:inline-flex;gap:2px;padding:3px;border:1px solid #c3dff8;border-radius:20px;background:#98c4f0}.ds-theme{display:grid;place-items:center;width:40px;height:28px;padding:5px;border:0;border-radius:16px;background:transparent;color:#172332;cursor:pointer}.ds-theme[aria-pressed=\"true\"]{background:#ffffffdc}.ds-theme:hover,.ds-language:hover{background:var(--hover,#f1f4f8)}.ds-theme-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ds-theme:focus-visible,.ds-language:focus-visible,.ds-nav-link:focus-visible{outline:2px solid #0854e5;outline-offset:3px}@media(max-width:1000px){.ds-nav{display:none}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-theme{width:26px}}@media(max-width:1200px){.ds-nav{gap:20px}.ds-header-controls{gap:12px}}@media(max-width:600px){.ds-header-controls{gap:8px}.ds-language{min-width:0;padding:6px}}@media(max-width:360px){.ds-header-controls{gap:6px}.ds-locale-code{display:none}.ds-theme{width:24px}}"
     },

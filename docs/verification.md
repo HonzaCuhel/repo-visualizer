@@ -1,5 +1,11 @@
 # Release verification
 
+## Shared design in generated HTML — 9 November 2026
+
+The SVG mark, embedded favicon and shared header styles now ship inside the skill itself. The core builder inserts them into every generated HTML; the public build uses the same assets without a second icon/style wrapper. The distributable now contains 35 files. Newly generated artifacts and their downloaded copies use the compact flag/code language control, sun/moon/system capsule and neutral 13px source action. Raw skill output still follows the graph/user language and system fallback; public defaults remain scoped to the public build.
+
+All 37 automated tests pass, including regressions for exactly one embedded mark/stylesheet, compact source action and retained theme capsule after HTML download. A clean ZIP was extracted and its own CLI built Whisper HTML. Browser checks passed 80 combinations of four widths, five languages and two themes with no remote requests or JavaScript errors. An actual re-download preserved chosen appearance, five language options and source inspection. Raw and public detail header computed styles matched exactly. The approved graph layout, topology, source excerpts and public-only return navigation are preserved.
+
 ## Shared public navigation — 8 November 2026
 
 The public landing now uses content-sized navigation links with equal gaps rather than fixed tracks. Public examples share the landing flag/code language trigger and sun/moon/system capsule. The detail source jump is a compact neutral 13px action, and a translated back link returns to the examples while preserving language/theme. Fresh public visits default to English/light; explicit URL and saved choices win. The raw skill still follows the graph/user language.

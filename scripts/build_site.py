@@ -28,11 +28,7 @@ def branded(document):
         back='<a class="detail-back" href="./#examples"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 5-7 7 7 7M3 12h18"/></svg><span data-i18n="backToExamples">Back to examples</span></a>'
         document=document.replace('<h1 id="page-title"',back+'<h1 id="page-title"',1)
         document=document.replace('</body>','<script id="detail-navigation">'+(ROOT/'site-src/detail-navigation.js').read_text()+'</script></body>',1)
-    mark=(ROOT/'site-src/brand-mark.svg').read_text().strip()
-    icon=mark.replace('</svg>','<style>@media(prefers-color-scheme:dark){svg{color:#8bb9ff}}</style></svg>')
-    data=base64.b64encode(icon.encode()).decode()
-    document=document.replace('>repo-visualizer</a','>'+mark.replace('<svg ','<svg aria-hidden="true" ',1)+'<span>repo-visualizer</span></a',1)
-    return document.replace('</head>','<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,'+data+'"><style id="brand-style">'+(ROOT/'site-src/brand.css').read_text()+'</style></head>',1)
+    return document
 
 def portable_builder_graph():
     graph=read_story(ROOT/'examples/stack-diagram/graph.json')
@@ -96,8 +92,8 @@ def build():
     for example in ('superpowers', 'whisper'):
         write_html(site/f'{example}.html',branded(build_html(read_story(ROOT/f'examples/{example}/graph.json'))))
     (site/'.nojekyll').touch()
-    mark=(ROOT/'site-src/brand-mark.svg').read_text()
+    mark=(ROOT/'skills/repo-visualizer/assets/brand-mark.svg').read_text()
     (site/'favicon.svg').write_text(mark.replace('</svg>','<style>@media(prefers-color-scheme:dark){svg{color:#8bb9ff}}</style></svg>'))
-    shutil.copy2(ROOT/'site-src/brand-mark.svg',assets/'brand-mark.svg')
+    shutil.copy2(ROOT/'skills/repo-visualizer/assets/brand-mark.svg',assets/'brand-mark.svg')
     print('Built public landing page and offline example')
 if __name__=='__main__':build()

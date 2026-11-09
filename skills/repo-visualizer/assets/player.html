@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="referrer" content="no-referrer" />
     <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="@@FAVICON@@" />
     <title>@@TITLE@@ · Repo Visualizer</title>
     <script id="appearance-config" type="application/json">
       @@UI_CONFIG@@
@@ -18,6 +19,7 @@
     <style id="player-style">
       @font-face{font-family:Atkinson;src:url(@@FONT_URL@@) format('truetype');font-weight:100 900;font-display:swap}@@CSS@@
     </style>
+    <style id="brand-style">@@BRAND_CSS@@</style>
   </head>
   <body class="@@BODY_CLASS@@">
     <a class="skip-link" href="#workspace" data-i18n="skip">Skip to graph</a>
@@ -27,7 +29,7 @@
         href="#"
         aria-label="Repo Visualizer home"
         data-i18n-aria="home"
-        >repo-visualizer</a
+        >@@BRAND_MARK@@<span>repo-visualizer</span></a
       >
       <nav
         class="site-nav"

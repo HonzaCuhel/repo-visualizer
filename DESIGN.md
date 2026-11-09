@@ -115,19 +115,12 @@ spacing:
   pane-large: 28px
   landing-gutter: clamp(24px, 3.53vw, 56px)
 components:
-  button-primary:
-    backgroundColor: '{colors.blue}'
-    textColor: '{colors.paper}'
-    rounded: '{rounded.primary}'
-    padding: 0.35em 0.8em
   public-detail-source:
     backgroundColor: transparent
     textColor: '{colors.ink}'
     typography: '{typography.public-detail-control}'
     rounded: '{rounded.primary}'
     padding: 7px 12px
-  button-primary-hover:
-    backgroundColor: '{colors.action-hover}'
   landing-button-primary:
     backgroundColor: '{colors.landing-action}'
     textColor: '{colors.paper}'
@@ -244,19 +237,19 @@ Persistent working surfaces are flat: thin rules, tonal fills and selected outli
 
 ## Shapes
 
-Small practical curves define the shared tools: inset code, conventional controls, a gently rounded workspace and graph nodes, and larger group bounds. The public presentation uses broader curves for its 22px explorer frame, 17px phone frame, 9px hero command, 8px hero actions, 14px installation surface and 12px video. The shared public header theme switch is a 20px capsule with 16px selected segments, on both the landing and branded example details. These are scoped component shapes, not a universal pill-button rule. Thin rectilinear rules remain the organizing device inside the workspace.
+Small practical curves define the shared tools: inset code, conventional controls, a gently rounded workspace and graph nodes, and larger group bounds. The public presentation uses broader curves for its 22px explorer frame, 17px phone frame, 9px hero command, 8px hero actions, 14px installation surface and 12px video. The shared header theme switch is a 20px capsule with 16px selected segments in every generated HTML, including raw skill, ZIP-built, offline and public examples. These are scoped component shapes, not a universal pill-button rule. Thin rectilinear rules remain the organizing device inside the workspace.
 
 ## Components
 
 ### Brand mark and landscape
 
-The mark is a crisp graph of three connected components: one filled node and two outlined nodes. The public header, favicon and README share the SVG, and public standalone examples embed it for offline use. The GitHub mark is the separately attributed Bootstrap Icons asset.
+The mark is a crisp graph of three connected components: one filled node and two outlined nodes. Its canonical SVG and shared header stylesheet live in the installed skill assets. The core builder embeds the mark, favicon and stylesheet in every generated HTML, including raw skill output, ZIP-built artifacts, offline files and public examples. The public builder adds its page-specific content and preferences without a duplicate brand-style or mark wrapper. The README shares the same mark. The GitHub mark is the separately attributed Bootstrap Icons asset.
 
 The landscape is original generated atmosphere, not a claim about a named real place. It has no UI painted into it. Shipping raster provenance records the generation prompt for generated imagery or the origin/render inputs for derived media. Preserve those records when replacing or rebuilding media.
 
 ### Buttons
 
-Compact, conventional actions have distinct selected and focus states. The public primary action is cobalt with white text; its secondary explore action is a thin dark border over translucent paper. Both have a 44px minimum height. The shared primary action uses the standalone working blue. Neutral view controls use a quiet hover fill and stronger selected text; export summaries use a thin rule. Keyboard focus uses a two-pixel blue outline with three-pixel offset; search uses focus-within with one-pixel offset. Disabled actions reduce opacity to 0.5 with a waiting cursor. Authored stroke SVG supplies action icons; mathematical zoom operators remain text.
+Compact, conventional actions have distinct selected and focus states. The public primary action is cobalt with white text; its secondary explore action is a thin dark border over translucent paper. Both have a 44px minimum height. Standalone headers use the compact neutral source-jump action; blue continues to identify graph selection, focus and links. Neutral view controls use a quiet hover fill and stronger selected text; export summaries use a thin rule. Keyboard focus uses a two-pixel blue outline with three-pixel offset; search uses focus-within with one-pixel offset. Disabled actions reduce opacity to 0.5 with a waiting cursor. Authored stroke SVG supplies action icons; mathematical zoom operators remain text.
 
 ### Chips / Component Navigation
 
@@ -272,11 +265,11 @@ Search combines an authored stroke icon with a transparent input, thin border an
 
 ### Navigation and Appearance
 
-Public landing navigation uses content-sized flex links with equal 28px gaps, reducing to 20px at 1200px and below; translation changes link width without imposing fixed columns. Links are quiet text over the sky with hover underlines. Component navigation and inspector tabs remain the working navigation; the active inspector tab has a thin blue underline. Landing and branded public detail headers share the flag-plus-locale-code trigger and the sun/moon/system capsule. The trigger opens a keyboard-operable listbox with a visible selected check. Appearance-group spacing is 24px, reducing to 12px at 1200px, 8px on phones and 6px at 360px. Theme segments are 40px wide, becoming 26px on phones and 24px at 360px; the locale code also hides at that narrowest breakpoint. English, Czech, German, French and Spanish UI catalogs are bundled; graph translation availability is separate and a notice explains mismatches. The current Superpowers and Whisper gallery graphs each include display translations in all five languages while source paths and revision-pinned references retain their literal identity.
+Public landing navigation uses content-sized flex links with equal 28px gaps, reducing to 20px at 1200px and below; translation changes link width without imposing fixed columns. Links are quiet text over the sky with hover underlines. Component navigation and inspector tabs remain the working navigation; the active inspector tab has a thin blue underline. Every core-generated HTML shares the flag-plus-locale-code trigger and the sun/moon/system capsule, including the landing, public details, raw skill output and ZIP-built or offline artifacts. The trigger opens a keyboard-operable listbox with a visible selected check. Appearance-group spacing is 24px, reducing to 12px at 1200px, 8px on phones and 6px at 360px. Theme segments are 40px wide, becoming 26px on phones and 24px at 360px; the locale code also hides at that narrowest breakpoint. English, Czech, German, French and Spanish UI catalogs are bundled; graph translation availability is separate and a notice explains mismatches. The current Superpowers and Whisper gallery graphs each include display translations in all five languages while source paths and revision-pinned references retain their literal identity.
 
-Sun, moon and system buttons explicitly select light, dark or operating-system appearance, with accessible labels and `aria-pressed`. Query choices precede stored choices, then artifact preferences and the fallback. The public build supplies English and light preferences to both landing and branded detail pages; a saved or queried choice wins. The raw installed skill player retains the user or graph language behavior and system theme fallback unless its artifact carries a preference. Choices persist locally. Exported standalone HTML embeds its player, fonts, interface catalogs and graph/source data for offline viewing and removes the public landscape styles and landing-only content.
+Sun, moon and system buttons explicitly select light, dark or operating-system appearance, with accessible labels and `aria-pressed`. Query choices precede stored choices, then artifact preferences and the fallback. The public build supplies English and light preferences to both landing and branded detail pages; a saved or queried choice wins. The raw installed skill player retains the user or graph language behavior and system theme fallback unless its artifact carries a preference. Choices persist locally. Exported standalone HTML embeds its player, shared brand mark/header styles, favicon, fonts, interface catalogs and graph/source data for offline viewing and removes the public landscape styles and landing-only content.
 
-Branded public detail pages keep an understated source-jump action in the desktop header: neutral transparent fill, a thin control rule, 13px medium text, 7px by 12px padding, 6px corners and a 36px minimum height. Hover uses the quiet surface; the action hides at 600px and below. A translated Back to examples link sits above the detail heading, with an authored 16px arrow, 13px medium text and a 36px minimum height. Back and the wordmark preserve the selected interface language and theme in their destination query. Back targets the examples anchor; an offline file uses the canonical public URL as its fallback. Both the back link and public detail header action hide in export-frame mode. These public additions do not change raw skill language selection or the exported graph framing.
+Every standalone HTML keeps an understated source-jump action in the desktop header: neutral transparent fill, a thin control rule, 13px medium text, 7px by 12px padding, 6px corners and a 36px minimum height. Hover uses the quiet surface; the action hides at 600px and below. The existing public-detail-control and public-detail-source token names now describe this shared core component as well. Public detail pages additionally place a translated Back to examples link above the detail heading, with an authored 16px arrow, 13px medium text and a 36px minimum height. Back and the wordmark preserve the selected interface language and theme in their destination query. Back targets the examples anchor; an offline file uses the canonical public URL as its fallback. Both the public back link and standalone header source action hide in export-frame mode. These public additions do not change raw skill language selection or the exported graph framing.
 
 ### Component Graph and Motion
 
