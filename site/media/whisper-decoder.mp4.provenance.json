@@ -1,0 +1,18 @@
+{
+  "kind": "runtime-render",
+  "generator": "Repo Visualizer canonical SVG / repoPlayer.renderFrame; Pillow and FFmpeg",
+  "settings": {
+    "width": 1600,
+    "height": 800,
+    "fps": 6,
+    "language": "en",
+    "theme": "dark"
+  },
+  "source_repository": "https://github.com/openai/whisper",
+  "source_revision": "86098128c0b4f24f0e2aa2994de830614b474227",
+  "source_html_commit": "abdd2a713d6335687f3f8c30b4c501582ad46542",
+  "source_html_path": "site/whisper-decoder.html",
+  "source_html_sha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272",
+  "artifact_sha256": "37edbba93cd4979d0bb899e841a0ab1022036782233e86757dbab43486e92f01",
+  "note": "Authored source walkthrough. No model weights/audio inference were executed. SVG and HTML preserve source/license metadata."
+}

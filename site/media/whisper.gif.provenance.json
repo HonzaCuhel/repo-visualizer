@@ -5,21 +5,20 @@
     "width": 1200,
     "height": 800,
     "fps": 6,
-    "theme": "system",
-    "language": "cs",
-    "scenario": "mechanism"
+    "theme": "light",
+    "language": "cs"
   },
   "source_repository": "https://github.com/openai/whisper",
   "source_revision": "86098128c0b4f24f0e2aa2994de830614b474227",
-  "source_html_sha256": "6ff064b8bd3cbc944ac845f166f0a59cc9a49bcba05e7771e84f4947d0491fd6",
+  "source_html_commit": "abdd2a713d6335687f3f8c30b4c501582ad46542",
+  "source_html_path": "site/whisper.html",
+  "source_html_sha256": "f4dea66843570c9c5e9cab4dee4ca0a54bb7bcdfb12d2c8e7b2f5f8002232cf6",
   "source_graph_sha256": "1e7eef3ffc3fc465c298f2c241389d0c5a4e425b88439c4bd30908a792e65991",
-  "artifact_sha256": "2f1e124a348bf84e780854cd8b5dab954b3cbbf3540ba7c216a92b71145591ef",
+  "artifact_sha256": "e435c962851c40ca6e0c9348d1c5fd509e68580efbd94b5096b12e1084372f31",
   "verification": {
     "frames": 108,
     "distinct_frames": 108,
-    "decoded_duration_ms": 18000
+    "duration_ms": 18000
   },
-  "note": "Rendered authored highlights over the source-derived graph; not an observed execution of the target. No target scripts or model weights were run.",
-  "source_html_commit": "35e158179f9f5eb0b239410dadaf875b44cca640",
-  "source_html_path": "site/whisper.html"
+  "note": "Rendered authored highlights over a source-derived graph; not observed execution. No target scripts/model weights were run."
 }

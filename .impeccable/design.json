@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-09T10:10:18.756663+00:00",
+  "generatedAt": "2026-11-09T10:14:14.841329+00:00",
   "title": "Design System: Repo Visualizer",
   "extensions": {
     "colorMeta": {
@@ -924,6 +924,30 @@
         {
           "path": "examples/whisper/decoder-loop.json",
           "sha256": "e7b9f9b64780dfbf10e6fc16f28000def3bb64d7f8aa4c38b052a4710dfb86cd"
+        },
+        {
+          "path": "docs/verification.md",
+          "sha256": "e06a7dbb2dc8dab767f2decd84c8eb794f5257e1b7052d3b88e6d103094375c9"
+        },
+        {
+          "path": "examples/whisper/README.md",
+          "sha256": "86de1b531f8c07ae7aaf40b3c9865767056c16e59270fabebb9b0b8f80478c3e"
+        },
+        {
+          "path": "site/media/whisper-decoder.png.provenance.json",
+          "sha256": "fa7587a33185a7b48aa5fa3db8b5ebcc516aea7e249b7020000130e653a893a4"
+        },
+        {
+          "path": "site/media/whisper-decoder.svg.provenance.json",
+          "sha256": "fc719b19884e82c28aaf73822c6c9e8ab19ed557ad134751224ca104813c1e95"
+        },
+        {
+          "path": "site/media/whisper-decoder.gif.provenance.json",
+          "sha256": "d08e9e58654753a308c356739d5ae90c24232119286f9459ded2b35d2a785181"
+        },
+        {
+          "path": "site/media/whisper-decoder.mp4.provenance.json",
+          "sha256": "5d70f285efd3193001fc8abd514b00b15b8796b6e943835a33e170f7814000da"
         }
       ],
       "screenshots": [
@@ -973,14 +997,14 @@
       "snippetScope": "Self-contained ds-prefixed HTML/CSS. Actual CSS custom properties have source-value fallbacks. Host must supply bundled Rethink/Atkinson fonts for exact type rendering. Static previews carry states but no application handlers; navigation hrefs are representative.",
       "tokenScope": "Frontmatter primitives are normative. Dark and landing variants remain explicitly scoped. Spacing names label observed repeated values, not a new runtime scale.",
       "documentationLimits": [
-        "Current source extraction and supplied actual diagram captures were inspected. Responsibility-diagram QA/unit reports are supporting evidence,not independent documenter reruns. Regenerated media is pending after frozen-code review;no new media-render completion is claimed.",
+        "Current source extraction and supplied actual diagram captures were inspected. Responsibility-diagram QA/unit reports are supporting evidence,not independent documenter reruns. Regenerated media is complete according to the inspected verification report. The documenter independently rechecked artifact/source hashes;decode and actual headless-browser playback results are supplied evidence,not documenter reruns.",
         "Impeccable comparison ledger remains hero/open on the tiny GitHub control despite explicit user approval. No closed build gate, browser hero approval receipt or publication is claimed; see docs/verification.md.",
         "Stale incumbent edge-line color, two-language wording and public pre-landscape composition are reconciled to current source. Tiny helper text and superseded standalone phone height constraints are contextual observations, not new design mandates.",
         "No invented field-error styling, global photographic requirement, or universal reduced-motion playback/export behavior."
       ],
-      "shippingRasterRule": "Generated images retain their generation prompt; derived raster media retain runtime origin/render input provenance.",
+      "shippingRasterRule": "Generated imagery retains its image-generation prompt. Diagram PNG/SVG/GIF/MP4 exports are runtime-render derived artifacts from the canonical SVG scene;their provenance records committed HTML identity,render settings,upstream source identity and source/artifact hashes. They are not imagegen assets or recordings of target-code execution.",
       "documentationDisposition": "Merged DESIGN.md and sidecar refreshed within the authorized two-file boundary. Standalone player guidance retained. Documentation completion does not close the independent hero/open comparison ledger.",
-      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact. Canonical brand assets now belong to the installed skill and are embedded by the core builder into every HTML; public-only English/light preferences and Back navigation remain separate. Shared responsibility diagrams add measured captions/edge labels,source-grounded flow bands,neutral frames and a single-pane expanded dialog. Focused Whisper decoder example is7nodes/7edges/4steps/12seconds. Responsive flow now follows physical page width and narrow shared-band text measurement;expanded diagrams choose readable detail below0.55 fit scale with manual camera controls respected and visible phone labels. Final typography cache stores measured node lines with geometry;scoped reviewerP2 mobile readability is resolved. Final supplied tests42/42,diagramQA160cases and expanded-readability20cases pass. Real media rerender remains pending.",
+      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact. Canonical brand assets now belong to the installed skill and are embedded by the core builder into every HTML; public-only English/light preferences and Back navigation remain separate. Shared responsibility diagrams add measured captions/edge labels,source-grounded flow bands,neutral frames and a single-pane expanded dialog. Focused Whisper decoder example is7nodes/7edges/4steps/12seconds. Responsive flow now follows physical page width and narrow shared-band text measurement;expanded diagrams choose readable detail below0.55 fit scale with manual camera controls respected and visible phone labels. Final typography cache stores measured node lines with geometry;scoped reviewerP2 mobile readability is resolved. Final supplied tests42/42,diagramQA160cases and expanded-readability20cases pass. Real media rerender is complete:36 public artifacts regenerated from committed HTML abdd2a713d6335687f3f8c30b4c501582ad46542;source/artifact hashes verified;13 changing GIFs and11 decoded/played MP4s recorded.",
       "supportingVerification": [
         {
           "path": ".work/header-qa.json",
@@ -1016,6 +1040,11 @@
           "path": ".work/expanded-readability-qa.json",
           "sha256": "f452712aa32ff5814951af8ae27c4b434ea035ab7e7c34c88b8dcdf357a8c859",
           "status": "Final supplied20-case expanded-readability report inspected;all controls inside. Czech390px example title18.65px/caption13.05px. These are scoped measurements,not global minimum-type tokens;not rerun by documenter."
+        },
+        {
+          "path": ".work/responsibility-media-verification.json",
+          "sha256": "6fc50c87f484239a027715d687eb0eaa7949ef30d76c6e8b1abe494ba42cb9c8",
+          "status": "Report inspected:36 artifacts have provenance;13 changing GIFs,including10×120frames,2×108frames and focused72frames/12seconds;all11 MP4s decoded and actually played headlessly. Documenter independently verified all current artifact hashes and committed-source HTML hashes;did not rerun decoding/playback."
         }
       ],
       "scopedFinishReview": {
@@ -1126,6 +1155,57 @@
       },
       "sharedBandTextMeasure": "On pageWidth<800px clamp title/caption text measurement to max(204,min(bandWidth-36,graphViewportWidth-36));wide pages use full band text measure. Captions retain the two-line/ellipsis limit.",
       "cachedLayoutTypography": "Precomputed layout cache retains measured per-node title/caption lines and sizes. Reusing cached geometry restores that typography before drawing;HyperFrames cached-layout regression included in supplied42-test suite."
+    },
+    "diagramMediaProjections": {
+      "origin": "runtime-render;Repo Visualizer canonical SVG/repoPlayer.renderFrame with Pillow/FFmpeg;no image generation.",
+      "sourceHtmlCommit": "abdd2a713d6335687f3f8c30b4c501582ad46542",
+      "artifacts": 36,
+      "gifs": {
+        "total": 13,
+        "codexVariants": 10,
+        "codexFrames": 120,
+        "fullWhisperAndSuperpowers": 2,
+        "fullMapFrames": 108,
+        "focusedDecoderFrames": 72,
+        "focusedDecoderDurationMs": 12000,
+        "distinctFrames": "Every decoded GIF frame changes according to supplied verification."
+      },
+      "mp4s": {
+        "total": 11,
+        "verification": "All decoded and actually played with advancing currentTime and no browser error in supplied headless-browser evidence."
+      },
+      "focusedArtifacts": [
+        {
+          "path": "site/media/whisper-decoder.png",
+          "provenance": "site/media/whisper-decoder.png.provenance.json",
+          "artifactSha256": "0c5379431dee3f036841818db2f07bf97de5c27facca92d9046b36409f35470c",
+          "sourceHtmlPath": "site/whisper-decoder.html",
+          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+        },
+        {
+          "path": "site/media/whisper-decoder.svg",
+          "provenance": "site/media/whisper-decoder.svg.provenance.json",
+          "artifactSha256": "c312b115003526b2f479e66a625643bbe1644e9f1d8ad2e1c936bbf55c41a472",
+          "sourceHtmlPath": "site/whisper-decoder.html",
+          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+        },
+        {
+          "path": "site/media/whisper-decoder.gif",
+          "provenance": "site/media/whisper-decoder.gif.provenance.json",
+          "artifactSha256": "3a1daf1d671ae1982850d7a05638356949464905b8ff354d5be3f8e3b274658b",
+          "sourceHtmlPath": "site/whisper-decoder.html",
+          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+        },
+        {
+          "path": "site/media/whisper-decoder.mp4",
+          "provenance": "site/media/whisper-decoder.mp4.provenance.json",
+          "artifactSha256": "37edbba93cd4979d0bb899e841a0ab1022036782233e86757dbab43486e92f01",
+          "sourceHtmlPath": "site/whisper-decoder.html",
+          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+        }
+      ],
+      "evidence": ".work/responsibility-media-verification.json",
+      "verificationBoundary": "Documenter rechecked all36 artifact hashes and source HTML hashes against the named Git commit. Media decoding and playback were inspected in the supplied report,not independently rerun. No physical-device or hosted playback claim."
     }
   },
   "components": [

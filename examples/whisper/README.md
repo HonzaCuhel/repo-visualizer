@@ -15,3 +15,5 @@ Generated with the repo-visualizer scan → inspect → graph → prepare → bu
 ## Decoder detail
 
 [Decoder loop](https://honzacuhel.github.io/repo-visualizer/whisper-decoder.html) is a focused 7-component, 7-relationship view with the encoder above and token context below the decoder computation. Shared bands reuse actual source-grounded nodes. The full transcription graph above retains windows, silence handling and fallback. [Canonical focused graph](decoder-loop.json).
+
+[Decoder GIF, 12 seconds](https://honzacuhel.github.io/repo-visualizer/media/whisper-decoder.gif) · [Video](https://honzacuhel.github.io/repo-visualizer/media/whisper-decoder.mp4) · [SVG](https://honzacuhel.github.io/repo-visualizer/media/whisper-decoder.svg). These exports use the same diagram and source model as the interactive HTML.

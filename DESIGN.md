@@ -280,7 +280,7 @@ Small practical curves define the shared tools: inset code, conventional control
 
 The mark is a crisp graph of three connected components: one filled node and two outlined nodes. Its canonical SVG and shared header stylesheet live in the installed skill assets. The core builder embeds the mark, favicon and stylesheet in every generated HTML, including raw skill output, ZIP-built artifacts, offline files and public examples. The public builder adds its page-specific content and preferences without a duplicate brand-style or mark wrapper. The README shares the same mark. The GitHub mark is the separately attributed Bootstrap Icons asset.
 
-The landscape is original generated atmosphere, not a claim about a named real place. It has no UI painted into it. Shipping raster provenance records the generation prompt for generated imagery or the origin/render inputs for derived media. Preserve those records when replacing or rebuilding media.
+The landscape is original generated atmosphere, not a claim about a named real place. It has no UI painted into it. Shipping raster provenance records the generation prompt for generated imagery or the origin/render inputs for derived media. Diagram PNG, SVG, GIF and MP4 exports are rendered from the canonical SVG scene by Repo Visualizer, with committed source-HTML identity and source/artifact fingerprints; these exports are derived renders, not image-generation assets or recordings of target-code execution. Preserve those records when replacing or rebuilding media.
 
 ### Buttons
 
