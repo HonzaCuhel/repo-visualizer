@@ -11,9 +11,9 @@
   },
   "source_repository": "https://github.com/openai/codex",
   "source_revision": "33b3f80a0935e51a49cbbda7d6473ef757d4241b",
-  "source_html_commit": "abdd2a713d6335687f3f8c30b4c501582ad46542",
+  "source_html_commit": "d24e71c7adf5542e0a9304774c80ef23c2047a92",
   "source_html_path": "site/codex-agent-loop.html",
-  "source_html_sha256": "387fcfe7a6668f10afe9b76d3eb7ff03cb12da69469821f748978d8330dc6726",
-  "artifact_sha256": "c8248d070f0d5b8dd9299ae962bd7ff60f59749a98d0b3a55a33aefda2d3f828",
+  "source_html_sha256": "c5e89ff61602fd0be26cd650ec6ff02dd14e94c3b9fd9eb7ba9f21c9da535132",
+  "artifact_sha256": "7fcf601d1f6ba75fbca8d1a97cf218d99e4914f2d42ab73942157b8260e51c5e",
   "note": "Source-derived graph explanation, not recorded execution. No image generation model used."
 }

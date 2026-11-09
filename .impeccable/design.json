@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-09T10:14:14.841329+00:00",
+  "generatedAt": "2026-11-09T11:07:15.678832+00:00",
   "title": "Design System: Repo Visualizer",
   "extensions": {
     "colorMeta": {
@@ -727,9 +727,9 @@
         "value": "360px"
       },
       {
-        "name": "diagram-flow-orientation",
+        "name": "legacy-band-text-measure",
         "value": "800px",
-        "comparison": "physical page width<800px => DOWN;otherwise RIGHT"
+        "comparison": "Only legacy shared-band text measurement narrows below this page width;every layout remains DOWN."
       }
     ],
     "surfaceScopes": {
@@ -855,11 +855,11 @@
         },
         {
           "path": "skills/repo-visualizer/assets/player.css",
-          "sha256": "c6a971aa8aaaee76e3002113ac13a82445ce06000c5db5c8a8beda14d2e1ed0e"
+          "sha256": "e5a49400f1e4a6e7efc1af3ee688345a5317a2f98a266fa1af4ba786ad4984b5"
         },
         {
           "path": "skills/repo-visualizer/assets/player.html",
-          "sha256": "86d92e26f92655dca0bc82e32199e3df5811f6e70202219c6ccba94a3b15793b"
+          "sha256": "b8a9781fca27ffa92ba1b85f81f9e4e864514a442e744dd9988db8c6cf10ff7f"
         },
         {
           "path": "skills/repo-visualizer/assets/appearance.js",
@@ -867,7 +867,7 @@
         },
         {
           "path": "skills/repo-visualizer/assets/player.js",
-          "sha256": "71b8731a7a4fb11183234cbf8a02a4d196896cb38502cbe150ccb9f104d5c795"
+          "sha256": "292c1ef02a5a74664320af6ae01a2353620c6d932d6b8767301cb41e6b76613d"
         },
         {
           "path": "PRODUCT.md",
@@ -891,11 +891,11 @@
         },
         {
           "path": "examples/superpowers/graph.json",
-          "sha256": "430f0504ab27d30e961bd98654574259b93bf8dadba31390a8df9f58b4ed9545"
+          "sha256": "bf75a1fee410721dae9541a9409d986da4c8d56fac2f1840311bbe52f833fc2e"
         },
         {
           "path": "examples/whisper/graph.json",
-          "sha256": "1e7eef3ffc3fc465c298f2c241389d0c5a4e425b88439c4bd30908a792e65991"
+          "sha256": "d4199b72e9dd3dd90ca13b9de6a1c6d0f37cb0a25593c1ca18ca4596a1415875"
         },
         {
           "path": "site-src/detail-navigation.js",
@@ -911,43 +911,55 @@
         },
         {
           "path": "skills/repo-visualizer/assets/diagram-layout.js",
-          "sha256": "51c56a8d32e969828ff1adfe58d5781c3f2a15c03a55fea2e1ed8079eda0ebfb"
+          "sha256": "ea47c7d8ccbee4bbd4368daa1e0b4ba60f25936ee1d45a06584bd80734118a80"
         },
         {
           "path": "skills/repo-visualizer/scripts/story_model.py",
-          "sha256": "dcf04fefa7ea6436e34755a39b9fa2660cad5e608961fc9b81711634e910e0b8"
+          "sha256": "9da4256e1455f76320db00fcc2d367cd292025842942d5c73b501a93e21b90f3"
         },
         {
           "path": "skills/repo-visualizer/references/graph-format.md",
-          "sha256": "7f22b11ea18e3c0dba298a89db9d539a591655438d1e4e88620a77f179f4c8ac"
+          "sha256": "2d8b032c9f243e016bc800f3b7692e576b8a7aae9677951baf13994164d5e16c"
         },
         {
           "path": "examples/whisper/decoder-loop.json",
-          "sha256": "e7b9f9b64780dfbf10e6fc16f28000def3bb64d7f8aa4c38b052a4710dfb86cd"
+          "sha256": "fd568282da9b8ef70142f82afe29c81ae5c6466c46cf6f0a429f1e06c7f53acc"
         },
         {
           "path": "docs/verification.md",
-          "sha256": "e06a7dbb2dc8dab767f2decd84c8eb794f5257e1b7052d3b88e6d103094375c9"
+          "sha256": "9d1356050b23d5a4841fa5cd40eeda5beac7a733c7c32c1e5b002d1f7bff1e0f"
         },
         {
           "path": "examples/whisper/README.md",
-          "sha256": "86de1b531f8c07ae7aaf40b3c9865767056c16e59270fabebb9b0b8f80478c3e"
+          "sha256": "63726f3aedf3b4a5009dbd184dbb23b3d37648de64f4ce7549bb123861d1d405"
         },
         {
           "path": "site/media/whisper-decoder.png.provenance.json",
-          "sha256": "fa7587a33185a7b48aa5fa3db8b5ebcc516aea7e249b7020000130e653a893a4"
+          "sha256": "3dc66f0e95c68c3257ee095838a0aa47ed5dcf380d5a3fcce65a6cc2967a4cf0"
         },
         {
           "path": "site/media/whisper-decoder.svg.provenance.json",
-          "sha256": "8bb5c83ec3876aeb0741b39eab96d40beb44b608338d30a304fcdaea03118b74"
+          "sha256": "7326343aab5f50b9b95a5602dcd8d7c33609481099b4b00c5d56129e15f88a43"
         },
         {
           "path": "site/media/whisper-decoder.gif.provenance.json",
-          "sha256": "d08e9e58654753a308c356739d5ae90c24232119286f9459ded2b35d2a785181"
+          "sha256": "08af7910cf75dcc02f58cfa9be24748b2328ee66ef1246e03f537b8610a0396a"
         },
         {
           "path": "site/media/whisper-decoder.mp4.provenance.json",
-          "sha256": "5d70f285efd3193001fc8abd514b00b15b8796b6e943835a33e170f7814000da"
+          "sha256": "856b5d4d1c92e9aca45f5f79b47567a327de7581f0e291484b7b290d2967bc1e"
+        },
+        {
+          "path": "skills/repo-visualizer/SKILL.md",
+          "sha256": "29074960b927546a272b6cb0fcd6c281ae0764d762d134989bfe9e10fdcdb9df"
+        },
+        {
+          "path": "skills/repo-visualizer/references/localization.md",
+          "sha256": "63969824bc49d81e3941baaf0ec2c01a04907e91992e216a7d8f73403593081c"
+        },
+        {
+          "path": "skills/repo-visualizer/scripts/repo_story.py",
+          "sha256": "4cbfc20eecbdebd61e97a8bf25a8075c1f7b5694ce32e95063bc0a90d152b12f"
         }
       ],
       "screenshots": [
@@ -990,6 +1002,14 @@
         {
           "path": ".work/diagram-mobile-readable.png",
           "scope": "Supplied actual readable expanded-phone capture visually inspected;no new browser interaction audit by documenter."
+        },
+        {
+          "path": ".work/ordered-workspace-desktop.png",
+          "scope": "Current supplied ordered full-workspace capture visually inspected;earlier diagram screenshots are historical context."
+        },
+        {
+          "path": ".work/ordered-workspace-mobile.png",
+          "scope": "Current supplied ordered full-workspace capture visually inspected;earlier diagram screenshots are historical context."
         }
       ],
       "qualitativeAuthority": "User-selected landscape comp and explicit assembled-render confirmation in chat: ne, v pohode, potvrzuju, udelej to. Existing flat professional standalone system preserved. No new metaphor interview claimed. User explicitly chose to merge the new website with the existing player rules: Sloučit nový web se stávajícími pravidly přehrávače (doporučuji).",
@@ -997,14 +1017,14 @@
       "snippetScope": "Self-contained ds-prefixed HTML/CSS. Actual CSS custom properties have source-value fallbacks. Host must supply bundled Rethink/Atkinson fonts for exact type rendering. Static previews carry states but no application handlers; navigation hrefs are representative.",
       "tokenScope": "Frontmatter primitives are normative. Dark and landing variants remain explicitly scoped. Spacing names label observed repeated values, not a new runtime scale.",
       "documentationLimits": [
-        "Current source extraction and supplied actual diagram captures were inspected. Responsibility-diagram QA/unit reports are supporting evidence,not independent documenter reruns. Regenerated media is complete according to the inspected verification report. The documenter independently rechecked artifact/source hashes;decode and actual headless-browser playback results are supplied evidence,not documenter reruns.",
+        "Current ordered/full-workspace source and supplied captures/reports inspected. Documenter independently verifies source/media hashes;test runs,browser interactions,decode/playback and scoped detector results remain supplied evidence,not documenter reruns. No WIIM private artifact modification is claimed.",
         "Impeccable comparison ledger remains hero/open on the tiny GitHub control despite explicit user approval. No closed build gate, browser hero approval receipt or publication is claimed; see docs/verification.md.",
         "Stale incumbent edge-line color, two-language wording and public pre-landscape composition are reconciled to current source. Tiny helper text and superseded standalone phone height constraints are contextual observations, not new design mandates.",
         "No invented field-error styling, global photographic requirement, or universal reduced-motion playback/export behavior."
       ],
       "shippingRasterRule": "Generated imagery retains its image-generation prompt. Diagram PNG/SVG/GIF/MP4 exports are runtime-render derived artifacts from the canonical SVG scene;their provenance records committed HTML identity,render settings,upstream source identity and source/artifact hashes. They are not imagegen assets or recordings of target-code execution.",
-      "documentationDisposition": "Merged DESIGN.md and sidecar refreshed within the authorized two-file boundary. Standalone player guidance retained. Documentation completion does not close the independent hero/open comparison ledger.",
-      "currentRefinement": "Shared 1480px public frame, bounded introduction/explorer heights, reader-position reveal with focus/hash/reduced-motion completion, and source-pinned Superpowers/Whisper gallery examples with five display languages. Mobile toolbar wraps Export when needed while preserving full translated labels. Public landing/detail headers now share appearance controls, English/light defaults and preference-preserving navigation; landing links use equal content-sized gaps and detail source jumps stay compact. Canonical brand assets now belong to the installed skill and are embedded by the core builder into every HTML; public-only English/light preferences and Back navigation remain separate. Shared responsibility diagrams add measured captions/edge labels,source-grounded flow bands,neutral frames and a single-pane expanded dialog. Focused Whisper decoder example is7nodes/7edges/4steps/12seconds. Responsive flow now follows physical page width and narrow shared-band text measurement;expanded diagrams choose readable detail below0.55 fit scale with manual camera controls respected and visible phone labels. Final typography cache stores measured node lines with geometry;scoped reviewerP2 mobile readability is resolved. Final supplied tests42/42,diagramQA160cases and expanded-readability20cases pass. Real media rerender is complete:36 public artifacts regenerated from committed HTML abdd2a713d6335687f3f8c30b4c501582ad46542;source/artifact hashes verified;13 changing GIFs and11 decoded/played MP4s recorded.",
+      "documentationDisposition": "Authorized merged design documentation completed for current shared ordered/full-workspace/multilingual system. Current scoped reviewer found no material finding. Historicalhero/open comparison ledger remains independently disclosed.",
+      "currentRefinement": "New explanations require explicit top-to-bottom mechanism phases with parallel peers level,navigator/tour matching phases,and complete five-language display text guarded by --all-languages --ordered. Expansion moves full existing workspace into native dialog and retains source inspection;close/Escape restores it. Current frozen source/media commitd24e71c;50tests,160caseQA,no material scoped review finding. All36 diagram media rebuilt and verified;focused decoder1000×1800portrait. Previous public header/landscape controls and historical ledger exception remain unchanged.",
       "supportingVerification": [
         {
           "path": ".work/header-qa.json",
@@ -1043,18 +1063,48 @@
         },
         {
           "path": ".work/responsibility-media-verification.json",
-          "sha256": "6fc50c87f484239a027715d687eb0eaa7949ef30d76c6e8b1abe494ba42cb9c8",
-          "status": "Report inspected:36 artifacts have provenance;13 changing GIFs,including10×120frames,2×108frames and focused72frames/12seconds;all11 MP4s decoded and actually played headlessly. Documenter independently verified all current artifact hashes and committed-source HTML hashes;did not rerun decoding/playback."
+          "sha256": "123f08edbdd8a249bddd242d37b5dae563782af2248ae7cfd7ccbc114fd52d9c",
+          "status": "Current report inspected:36 media from committedHTMLd24e71c;13changing GIFs120/108/72frames and11decoded/playedMP4s. Documenter independently verified artifact/source hashes,not rerun decoding/playback."
+        },
+        {
+          "path": ".work/ordered-multilingual-tests.log",
+          "sha256": "e1e609d4c2fb53f8b087a1ed98442dc83f02df8b28bf392b876f20799621288c",
+          "status": "Supplied final log inspected:50 tests passed,including canonicalJSON all-language preservation;not rerun by documenter."
+        },
+        {
+          "path": ".work/ordered-multilingual-qa.json",
+          "sha256": "5d484cce08ba178ca3d95ee7328d4cf26cdd9318349ff07be7b6b9c3938bd50a",
+          "status": "Supplied final160-case report inspected;errors/issues empty;not rerun by documenter."
+        },
+        {
+          "path": ".work/ordered-workspace-independent-qa.json",
+          "sha256": "035f3fa423e956b21951437095ecd2c393f8822ab96dcbe09235f8e40508c66e",
+          "status": "Supplied independent390/1440px phase alignment,navigator,complete coverage and expanded source-inspection checks inspected;not rerun by documenter."
+        },
+        {
+          "path": ".work/ordered-layout-final-detector.json",
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "status": "Supplied final scoped layout detector file is empty;preceded only by nonvisual canonicalJSON export fix;not a whole-site clean-detector claim and not rerun by documenter."
         }
       ],
       "scopedFinishReview": {
-        "path": ".work/responsibility-diagram-finish-review.md",
-        "sha256": "075a05533a75cf0a6339cf2b5dcf5a21033b992eb24d6db56ef0c6cf5435da19",
-        "finding": "P2 mobile readability",
-        "status": "resolved in reviewer follow-up",
-        "basis": "Reviewer independently rechecked local headless Brave at320/390px Czech/dark:expanded detail readable,Fit overview respected,Escape/source return retained. Supplied20-case report covers4widths×5languages.",
-        "limits": "Local headless evidence,not physical-device or hosted verification. Complete fitted overview remains small and reading detail requires panning. This resolves the scoped P2 only;historicalhero/open comparison ledger remains separate."
-      }
+        "path": ".work/ordered-workspace-finish-review.md",
+        "sha256": "ae465de6130e9b07557cc3d5f7c3c97d08e1585c9e1b9c1ac0292d89b556d600",
+        "scope": "Ordered phases,full expanded workspace and complete five-language authoring",
+        "status": "no material scoped finding",
+        "basis": "Reviewer inspected actual captures and independently exercised390/1440px local headless workflows;zero page errors;source inspection remained expanded.",
+        "limits": "Local evidence only;no hosted/physical-device proof,no claim that private WIIM artifact was opened or updated. Coverage does not certify linguistic/semantic accuracy. Historicalhero/open ledger remains separate."
+      },
+      "historicalScopedFinishReviews": [
+        {
+          "path": ".work/responsibility-diagram-finish-review.md",
+          "sha256": "075a05533a75cf0a6339cf2b5dcf5a21033b992eb24d6db56ef0c6cf5435da19",
+          "finding": "P2 mobile readability",
+          "status": "resolved in reviewer follow-up",
+          "basis": "Reviewer independently rechecked local headless Brave at320/390px Czech/dark:expanded detail readable,Fit overview respected,Escape/source return retained. Supplied20-case report covers4widths×5languages.",
+          "limits": "Local headless evidence,not physical-device or hosted verification. Complete fitted overview remains small and reading detail requires panning. This resolves the scoped P2 only;historicalhero/open comparison ledger remains separate."
+        }
+      ]
     },
     "galleryEvidence": {
       "superpowers": {
@@ -1069,7 +1119,48 @@
           "es"
         ],
         "sourceRevision": "22f0b463e7a5e579904dd6211a520321035526f7",
-        "scope": "Current public gallery example; counts and topology are data, not design invariants."
+        "scope": "Current public gallery example; counts and topology are data, not design invariants.",
+        "presentation": {
+          "levels": [
+            [
+              "router"
+            ],
+            [
+              "design"
+            ],
+            [
+              "approval"
+            ],
+            [
+              "plan"
+            ],
+            [
+              "choice"
+            ],
+            [
+              "controller",
+              "inline"
+            ],
+            [
+              "implementer"
+            ],
+            [
+              "review"
+            ],
+            [
+              "fix"
+            ],
+            [
+              "ledger"
+            ],
+            [
+              "final"
+            ],
+            [
+              "finish"
+            ]
+          ]
+        }
       },
       "whisper": {
         "graph": "examples/whisper/graph.json",
@@ -1083,7 +1174,45 @@
           "es"
         ],
         "sourceRevision": "86098128c0b4f24f0e2aa2994de830614b474227",
-        "scope": "Current public gallery example; counts and topology are data, not design invariants."
+        "scope": "Current public gallery example; counts and topology are data, not design invariants.",
+        "presentation": {
+          "levels": [
+            [
+              "audio"
+            ],
+            [
+              "mel"
+            ],
+            [
+              "window"
+            ],
+            [
+              "encoder",
+              "tokens"
+            ],
+            [
+              "embedding"
+            ],
+            [
+              "self"
+            ],
+            [
+              "cross"
+            ],
+            [
+              "logits"
+            ],
+            [
+              "sample"
+            ],
+            [
+              "quality"
+            ],
+            [
+              "output"
+            ]
+          ]
+        }
       },
       "whisperDecoder": {
         "graph": "examples/whisper/decoder-loop.json",
@@ -1105,10 +1234,32 @@
             "encoder"
           ],
           "bottom": [
-            "tokens"
+            "sample"
+          ],
+          "levels": [
+            [
+              "encoder",
+              "tokens"
+            ],
+            [
+              "embedding"
+            ],
+            [
+              "self"
+            ],
+            [
+              "cross"
+            ],
+            [
+              "logits"
+            ],
+            [
+              "sample"
+            ]
           ]
         },
-        "scope": "Focused public decoder example;existing full graphs remain unchanged;counts are data,not design invariants."
+        "scope": "Focused public decoder example;existing full graphs remain unchanged;counts are data,not design invariants.",
+        "mediaGeometry": "1000×1800 portrait;12seconds/72GIF frames."
       }
     },
     "sharedHeaderAppearance": {
@@ -1138,27 +1289,36 @@
       "edgeLimit": "Measured128px wrapping width;maximum three display lines with ellipsis.",
       "frame": "16px rounded neutral frame;light diagram-surface,dark dark-diagram-surface;node fill is paper in light and dark-diagram-surface in dark.",
       "bands": "Light diagram-band,dark dark-diagram-band;actual sourced component IDs,not decorative buses.",
-      "layout": "Auto flow only for a3–6node ungrouped acyclic chain meeting available-width geometry threshold;otherwise layered. Explicit flow permits1–8main nodes and≤2top/≤2bottom unique existing IDs;no groups or layered hints with bands. Flow runs DOWN below physical page width800px and RIGHT otherwise. Main-flow between-layer spacing24px.",
-      "routing": "Orthogonal visibility routing avoids shared-component node bodies;branches,cycles,parallel and self relationships retain canonical IDs/evidence.",
+      "layout": "Every layout is DOWN at every page width. New output requires explicit ungrouped presentation.levels;each component exactly once,inputs first,terminal outputs last,parallel/alternative peers in the same phase. Legacy auto/flow/layered/grouped artifacts remain compatible,not the new default.",
+      "routing": "Orthogonal routes avoid node bodies while retaining canonical relationship IDs/evidence,including branches,cycles,parallel,self and disconnected cases. Grouped legacy routes preserve their declared containers.",
       "inferred": "Dashed inferred edges and separate inferred node marker retained.",
       "expandedDialog": {
-        "primitive": "Native dialog;existing graph pane is moved,not cloned;single SVG.",
-        "desktopGeometry": "inset16px;width/height calc(100% - 32px);14px radius;thin control rule;#08101a99 backdrop.",
-        "mobileGeometry": "inset6px;width/height calc(100% - 12px);graph-stage:flex1;height:auto.",
-        "selection": "Retained on expand/collapse;collapse restores prior camera.",
-        "keyboard": "Escape collapses;expand button focus restored. Inspect selection collapses and focuses selected source Code tab.",
-        "exports": "HTML export returns pane to workspace,closes dialog,resets expanded state. Expand/inspect actions hidden in fixed export frames.",
+        "primitive": "Native dialog moves existing complete #workspace with navigator,graph and inspector;single SVG,no duplicate workspace.",
+        "desktopGeometry": "inset16px;width/height calc(100% - 32px);14px radius;44px minimum persistent close bar;workspace three columns minmax(210px,22%) minmax(0,1fr) minmax(260px,28%);thin control rule;#08101a99 backdrop.",
+        "mobileGeometry": "<=600px:inset6px;dialog scrolls vertically with sticky close bar;workspace stacked;navigation max-height250px;graph-pane min-height530px;stage height/min-height420px;inspector min-height220px.",
+        "selection": "Retained while expanded;navigation,graph and inspector share selection;closing restores prior camera.",
+        "keyboard": "Close bar/Escape closes and restores expand-control focus;Inspect selection focuses Code tab without closing dialog.",
+        "exports": "Downloaded HTML returns whole workspace to original document position,closes dialog and resets expansion. Canonical JSON retains all languages/metadata independent of selected UI locale. Fixed exports hide expansion controls.",
         "readableDetail": "If fitted scale<0.55,center on selected node (or source endpoint for edge selection),targeting one logical diagram unit per screen pixel. The full graph remains available through pan/zoom/Fit;this is camera framing,not a topology change.",
-        "manualControls": "Explicit pan or zoom disables automatic readable framing;Fit disables it and restores overview. Source inspection and Escape behavior remain unchanged.",
-        "mobileControls": "Visible translated Expand/Collapse label;graph-actions max-width100% and flex-wrap prevent overflow. A12px/1.5line pan hint explains moving through the graph and Fit.",
-        "overviewLimit": "Full graph/Fit remains a compact overview on narrow phones;reading captions uses selected-component detail plus panning. No claim that every caption is simultaneously readable in the fitted overview."
+        "manualControls": "Explicit pan/zoom/Fit override automatic readable framing;Fit restores overview. Selection and source inspection remain available inside the modal.",
+        "mobileControls": "Visible translated Expand/Collapse and Inspect labels;actions wrap within available width;sticky36px close action;pan hint remains available.",
+        "overviewLimit": "Full graph/Fit remains a compact overview on narrow phones;reading captions uses selected-component detail plus panning. No claim that every caption is simultaneously readable in the fitted overview.",
+        "tabletGeometry": "<=1000px:navigator spans left column;graph top-right,inspector bottom-right;both remain inside dialog."
       },
       "sharedBandTextMeasure": "On pageWidth<800px clamp title/caption text measurement to max(204,min(bandWidth-36,graphViewportWidth-36));wide pages use full band text measure. Captions retain the two-line/ellipsis limit.",
-      "cachedLayoutTypography": "Precomputed layout cache retains measured per-node title/caption lines and sizes. Reusing cached geometry restores that typography before drawing;HyperFrames cached-layout regression included in supplied42-test suite."
+      "cachedLayoutTypography": "Precomputed layout caches retain measured node title/caption lines and sizes with geometry;cached-layout regression remains in the supplied50-test suite.",
+      "orderedPhases": {
+        "field": "presentation.levels",
+        "validation": "Non-empty phases;every node ID exactly once;ungrouped;input kinds in first row,terminal output kinds in last;top/bottom bands only at boundaries.",
+        "geometry": "Peers share exactY and equal row height;64px horizontal gap;112px after each row;all widths stay DOWN.",
+        "navigator": "Flatten same phases;phase badge12px/tabular numerals;peers share phase number;filtering/translations retain order.",
+        "tour": "Default component tour uses the same order while remaining labeled as a tour,not execution trace.",
+        "meaning": "Author phases from source-inspected mechanism;preserve feedback/branches/cycles/parallel edges;do not infer causal sequence from graph sort/import order."
+      }
     },
     "diagramMediaProjections": {
       "origin": "runtime-render;Repo Visualizer canonical SVG/repoPlayer.renderFrame with Pillow/FFmpeg;no image generation.",
-      "sourceHtmlCommit": "abdd2a713d6335687f3f8c30b4c501582ad46542",
+      "sourceHtmlCommit": "d24e71c7adf5542e0a9304774c80ef23c2047a92",
       "artifacts": 36,
       "gifs": {
         "total": 13,
@@ -1178,34 +1338,66 @@
         {
           "path": "site/media/whisper-decoder.png",
           "provenance": "site/media/whisper-decoder.png.provenance.json",
-          "artifactSha256": "0c5379431dee3f036841818db2f07bf97de5c27facca92d9046b36409f35470c",
+          "artifactSha256": "9e66248996f840c847bba2ca45ae1592c5abe25b4ef705dff3bdef0f33df0712",
           "sourceHtmlPath": "site/whisper-decoder.html",
-          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+          "sourceHtmlSha256": "102c9a6c593267ea9308bf79462a058bb63c02010b5e72ddd03477d58aef0bce"
         },
         {
           "path": "site/media/whisper-decoder.svg",
           "provenance": "site/media/whisper-decoder.svg.provenance.json",
-          "artifactSha256": "34830195e9d69ce97dc63d27c8f01316df40aa6c6dc083a944cdd74e8cc667ce",
+          "artifactSha256": "5b0ca61aa33f86d1ce1f602453417f7d0b8e2c6a84dff07e5d38bcfcacb4fa27",
           "sourceHtmlPath": "site/whisper-decoder.html",
-          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+          "sourceHtmlSha256": "102c9a6c593267ea9308bf79462a058bb63c02010b5e72ddd03477d58aef0bce"
         },
         {
           "path": "site/media/whisper-decoder.gif",
           "provenance": "site/media/whisper-decoder.gif.provenance.json",
-          "artifactSha256": "3a1daf1d671ae1982850d7a05638356949464905b8ff354d5be3f8e3b274658b",
+          "artifactSha256": "c817558d502294d63d16a8c3d9afa4eacead61972ec4a1cf54bd7709c7df0860",
           "sourceHtmlPath": "site/whisper-decoder.html",
-          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+          "sourceHtmlSha256": "102c9a6c593267ea9308bf79462a058bb63c02010b5e72ddd03477d58aef0bce"
         },
         {
           "path": "site/media/whisper-decoder.mp4",
           "provenance": "site/media/whisper-decoder.mp4.provenance.json",
-          "artifactSha256": "37edbba93cd4979d0bb899e841a0ab1022036782233e86757dbab43486e92f01",
+          "artifactSha256": "138a2051a3527c728ed83af04ae89fd3314954a298b7f6159a72ce45895db0fe",
           "sourceHtmlPath": "site/whisper-decoder.html",
-          "sourceHtmlSha256": "0d69abee66776e6ddc866af3d08c059f5392e67b778ebd50c74ff7c02b854272"
+          "sourceHtmlSha256": "102c9a6c593267ea9308bf79462a058bb63c02010b5e72ddd03477d58aef0bce"
         }
       ],
       "evidence": ".work/responsibility-media-verification.json",
-      "verificationBoundary": "Documenter rechecked all36 artifact hashes and source HTML hashes against the named Git commit. Media decoding and playback were inspected in the supplied report,not independently rerun. No physical-device or hosted playback claim."
+      "verificationBoundary": "Documenter rechecked all36 artifact hashes and source HTML hashes against the named Git commit. Media decoding and playback were inspected in the supplied report,not independently rerun. No physical-device or hosted playback claim.",
+      "focusedGeometry": "1000×1800 portrait",
+      "svgSerialization": "FocusedSVG provenance fingerprints normalized emitted SVG whitespace;actual file hash matches recorded artifact hash."
+    },
+    "completeExplanationLanguages": {
+      "languages": [
+        "en",
+        "cs",
+        "de",
+        "fr",
+        "es"
+      ],
+      "initialView": "Explicit requested language,otherwise user/graph language;public default remainsEnglish. If primary language outside the five,provide all five translations in addition.",
+      "requiredDisplayFields": [
+        "title",
+        "question",
+        "summary",
+        "node label/description/caption/inference reason",
+        "edge label/relation/inference reason",
+        "group/scenario labels",
+        "step title/description/inference reason",
+        "uncertainties",
+        "overview lead and every overview path label"
+      ],
+      "guards": [
+        "--all-languages",
+        "--ordered"
+      ],
+      "workflow": "Require both flags for new prepare/build;validate also supports guards;missing coverage/phases rejected before output writes.",
+      "canonicalData": "Keep IDs,presentation,topology,evidence,source excerpts,code symbols,paths,fingerprints and exact licenses unchanged;translations are display-only.",
+      "downloads": "HTML and canonical JSON retain all supplied languages regardless of UI selection;deterministic image/video uses selected language.",
+      "compatibility": "Lower-level format still accepts grouped/partial/single-language older artifacts without guards;that is not the default for new skill output.",
+      "verificationLimit": "Coverage validates field completeness,not linguistic accuracy or explanation semantics."
     }
   },
   "components": [
@@ -1325,7 +1517,9 @@
       "Do preserve flat thin-ruled tooling over the public landscape and keep photographic styling scoped to that public surface.",
       "Do retain Rethink on the landing, Atkinson in standalone explanations and graph labels, and monospace for literal code and source identity.",
       "Do preserve intrinsic landing tablet rows and the automatic mobile graph-pane height so controls and evidence remain in flow.",
-      "Do retain five bundled interface languages, explicit appearance choices, keyboard states and distinct graph-language availability.",
+      "Do deliver complete English, Czech, German, French and Spanish explanations for new work, preserving canonical evidence and source text.",
+      "Do author top-to-bottom mechanism phases with parallel peers level, and use the same phases for the navigator and default component tour.",
+      "Do keep navigation, diagram and source inspection together inside the expanded workspace, with keyboard close and scroll access on phones.",
       "Do preserve source meaning and offline assets across interactive and exported projections.",
       "Do retain prompt or origin provenance for every shipping raster."
     ],
